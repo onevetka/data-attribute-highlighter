@@ -1,0 +1,18 @@
+.tooltip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: black;
+  color: white;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: bold;
+
+  display: none;
+  visibility: hidden;
+  z-index: 100;
+}
+
+.highlighted-element {
+  outline: 5px solid #007AFF !important;
+}
