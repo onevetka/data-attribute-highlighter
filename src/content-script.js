@@ -6,12 +6,12 @@ function getListOfElementsWithAttribute(attributeName) {
 }
 
 function highlightElements(elements) {
-  elements.forEach(element => {
+  elements.forEach((element) => {
     element.classList.add('highlighted-element');
 
     element.addEventListener('mousemove', (event) => {
-      var x = event.clientX;
-      var y = event.clientY;
+      const x = event.clientX;
+      const y = event.clientY;
 
       const tipWrapper = document.getElementById('tooltip');
 
@@ -33,7 +33,7 @@ function highlightElements(elements) {
       tipWrapper.style.visibility = 'hidden';
       tipWrapper.style.left = '0px';
       tipWrapper.style.top = '0px';
-    })
+    });
   });
 }
 
@@ -52,3 +52,9 @@ const foundElementsList = getListOfElementsWithAttribute(ATTRIBUTE_NAME);
 highlightElements(foundElementsList);
 addTooltipToDocument();
 
+document.addEventListener('click', () => {
+  setTimeout(() => {
+    const fElementsList = getListOfElementsWithAttribute(ATTRIBUTE_NAME);
+    highlightElements(fElementsList);
+  }, 100);
+});
