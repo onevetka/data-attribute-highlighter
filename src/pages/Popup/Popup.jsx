@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Popup.css';
 
 const Popup = () => {
   const [currentValue, setCurrentValue] = useState('');
+
+  useEffect(() => {
+    /**
+     * Initialize input with current value from store
+     */
+    chrome.storage.local.get("highlight-data-named", (data) => {
+      const attributeName = data['highlight-data-named'];
+
+      setCurrentValue(attributeName);
+    });
+  }, []);
 
   const handleSave = () => {
     chrome.storage.local.set({ 'highlight-data-named': currentValue }, function () {

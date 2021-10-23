@@ -12,7 +12,7 @@ class Highlighter {
     this.tooltip = addTooltipToDocument();
   }
 
-  highlightElements(elements: any, attributeName: string = 'data-test') {
+  select(elements: Array<HTMLElement>, attributeName: string = 'data-test') {
     elements.forEach((element: any) => {
       element.classList.add('highlighted-element');
 
@@ -30,6 +30,14 @@ class Highlighter {
       });
 
       element.addEventListener('mouseleave', () => deleteTooltip(this.tooltip));
+    });
+  }
+
+  remove(elements: Array<HTMLElement>, attributeName: string = 'data-test') {
+    elements.forEach((element: any) => {
+      element.classList.remove('highlighted-element');
+
+      // TODO: Remove event listeners
     });
   }
 }

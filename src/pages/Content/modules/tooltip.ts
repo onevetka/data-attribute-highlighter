@@ -1,4 +1,4 @@
-export function addTooltipToDocument() {
+export function addTooltipToDocument(): HTMLElement {
   const tooltip = document.createElement('div');
 
   tooltip.className = 'tooltip';
