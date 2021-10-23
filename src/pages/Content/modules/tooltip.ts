@@ -5,13 +5,15 @@ export function addTooltipToDocument() {
   tooltip.id = 'tooltip';
 
   document.body.appendChild(tooltip);
+
+  return tooltip;
 }
 
 export function drawTooltipByCoordinates(x: number, y: number, label: string, tooltip: HTMLElement | null) {
   if (tooltip === null) {
     return null;
   }
-  
+
   tooltip.innerText = label;
   tooltip.style.left = `${x + 16}px`;
   tooltip.style.top = `${y + 16}px`;

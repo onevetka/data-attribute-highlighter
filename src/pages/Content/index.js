@@ -1,7 +1,6 @@
-import { addTooltipToDocument } from './modules/tooltip';
+// import { addTooltipToDocument } from './modules/tooltip';
 import controller from './modules/controller';
 
-addTooltipToDocument();
 controller.startHighlighter();
 
 // TODO: Create listentrs controller

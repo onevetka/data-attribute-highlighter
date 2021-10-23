@@ -1,41 +1,34 @@
 import { addTooltipToDocument, drawTooltipByCoordinates, deleteTooltip } from './tooltip';
 
-interface HighlighterInterface {
-  attributeName: string;
+/**
+ * Implementation
+ */
+class Highlighter {
   color: string;
   tooltip: HTMLElement | null;
 
-  highlightElements: Function;
-}
-
-class Highlighter implements HighlighterInterface {
-  attributeName;
-  color;
-  tooltip;
-
-  constructor(attributeName: string = 'data-test', color: string = '') {
-    this.attributeName = attributeName;
+  constructor(color: string = '') {
     this.color = color;
-    this.tooltip = document.getElementById('tooltip');
+    this.tooltip = addTooltipToDocument();
   }
 
-  highlightElements(elements: any) {
+  highlightElements(elements: any, attributeName: string = 'data-test') {
     elements.forEach((element: any) => {
       element.classList.add('highlighted-element');
 
-      const label = element.getAttribute(this.attributeName);
-  
+      const label = element.getAttribute(attributeName);
+
       element.addEventListener('mousemove', (event: MouseEvent) => {
         const x = event.clientX;
         const y = event.clientY;
 
         drawTooltipByCoordinates(x, y, label, this.tooltip);
-  
+
         if (event.target === element) {
           event.stopPropagation();
         }
       });
-  
+
       element.addEventListener('mouseleave', () => deleteTooltip(this.tooltip));
     });
   }
