@@ -1,38 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useController from './useController';
 import './Popup.css';
 
 const Popup = () => {
-  const [currentValue, setCurrentValue] = useState('');
-
-  useEffect(() => {
-    /**
-     * Initialize input with current value from store
-     */
-    chrome.storage.local.get("highlight-data-named", (data) => {
-      const attributeName = data['highlight-data-named'];
-
-      setCurrentValue(attributeName);
-    });
-  }, []);
-
-  const handleSave = () => {
-    chrome.storage.local.set({ 'highlight-data-named': currentValue }, function () {
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        // TODO: Create constant
-        chrome.tabs.sendMessage(tabs[0].id, { messageType: "highlight-data" });
-      });
-    })
-  }
-
-  const handleInputChange = (event) => {
-    setCurrentValue(event.target.value);
-  }
+  const { state, handleInputChange, handleSave } = useController();
+  const { currentValue } = state;
 
   return (
     <div className="App">
       <header className="App-header">
-        <input value={currentValue} onChange={handleInputChange} />
-        <button onClick={handleSave}>Save</button>
+        <form onSubmit={handleSave}>
+          <input value={currentValue} onChange={handleInputChange} />
+          <button type="submit">Save</button>
+        </form>
       </header>
     </div>
   );
