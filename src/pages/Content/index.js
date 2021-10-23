@@ -1,5 +1,14 @@
 import { addTooltipToDocument } from './modules/tooltip';
-import Controller from './modules/controller';
+import controller from './modules/controller';
 
 addTooltipToDocument();
-Controller.startHighlighter();
+controller.startHighlighter();
+
+// TODO: Create listentrs controller
+chrome.runtime.onMessage.addListener(
+  function (request) {
+    if (request.messageType === "highlight-data") {
+      controller.startHighlighter();
+    }
+  }
+);

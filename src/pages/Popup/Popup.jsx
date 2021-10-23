@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import Controller from '../Content/modules/controller';
 import './Popup.css';
 
 const Popup = () => {
   const [currentValue, setCurrentValue] = useState('');
 
   const handleSave = () => {
-    chrome.storage.local.set({'highlight-data-named': currentValue}, function() {
-      Controller.startHighlighter();
-    });
+    chrome.storage.local.set({ 'highlight-data-named': currentValue }, function () {
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        // TODO: Create constant
+        chrome.tabs.sendMessage(tabs[0].id, { messageType: "highlight-data" });
+      });
+    })
   }
 
   const handleInputChange = (event) => {
