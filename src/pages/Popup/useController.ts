@@ -26,13 +26,9 @@ const useController = () => {
     })
   }
 
-  const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setCurrentValue(event.currentTarget.value);
-  }
-
   const state = { currentValue };
 
-  return { state, handleSave, handleInputChange }
+  return { state, handleSave, handleInputChange: setCurrentValue }
 }
 
 export default useController

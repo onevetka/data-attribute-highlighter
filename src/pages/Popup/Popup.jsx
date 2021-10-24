@@ -1,6 +1,7 @@
 import React from 'react';
 import useController from './useController';
 import './Popup.css';
+import Input from '../../components/Input';
 
 const Popup = () => {
   const { state, handleInputChange, handleSave } = useController();
@@ -10,7 +11,7 @@ const Popup = () => {
     <div className="App">
       <header className="App-header">
         <form onSubmit={handleSave}>
-          <input value={currentValue} onChange={handleInputChange} />
+          <Input value={currentValue} onChange={handleInputChange} />
           <button type="submit">Save</button>
         </form>
       </header>
