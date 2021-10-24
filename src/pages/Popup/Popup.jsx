@@ -18,7 +18,7 @@ const Popup = () => {
       <header className="App-header">
         <form onSubmit={handleSave}>
           <Input value={currentValue} onChange={handleInputChange} />
-          <Button type="submit">Save</Button>
+          <Button type="submit">Highlight</Button>
         </form>
       </header>
     </div>
