@@ -1,5 +1,5 @@
 import React, { FormEvent } from 'react';
-// import cx from 'classnames';
+import cx from 'classnames';
 
 // Assets
 import styles from './style.module.scss';
@@ -12,7 +12,7 @@ export enum InputStatus {
 }
 
 const statusStylesMap = {
-  // [InputStatus.error]: styles.error,
+  [InputStatus.error]: styles.error,
   // [InputStatus.warning]: styles.warning,
   // [InputStatus.approved]: styles.approved,
   // [InputStatus.pending]: styles.pending,
@@ -45,8 +45,7 @@ const Input: React.FC<InputProps> = ({
   return (
     // <div className={styles.inputWrapper}>
     <input
-      // className={cx(styles.input, status && statusStylesMap[status])}
-      className={styles.inputNew}
+      className={cx(styles.input, status && statusStylesMap[status])}
       value={value}
       placeholder={placeholder}
       onChange={handleChange}

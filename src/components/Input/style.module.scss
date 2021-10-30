@@ -1,9 +1,13 @@
-.input-new {
+.input {
   padding: 8px;
   border-radius: 6px;
   font-size: 14px;
-  background-color: #000000;
+  // background-color: #000000;
   color: white;
   border: none;
   outline: none;
+
+  &.error {
+    background-color: red;
+  }
 }
