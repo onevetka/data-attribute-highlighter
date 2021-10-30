@@ -2,7 +2,7 @@ import React, { FormEvent } from 'react';
 // import cx from 'classnames';
 
 // Assets
-import './style.scss';
+import styles from './style.module.scss';
 
 export enum InputStatus {
   error = 'error',
@@ -46,7 +46,7 @@ const Input: React.FC<InputProps> = ({
     // <div className={styles.inputWrapper}>
     <input
       // className={cx(styles.input, status && statusStylesMap[status])}
-      className="input"
+      className={styles.inputNew}
       value={value}
       placeholder={placeholder}
       onChange={handleChange}

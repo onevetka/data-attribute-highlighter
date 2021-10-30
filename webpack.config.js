@@ -63,6 +63,13 @@ var options = {
           },
           {
             loader: 'css-loader',
+            options: {
+              modules: {
+                auto: true,
+                localIdentName: "[local]--[hash:base64:5]",
+                exportLocalsConvention: "camelCase",
+              },
+            }
           },
           {
             loader: 'sass-loader',
