@@ -51,13 +51,13 @@ const Input: React.FC<InputProps> = ({
   };
 
   return (
-    <div className={styles.outerFieldWrapper}>
+    <div className={cx(styles.outerFieldWrapper, className)}>
       {label && (
         <div className={styles.label}>
           {label}
         </div>
       )}
-      <div className={cx(styles.inputWrapper, className)}>
+      <div className={cx(styles.inputWrapper)}>
         <input
           className={cx(styles.input, status && statusStylesMap[status])}
           value={value}

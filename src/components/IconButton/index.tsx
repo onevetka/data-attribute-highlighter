@@ -1,24 +1,22 @@
 import React, { MouseEventHandler } from 'react';
-import cx from 'classnames';
+// import cx from 'classnames';
 
 // Assets
 import styles from './style.module.scss';
 
-interface ButtonProps {
+interface IconButtonProps {
   onClick?: MouseEventHandler;
   type?: 'button' | 'submit';
   disabled?: boolean;
   isPending?: boolean;
-  className?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({
+const IconButton: React.FC<IconButtonProps> = ({
   children,
   onClick,
   type = 'button',
   disabled,
   isPending,
-  className,
 }) => {
   return (
     <button
@@ -26,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({
       //   [styles.disabled]: disabled,
       //   [styles.peniding]: isPending,
       // })}
-      className={cx(styles.button, className)}
+      className={styles.button}
       type={type}
       disabled={disabled}
       onClick={onClick}
@@ -36,4 +34,4 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
+export default IconButton;
