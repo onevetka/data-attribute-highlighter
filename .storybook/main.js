@@ -12,7 +12,16 @@ module.exports = {
 
     config.module.rules.push({
       test: /\.scss$/,
-      use: ['style-loader', 'css-loader?modules=true'],
+      use: ['style-loader', {
+        loader: 'css-loader',
+        options: {
+          modules: {
+            auto: true,
+            localIdentName: "[local]--[hash:base64:5]",
+            exportLocalsConvention: "camelCase",
+          },
+        }
+      },],
       include: path.resolve(__dirname, '../'),
     });
 

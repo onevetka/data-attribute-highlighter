@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, ReactElement } from 'react';
 import cx from 'classnames';
 
 // Assets
@@ -19,9 +19,13 @@ const statusStylesMap = {
 };
 
 interface InputProps {
+  className?: string;
   disabled?: boolean;
+  label?: string;
+  additionalIcon?: ReactElement;
   value?: string;
   placeholder?: string;
+  maxLength?: number;
   status?: InputStatus;
   statusText?: string;
   onChange?: Function;
@@ -30,31 +34,48 @@ interface InputProps {
 }
 
 const Input: React.FC<InputProps> = ({
+  className,
+  label,
   value,
+  additionalIcon,
   placeholder,
   onChange,
   disabled,
+  maxLength,
   status,
   statusText,
 }) => {
   const handleChange = (event: FormEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
-    onChange && onChange(value);
+    onChange?.(value);
   };
 
   return (
-    // <div className={styles.inputWrapper}>
-    <input
-      className={cx(styles.input, status && statusStylesMap[status])}
-      value={value}
-      placeholder={placeholder}
-      onChange={handleChange}
-      disabled={disabled}
-    />
-    /* {status ? (
+    <div className={styles.outerFieldWrapper}>
+      {label && (
+        <div className={styles.label}>
+          {label}
+        </div>
+      )}
+      <div className={cx(styles.inputWrapper, className)}>
+        <input
+          className={cx(styles.input, status && statusStylesMap[status])}
+          value={value}
+          placeholder={placeholder}
+          onChange={handleChange}
+          disabled={disabled}
+          maxLength={maxLength}
+        />
+        {additionalIcon && (
+          <div className={styles.additionalIcon}>
+            {additionalIcon}
+          </div>
+        )}
+      </div>
+      {/* {status && (
       <span className={cx(styles.status, statusStylesMap[status])}>{statusText}</span>
-    ) : null} */
-    // </div>
+    )} */}
+    </div>
   );
 };
 
