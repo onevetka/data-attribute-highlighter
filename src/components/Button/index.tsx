@@ -2,7 +2,7 @@ import React, { MouseEventHandler } from 'react';
 // import cx from 'classnames';
 
 // Assets
-import './style.scss';
+import styles from './style.module.scss';
 
 interface ButtonProps {
   onClick?: MouseEventHandler;
@@ -24,7 +24,7 @@ const Button: React.FC<ButtonProps> = ({
       //   [styles.disabled]: disabled,
       //   [styles.peniding]: isPending,
       // })}
-      className="button"
+      className={styles.button}
       type={type}
       disabled={disabled}
       onClick={onClick}

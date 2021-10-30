@@ -50,7 +50,7 @@ const Input: React.FC<InputProps> = ({
       placeholder={placeholder}
       onChange={handleChange}
       disabled={disabled}
-    ></input>
+    />
     /* {status ? (
       <span className={cx(styles.status, statusStylesMap[status])}>{statusText}</span>
     ) : null} */
