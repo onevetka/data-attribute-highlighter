@@ -23,7 +23,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
     setColor(val);
   }
 
-  const colorIndicator = <div style={{ backgroundColor: color }} className={cx(styles.colorIndicator, {
+  const colorIndicator = <div style={disabled ? undefined : { backgroundColor: color }} className={cx(styles.colorIndicator, {
     [styles.disabled]: disabled,
   })} />
 

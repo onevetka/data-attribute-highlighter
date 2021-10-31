@@ -12,7 +12,7 @@ export default {
 } as ComponentMeta<typeof CurrentAttributeListItem>;
 
 const Template: ComponentStory<typeof CurrentAttributeListItem> = () => {
-  return <CurrentAttributeListItem label="data-tnav" highlightingСolor="#0670EF" onClose={() => { }} onToggleVisibility={() => { }} isHighlighted />;
+  return <CurrentAttributeListItem label="data-tnav" highlightingСolor="#0670EF" onClose={() => { }} onToggleVisibility={() => { }} isHighlighted={false} />;
 };
 
 export const Default = Template.bind({});
