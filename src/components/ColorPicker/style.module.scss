@@ -1,9 +1,14 @@
 .color-picker {
-  width: 84px;
+  width: 110px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .color-indicator {
   width: 8px;
   height: 8px;
   border-radius: 4px;
+}
+
+.color-indicator.disabled {
+  background-color: black;
 }

@@ -57,7 +57,7 @@ const Input: React.FC<InputProps> = ({
           {label}
         </div>
       )}
-      <div className={cx(styles.inputWrapper)}>
+      <div className={cx(styles.inputWrapper, { [styles.disabled]: disabled })}>
         <input
           className={cx(styles.input, status && statusStylesMap[status])}
           value={value}

@@ -1,0 +1,16 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  max-width: 300px;
+  gap: 8px;
+}
+
+.label {
+  flex-grow: 1;
+  color: white;
+}
+
+.label.disabled {
+  color: #B0B0B0;
+  text-decoration: line-through;
+}
