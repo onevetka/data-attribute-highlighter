@@ -21,7 +21,10 @@ const Popup = () => {
           <Input className={styles.attributeNameInput} label="Attribute name" value={currentValue} onChange={handleInputChange} />
           <Button className={styles.highlightButton} type="submit">Highlight</Button>
         </form>
-        <CurrentAttributeListItem label="data-tnav" highlightingСolor="#0670EF" onClose={() => { }} onToggleVisibility={() => { }} />
+        <div className={styles.table}>
+          <CurrentAttributeListItem label="data-tnav" highlightingСolor="#0670EF" onClose={() => { }} onToggleVisibility={() => { }} />
+
+        </div>
       </header>
     </div>
   );
