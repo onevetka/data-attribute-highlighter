@@ -1,0 +1,10 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.list-item {
+  &:not(:first-child) {
+    padding-top: 16px;
+  }
+}

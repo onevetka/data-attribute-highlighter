@@ -13,6 +13,7 @@ import VisibilityOnIcon from '../Icons/VisibilityOnIcon';
 import styles from './style.module.scss';
 
 interface ListItemProps {
+  className: string;
   label: string;
   highlightingСolor: string;
   isHighlighted: boolean;
@@ -20,9 +21,9 @@ interface ListItemProps {
   onToggleVisibility: Function;
 }
 
-const CurrentAttributeListItem: React.FC<ListItemProps> = ({ label, highlightingСolor, isHighlighted, onClose, onToggleVisibility }) => {
+const CurrentAttributeListItem: React.FC<ListItemProps> = ({ className, label, highlightingСolor, isHighlighted, onClose, onToggleVisibility }) => {
   return (
-    <div className={styles.wrapper}>
+    <div className={cx(styles.wrapper, className)}>
       <div className={cx(styles.label, { [styles.disabled]: !isHighlighted })}>{label}</div>
       <ColorPicker value={highlightingСolor} disabled={!isHighlighted} />
       <IconButton onClick={onToggleVisibility as MouseEventHandler}>{isHighlighted ? <VisibilityOnIcon /> : <VisibilityOffIcon />}</IconButton>
