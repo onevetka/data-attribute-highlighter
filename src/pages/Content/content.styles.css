@@ -14,5 +14,6 @@
 }
 
 .highlighted-element {
-  outline: 5px solid #007AFF !important;
+  outline-style: solid;
+  outline-width: 5px;
 }

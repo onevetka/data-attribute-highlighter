@@ -1,43 +1,43 @@
 import { STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD } from "../../../constants/store";
-import { getListOfElementsWithAttribute } from "../../../services/document.service";
-import Highlighter from "./highlighter";
+import colorGeneratorService from "./colorGenerator.service";
+import highlighterService, { HighligherData } from "./highlighter.service";
 
 /**
  * Abstraction (Interface)
  */
 class Controller {
-  highlighter: Highlighter;
-  currentAttributeName: string = '';
+  highlightedAttributes: Array<HighligherData> = [];
 
-  constructor(highlighter: Highlighter) {
-    this.highlighter = highlighter;
+  constructor() {
     chrome.storage.local.get("highlight-data-named", (data) => {
-      this.currentAttributeName = data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD];
+      this.highlightedAttributes = data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD] || [];
     });
+    this.highlightedAttributes.forEach(({ attributeName, color }) => {
+      highlighterService.addHighlighter(attributeName, color);
+    })
   }
 
-  public startHighlighter() {
-    chrome.storage.local.get(STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD, (data) => {
-      const attributeName = data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD];
-
-      if (this.currentAttributeName !== attributeName) {
-        const foundElementsList = getListOfElementsWithAttribute(this.currentAttributeName);
-        this.highlighter.remove(foundElementsList, this.currentAttributeName);
-      }
-
-      this.currentAttributeName = attributeName;
-
-      if (!attributeName) {
-        return null;
-      }
-
-      const foundElementsList = getListOfElementsWithAttribute(attributeName);
-      this.highlighter.select(foundElementsList, attributeName);
-    });
+  addHighlighter(attributeName: string,) {
+    const color = colorGeneratorService.getColor() || 'black';
+    highlighterService.addHighlighter(attributeName, color);
   }
+
+  // public startHighlighter() {
+  //   chrome.storage.local.get(STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD, (data) => {
+  //     const attributeName = data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD];
+
+  //     this.currentAttributeName = attributeName;
+
+  //     if (!attributeName) {
+  //       return null;
+  //     }
+
+
+  //     this.highlighterService.addHighlighter(attributeName);
+  //   });
+  // }
 }
 
-const highlighter = new Highlighter();
-const controller = new Controller(highlighter);
+const controller = new Controller();
 
 export default controller;
