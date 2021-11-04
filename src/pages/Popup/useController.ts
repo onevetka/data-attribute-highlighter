@@ -6,7 +6,9 @@ import colorGeneratorService from '../Content/modules/colorGenerator.service';
 const useController = () => {
   const [currentValue, setCurrentValue] = useState('');
 
-  const handleSave = () => {
+  const handleSave = (event: Event) => {
+    event.preventDefault();
+
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       // TODO: Create constant
       const tabId = tabs[0].id || 0;
