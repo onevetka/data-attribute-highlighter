@@ -14,11 +14,11 @@ const AttributeList: React.FC<any> = ({ className }) => {
         <CurrentAttributeListItem
           className={styles.listItem}
           label={item.label}
-          highlightingСolor={item.highlightingСolor}
+          highlightingСolor={item.color}
           isHighlighted={item.isHighlighted}
           onClose={item.onClose}
           onToggleVisibility={item.onToggleVisibility}
-          key={item.id}
+          key={item.label}
         />
       ))}
     </div>

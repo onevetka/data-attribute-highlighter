@@ -15,8 +15,6 @@ class Controller {
       this.highlightedAttributes.forEach(({ attributeName, color }) => {
         highlighterService.addHighlighter(attributeName, color);
       });
-
-      console.log(`highlightedAttributes`, this.highlightedAttributes);
     });
   }
 
@@ -30,6 +28,16 @@ class Controller {
       const newData = [...highlightedAttributes, { attributeName, color }];
 
       chrome.storage.local.set({ [STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD]: newData });
+    });
+  }
+
+  removeHighlighter(id: number) {
+    chrome.storage.local.get(STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD, (data) => {
+      const highlightedAttributes = data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD] || [];
+
+      highlighterService.removeHighlighter(id);
+      highlightedAttributes.splice(id, 1);
+      chrome.storage.local.set({ [STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD]: highlightedAttributes });
     });
   }
 }

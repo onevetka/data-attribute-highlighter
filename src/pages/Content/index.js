@@ -9,5 +9,9 @@ chrome.runtime.onMessage.addListener(
     if (request.messageType === "highlight-data") {
       controller.addHighlighter(request.attributeName);
     }
+
+    if (request.messageType === "remove-highlighter") {
+      controller.removeHighlighter(request.id);
+    }
   }
 );
