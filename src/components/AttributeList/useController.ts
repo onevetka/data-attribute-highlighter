@@ -30,7 +30,7 @@ const useController = () => {
         onToggleVisibility: () => { handleToggleAttributeVisibility(1) },
       }
     ]);
-  })
+  }, [])
 
   const state = {
     items,
