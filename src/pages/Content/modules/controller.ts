@@ -1,6 +1,6 @@
 import { HIGHLIGHTERS_FIELD } from "../../../constants/store";
 import { getListOfElementsWithAttribute } from "../../../services/document.service";
-import colorGeneratorService from "./colorGenerator.service";
+import colorGeneratorService from "../../../services/colorGenerator.service";
 import Highlighter from "./highlighter";
 
 export type HighligherData = {
