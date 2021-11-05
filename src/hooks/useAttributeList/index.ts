@@ -11,9 +11,9 @@ const useAttributeList = () => {
     setHighlightedAttributes(data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD] || []);
   });
 
-  const attributeList = highlightedAttributes.map((attribute, index) => {
+  const attributeList = highlightedAttributes.map((attribute) => {
     return ({
-      id: index,
+      id: attribute.id,
       label: attribute.attributeName,
       color: attribute.color,
       isHighlighted: true,
@@ -21,7 +21,7 @@ const useAttributeList = () => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
           const tabId = tabs[0].id || 0;
 
-          chrome.tabs.sendMessage(tabId, { messageType: "remove-highlighter", id: index });
+          chrome.tabs.sendMessage(tabId, { messageType: "remove-highlighter", id: attribute.id });
         });
       },
       onToggleVisibility: () => { },

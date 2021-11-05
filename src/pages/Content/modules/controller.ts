@@ -4,6 +4,7 @@ import colorGeneratorService from "./colorGenerator.service";
 import Highlighter from "./highlighter";
 
 export type HighligherData = {
+  id: string;
   attributeName: string;
   color: string;
   isVisible?: boolean;
@@ -33,20 +34,25 @@ class Controller {
       const color = colorGeneratorService.getColor() || 'black';
       Highlighter.select(foundElementsList, color);
 
-      const newData = [...highlightedAttributes, { attributeName, color }];
+      const hash = Math.random().toString(36).substr(2, 5);
+      const id = `${attributeName}-${hash}`;
+
+      const newData = [...highlightedAttributes, { id, attributeName, color }];
 
       chrome.storage.local.set({ [STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD]: newData });
     });
   }
 
-  removeHighlighter(id: number) {
+  removeHighlighter(id: string) {
     chrome.storage.local.get(STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD, (data) => {
-      const highlightedAttributes = data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD] || [];
+      const highlightedAttributes: Array<HighligherData> = data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD] || [];
 
-      const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[id].attributeName);
+      const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
+
+      const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[index].attributeName);
       Highlighter.remove(foundElementsList);
 
-      highlightedAttributes.splice(id, 1);
+      highlightedAttributes.splice(index, 1);
       chrome.storage.local.set({ [STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD]: highlightedAttributes });
     });
   }
