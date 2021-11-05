@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react'
-import { STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD } from '../../constants/store';
-import colorGeneratorService from '../Content/modules/colorGenerator.service';
+import { useState } from 'react';
 
 
 const useController = () => {

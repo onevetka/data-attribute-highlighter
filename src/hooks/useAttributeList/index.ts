@@ -2,13 +2,13 @@
 import { useState } from "react";
 
 // Constants
-import { STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD } from "../../constants/store";
+import { HIGHLIGHTERS_FIELD } from "../../constants/store";
 import { HighligherData } from "../../pages/Content/modules/controller";
 
 const useAttributeList = () => {
   const [highlightedAttributes, setHighlightedAttributes] = useState<Array<HighligherData>>([]);
-  chrome.storage.local.get(STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD, (data) => {
-    setHighlightedAttributes(data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD] || []);
+  chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
+    setHighlightedAttributes(data[HIGHLIGHTERS_FIELD] || []);
   });
 
   const attributeList = highlightedAttributes.map((attribute) => {
