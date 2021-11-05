@@ -1,6 +1,8 @@
 // import { addTooltipToDocument } from './modules/tooltip';
 import controller from './modules/controller';
 
+controller.initHighlighters();
+
 // TODO: Create listentrs controller
 chrome.runtime.onMessage.addListener(
   function (request) {

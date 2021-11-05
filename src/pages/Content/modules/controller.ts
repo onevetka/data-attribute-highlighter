@@ -9,17 +9,16 @@ export type HighligherData = {
   isVisible?: boolean;
 }
 
-/**
- * Abstraction (Interface)
- */
 class Controller {
-  highlightedAttributes: Array<HighligherData> = [];
+  /**
+   * Abstraction (Interface)
+   */
 
-  constructor() {
+  initHighlighters() {
     chrome.storage.local.get(STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD, (data) => {
-      this.highlightedAttributes = data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD] || [];
+      const highlightedAttributes: Array<HighligherData> = data[STORE_CURRENT_HIGHLIGHTED_ATTRIBUTES_FIELD] || [];
 
-      this.highlightedAttributes.forEach(({ attributeName, color }) => {
+      highlightedAttributes.forEach(({ attributeName, color }) => {
         const foundElementsList = getListOfElementsWithAttribute(attributeName);
         Highlighter.select(foundElementsList, color);
       });
