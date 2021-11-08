@@ -7,6 +7,7 @@ import { HighligherData } from "../../pages/Content/modules/controller";
 
 const useAttributeList = () => {
   const [highlightedAttributes, setHighlightedAttributes] = useState<Array<HighligherData>>([]);
+
   chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
     setHighlightedAttributes(data[HIGHLIGHTERS_FIELD] || []);
   });
