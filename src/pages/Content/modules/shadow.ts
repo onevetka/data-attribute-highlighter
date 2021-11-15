@@ -1,8 +1,3 @@
-import validateColor from './validateColor';
-
-const INSET_EXIST_REGEXP = /^inset.*$/;
-const SHADOW_VALUES_REGEXP = /^(inset )?(\W?|[\d]px ){4}.*$/;
-
 class Shadow {
   /**
    * Class providing api for working with box-shadow
@@ -37,28 +32,6 @@ class Shadow {
       `${offsetXCSS} ${offsetYCSS} ${blurRadiusCSS} ${spreadRadiusCSS} ${this.color}`;
 
     return shadowCSS;
-  }
-
-  public recognizeCSS(shadowCSS: string) {
-    const valuesList = shadowCSS.split(" ");
-
-    const isValidShadowValues = SHADOW_VALUES_REGEXP.test(shadowCSS);
-    const isValidColor = validateColor(valuesList[5] || valuesList[4]);
-
-    if (!isValidColor || !isValidShadowValues) {
-      throw new Error(`Irrelevant shadow css string: ${shadowCSS}`);
-    }
-
-    const isInsetShadow = INSET_EXIST_REGEXP.test(shadowCSS);
-
-    this.offsetX = parseInt(valuesList[isInsetShadow ? 1 : 0], 10);
-    this.offsetY = parseInt(valuesList[isInsetShadow ? 2 : 1], 10);
-    this.blurRadius = parseInt(valuesList[isInsetShadow ? 3 : 2], 10);
-    this.spreadRadius = parseInt(valuesList[isInsetShadow ? 4 : 3], 10);
-    this.color = valuesList[isInsetShadow ? 5 : 4];
-
-    this.inset = isInsetShadow;
-    this.notation = "px";
   }
 }
 

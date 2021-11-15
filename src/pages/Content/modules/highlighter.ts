@@ -1,41 +1,74 @@
-import { addTooltipToDocument, drawTooltipByCoordinates, deleteTooltip } from './tooltip';
+// import { addTooltipToDocument, drawTooltipByCoordinates, deleteTooltip } from './tooltip';
+import Shadow from './shadow';
 
-/**
- * Implementation
- */
+const getHash = () => {
+  return Math.random().toString(36).substr(2, 5);
+};
+
 class Highlighter {
-  // tooltip: HTMLElement | null;
+  public selectedElements: Record<string, Array<Shadow>> = {};
 
-  static select(elements: Array<HTMLElement>, color: string/*, attributeName: string = 'data-test'*/) {
-    elements.forEach((element: any) => {
-      element.classList.add('highlighted-element');
-      element.style.outlineColor = color;
+  public add(element: HTMLElement, color: string) {
+    const id = element.dataset.highlighterId;
+    if (id) {
+      const shadows = this.selectedElements[id];
+      const spreadSize = (shadows.length + 1) * 5;
 
-      // const label = element.getAttribute(attributeName);
+      const shadow = new Shadow();
 
-      // element.addEventListener('mousemove', (event: MouseEvent) => {
-      //   const x = event.clientX;
-      //   const y = event.clientY;
+      shadow.color = color;
+      shadow.spreadRadius = spreadSize;
 
-      //   drawTooltipByCoordinates(x, y, label, this.tooltip);
+      shadows.push(shadow);
 
-      //   if (event.target === element) {
-      //     event.stopPropagation();
-      //   }
-      // });
+      element.style.boxShadow = this.getBoxShadow(shadows);
 
-      // element.addEventListener('mouseleave', () => deleteTooltip(this.tooltip));
-    });
+      this.selectedElements[id] = shadows;
+    } else {
+      const shadow = new Shadow();
+      const uniqId = getHash();
+
+      shadow.color = color;
+      shadow.spreadRadius = 5;
+
+      element.style.boxShadow = shadow.computeCSS();
+      element.dataset.highlighterId = uniqId;
+
+      this.selectedElements[uniqId] = [shadow];
+    }
   }
 
-  static remove(elements: Array<HTMLElement>/*, attributeName: string = 'data-test'*/) {
-    elements.forEach((element: any) => {
-      element.classList.remove('highlighted-element');
-      element.style.outlineColor = 'unset';
+  public remove(element: HTMLElement, color: string) {
+    const id = element.dataset.highlighterId;
 
-      // TODO: Remove event listeners
+    if (!id) {
+      throw new Error("This element have not this color");
+    }
+
+    const originalShadows = this.selectedElements[id];
+    const toRemoveIndex = originalShadows.findIndex(
+      (shadow) => shadow.color === color
+    );
+    const shadows = this.recomputeBordersWidth([
+      ...originalShadows.slice(0, toRemoveIndex),
+      ...originalShadows.slice(toRemoveIndex + 1)
+    ]);
+
+    element.style.boxShadow = this.getBoxShadow(shadows);
+
+    this.selectedElements[id] = shadows;
+  }
+
+  private getBoxShadow(shadows: Array<Shadow>) {
+    return shadows.map((shadow) => shadow.computeCSS()).join(", ");
+  }
+
+  private recomputeBordersWidth(shadows: Array<Shadow>) {
+    return shadows.map((shadow, index) => {
+      shadow.spreadRadius = (index + 1) * 5;
+      return shadow;
     });
   }
 }
 
-export default Highlighter;
+export default new Highlighter();

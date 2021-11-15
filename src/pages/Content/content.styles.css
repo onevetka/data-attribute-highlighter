@@ -12,8 +12,3 @@
   visibility: hidden;
   z-index: 100;
 }
-
-.highlighted-element {
-  outline-style: solid;
-  outline-width: 5px;
-}

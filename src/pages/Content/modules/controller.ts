@@ -22,7 +22,7 @@ class Controller {
       highlightedAttributes.forEach(({ attributeName, color, isVisible }) => {
         if (isVisible) {
           const foundElementsList = getListOfElementsWithAttribute(attributeName);
-          Highlighter.select(foundElementsList, color);
+          foundElementsList.forEach(element => Highlighter.add(element, color))
         }
       });
     });
@@ -34,7 +34,8 @@ class Controller {
 
       const foundElementsList = getListOfElementsWithAttribute(attributeName);
       const color = colorGeneratorService.getColor() || 'black';
-      Highlighter.select(foundElementsList, color);
+
+      foundElementsList.forEach(element => Highlighter.add(element, color))
 
       const hash = Math.random().toString(36).substr(2, 5);
       const id = `${attributeName}-${hash}`;
@@ -52,7 +53,8 @@ class Controller {
       const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
 
       const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[index].attributeName);
-      Highlighter.remove(foundElementsList);
+
+      foundElementsList.forEach(element => Highlighter.remove(element, highlightedAttributes[index].color));
 
       highlightedAttributes.splice(index, 1);
       chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: highlightedAttributes });
@@ -66,7 +68,7 @@ class Controller {
       const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
       const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[index].attributeName);
       const color = highlightedAttributes[index].color;
-      Highlighter.select(foundElementsList, color);
+      foundElementsList.forEach(element => Highlighter.add(element, color))
 
       highlightedAttributes[index].isVisible = true;
       chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: highlightedAttributes });
@@ -79,7 +81,7 @@ class Controller {
 
       const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
       const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[index].attributeName);
-      Highlighter.remove(foundElementsList);
+      foundElementsList.forEach(element => Highlighter.remove(element, highlightedAttributes[index].color));
 
       highlightedAttributes[index].isVisible = false;
       chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: highlightedAttributes });
