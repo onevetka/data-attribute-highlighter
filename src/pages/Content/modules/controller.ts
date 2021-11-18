@@ -81,6 +81,7 @@ class Controller {
 
       const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
       const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[index].attributeName);
+
       foundElementsList.forEach(element => Highlighter.remove(element, highlightedAttributes[index].color));
 
       highlightedAttributes[index].isVisible = false;

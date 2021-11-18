@@ -33,8 +33,6 @@ class Highlighter {
   public remove(element: HTMLElement, color: string) {
     const id = element.dataset.highlightedElemId;
 
-    console.log(id);
-
     if (!id) throw new Error("This element has not highlighted");
 
     const originalShadows = this.selectedElements[id];
@@ -51,6 +49,10 @@ class Highlighter {
     ]);
 
     element.style.boxShadow = this.getBoxShadow(shadows);
+    
+    if (shadows.length === 0) {
+      delete element.dataset.highlightedElemId;
+    }
 
     this.selectedElements[id] = shadows;
   }
