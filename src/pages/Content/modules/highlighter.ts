@@ -6,49 +6,45 @@ const getHash = () => {
 };
 
 class Highlighter {
-  public selectedElements: Record<string, Array<Shadow>> = {};
+  public selectedElements: Record<string, Array<Shadow>>;
+
+  constructor() {
+    this.selectedElements = {};
+  }
 
   public add(element: HTMLElement, color: string) {
-    const id = element.dataset.highlighterId;
-    if (id) {
-      const shadows = this.selectedElements[id];
-      const spreadSize = (shadows.length + 1) * 5;
+    const hasShadows = Boolean(element.dataset.highlightedElemId);
+    const id = element.dataset.highlightedElemId || getHash();
 
-      const shadow = new Shadow();
+    const shadows = hasShadows ? this.selectedElements[id] : [];
+    const spreadSize = hasShadows ? (shadows.length + 1) * 5 : 5;
 
-      shadow.color = color;
-      shadow.spreadRadius = spreadSize;
+    const shadow = new Shadow();
 
-      shadows.push(shadow);
+    shadow.color = color;
+    shadow.spreadRadius = spreadSize;
 
-      element.style.boxShadow = this.getBoxShadow(shadows);
+    element.dataset.highlightedElemId = id;
+    element.style.boxShadow = this.getBoxShadow([...shadows, shadow]);
 
-      this.selectedElements[id] = shadows;
-    } else {
-      const shadow = new Shadow();
-      const uniqId = getHash();
-
-      shadow.color = color;
-      shadow.spreadRadius = 5;
-
-      element.style.boxShadow = shadow.computeCSS();
-      element.dataset.highlighterId = uniqId;
-
-      this.selectedElements[uniqId] = [shadow];
-    }
+    this.selectedElements[id] = [...shadows, shadow];
   }
 
   public remove(element: HTMLElement, color: string) {
-    const id = element.dataset.highlighterId;
+    const id = element.dataset.highlightedElemId;
 
-    if (!id) {
-      throw new Error("This element have not this color");
-    }
+    console.log(id);
+
+    if (!id) throw new Error("This element has not highlighted");
 
     const originalShadows = this.selectedElements[id];
+
     const toRemoveIndex = originalShadows.findIndex(
       (shadow) => shadow.color === color
     );
+
+    if (toRemoveIndex === -1) throw new Error("The element haven't this color");
+
     const shadows = this.recomputeBordersWidth([
       ...originalShadows.slice(0, toRemoveIndex),
       ...originalShadows.slice(toRemoveIndex + 1)

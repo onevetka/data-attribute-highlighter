@@ -3,7 +3,7 @@ import { getListOfElementsWithAttribute } from "../../../services/document.servi
 import colorGeneratorService from "../../../services/colorGenerator.service";
 import Highlighter from "./highlighter";
 
-export type HighligherData = {
+export type HighlighterData = {
   id: string;
   attributeName: string;
   color: string;
@@ -17,7 +17,7 @@ class Controller {
 
   initHighlighters() {
     chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes: Array<HighligherData> = data[HIGHLIGHTERS_FIELD] || [];
+      const highlightedAttributes: Array<HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
 
       highlightedAttributes.forEach(({ attributeName, color, isVisible }) => {
         if (isVisible) {
@@ -48,7 +48,7 @@ class Controller {
 
   removeHighlighter(id: string) {
     chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes: Array<HighligherData> = data[HIGHLIGHTERS_FIELD] || [];
+      const highlightedAttributes: Array<HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
 
       const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
 
@@ -63,7 +63,7 @@ class Controller {
 
   showHighlighter(id: string) {
     chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes: Array<HighligherData> = data[HIGHLIGHTERS_FIELD] || [];
+      const highlightedAttributes: Array<HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
 
       const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
       const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[index].attributeName);
@@ -77,7 +77,7 @@ class Controller {
 
   hideHighlighter(id: string) {
     chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes: Array<HighligherData> = data[HIGHLIGHTERS_FIELD] || [];
+      const highlightedAttributes: Array<HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
 
       const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
       const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[index].attributeName);

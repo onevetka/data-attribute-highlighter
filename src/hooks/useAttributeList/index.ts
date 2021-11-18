@@ -3,10 +3,10 @@ import { useState } from "react";
 
 // Constants
 import { HIGHLIGHTERS_FIELD } from "../../constants/store";
-import { HighligherData } from "../../pages/Content/modules/controller";
+import { HighlighterData } from "../../pages/Content/modules/controller";
 
 const useAttributeList = () => {
-  const [highlightedAttributes, setHighlightedAttributes] = useState<Array<HighligherData>>([]);
+  const [highlightedAttributes, setHighlightedAttributes] = useState<Array<HighlighterData>>([]);
 
   chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
     setHighlightedAttributes(data[HIGHLIGHTERS_FIELD] || []);
