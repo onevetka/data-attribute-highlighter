@@ -33,6 +33,7 @@ class Highlighter {
   public remove(element: HTMLElement, color: string) {
     const id = element.dataset.highlightedElemId;
 
+
     if (!id) throw new Error("This element has not highlighted");
 
     const originalShadows = this.selectedElements[id];

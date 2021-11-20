@@ -1,13 +1,14 @@
+import AttributeList from "../../../components/AttributeList";
 import { HIGHLIGHTERS_FIELD } from "../../../constants/store";
-import { getListOfElementsWithAttribute } from "../../../services/document.service";
 import colorGeneratorService from "../../../services/colorGenerator.service";
-import Highlighter from "./highlighter";
+import manipulator from "./manipulator";
 
 export type HighlighterData = {
-  id: string;
+  // id: string;
   attributeName: string;
   color: string;
-  isVisible?: boolean;
+  isVisible: boolean;
+  elements: Array<HTMLElement>;
 }
 
 class Controller {
@@ -17,76 +18,46 @@ class Controller {
 
   initHighlighters() {
     chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes: Array<HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
+      const highlightedAttributes: Record<string, HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
 
-      highlightedAttributes.forEach(({ attributeName, color, isVisible }) => {
-        if (isVisible) {
-          const foundElementsList = getListOfElementsWithAttribute(attributeName);
-          foundElementsList.forEach(element => Highlighter.add(element, color))
-        }
+      Object.keys(highlightedAttributes).forEach((id) => {
+        const {color, attributeName, isVisible} = highlightedAttributes[id];
+
+        manipulator.add(id, attributeName, color, isVisible);
       });
     });
   }
 
   addHighlighter(attributeName: string) {
     chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes = data[HIGHLIGHTERS_FIELD] || [];
 
-      const foundElementsList = getListOfElementsWithAttribute(attributeName);
       const color = colorGeneratorService.getColor() || 'black';
-
-      foundElementsList.forEach(element => Highlighter.add(element, color))
-
       const hash = Math.random().toString(36).substr(2, 5);
       const id = `${attributeName}-${hash}`;
 
-      const newData = [...highlightedAttributes, { id, attributeName, color, isVisible: true }];
+      manipulator.add(id, attributeName, color, true);
 
-      chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: newData });
+      chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: manipulator.highlightedAttributes });
     });
   }
 
   removeHighlighter(id: string) {
     chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes: Array<HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
+      // TODO: delete wrapper
+      manipulator.remove(id);
 
-      const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
-
-      const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[index].attributeName);
-
-      foundElementsList.forEach(element => Highlighter.remove(element, highlightedAttributes[index].color));
-
-      highlightedAttributes.splice(index, 1);
-      chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: highlightedAttributes });
+      chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: manipulator.highlightedAttributes });
     });
   }
 
-  showHighlighter(id: string) {
-    chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes: Array<HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
+  toggleHighlighterVisibility(id: string) {
+    const { isVisible } = manipulator.highlightedAttributes[id];
 
-      const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
-      const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[index].attributeName);
-      const color = highlightedAttributes[index].color;
-      foundElementsList.forEach(element => Highlighter.add(element, color))
-
-      highlightedAttributes[index].isVisible = true;
-      chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: highlightedAttributes });
-    });
-  }
-
-  hideHighlighter(id: string) {
-    chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes: Array<HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
-
-      const index = highlightedAttributes.findIndex(attribute => attribute.id === id);
-      const foundElementsList = getListOfElementsWithAttribute(highlightedAttributes[index].attributeName);
-
-      foundElementsList.forEach(element => Highlighter.remove(element, highlightedAttributes[index].color));
-
-      highlightedAttributes[index].isVisible = false;
-      chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: highlightedAttributes });
-    });
+    if (isVisible) {
+      manipulator.hide(id);
+    } else {
+      manipulator.show(id);
+    }
   }
 }
 
