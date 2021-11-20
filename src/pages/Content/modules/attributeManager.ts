@@ -2,7 +2,7 @@ import { getListOfElementsWithAttribute } from "../../../services/document.servi
 import { HighlighterData } from "./controller";
 import highlighter from "./highlighter";
 
-class Manipulator {
+class AttributeManager {
   public highlightedAttributes: Record<string, HighlighterData>;
 
   constructor() {
@@ -91,6 +91,4 @@ class Manipulator {
   }
 }
 
-const manipulator = new Manipulator();
-
-export default new Manipulator();
+export default new AttributeManager();

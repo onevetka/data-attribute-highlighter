@@ -1,7 +1,7 @@
 import AttributeList from "../../../components/AttributeList";
 import { HIGHLIGHTERS_FIELD } from "../../../constants/store";
 import colorGeneratorService from "../../../services/colorGenerator.service";
-import manipulator from "./manipulator";
+import AttributeManager from "./attributeManager";
 
 export type HighlighterData = {
   attributeName: string;
@@ -21,7 +21,7 @@ class Controller {
       Object.keys(highlightedAttributes).forEach((id) => {
         const {color, attributeName, isVisible} = highlightedAttributes[id];
 
-        manipulator.add(id, attributeName, color, isVisible);
+        AttributeManager.add(id, attributeName, color, isVisible);
       });
     });
   }
@@ -31,27 +31,27 @@ class Controller {
     const hash = Math.random().toString(36).substr(2, 5);
     const id = `${attributeName}-${hash}`;
 
-    manipulator.add(id, attributeName, color, true);
+    AttributeManager.add(id, attributeName, color, true);
 
-    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: manipulator.highlightedAttributes });
+    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
   }
 
   removeHighlighter(id: string) {
-    manipulator.remove(id);
+    AttributeManager.remove(id);
 
-    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: manipulator.highlightedAttributes });
+    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
   }
 
   toggleHighlighterVisibility(id: string) {
-    const { isVisible } = manipulator.highlightedAttributes[id];
+    const { isVisible } = AttributeManager.highlightedAttributes[id];
 
     if (isVisible) {
-      manipulator.hide(id);
+      AttributeManager.hide(id);
     } else {
-      manipulator.show(id);
+      AttributeManager.show(id);
     }
 
-    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: manipulator.highlightedAttributes });
+    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
   }
 }
 
