@@ -19,7 +19,6 @@ class Manipulator {
 
     if (elements.length === 0) {
       console.log(`Can not find element with attribute: ${attributeName}`);
-      return;
     }
 
     if (id in this.highlightedAttributes) {
@@ -28,7 +27,7 @@ class Manipulator {
     }
 
     if (isVisible) {
-      elements.forEach((element) => highlighter.add(element, color));
+      elements?.forEach((element) => highlighter.add(element, color));
     }
 
     this.highlightedAttributes[id] = {

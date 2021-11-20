@@ -4,7 +4,6 @@ import colorGeneratorService from "../../../services/colorGenerator.service";
 import manipulator from "./manipulator";
 
 export type HighlighterData = {
-  // id: string;
   attributeName: string;
   color: string;
   isVisible: boolean;
@@ -13,9 +12,8 @@ export type HighlighterData = {
 
 class Controller {
   /**
-   * Provides methods for managing highlighters
+   * Provides methods for UI
    */
-
   initHighlighters() {
     chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
       const highlightedAttributes: Record<string, HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
@@ -29,25 +27,19 @@ class Controller {
   }
 
   addHighlighter(attributeName: string) {
-    chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
+    const color = colorGeneratorService.getColor() || 'black';
+    const hash = Math.random().toString(36).substr(2, 5);
+    const id = `${attributeName}-${hash}`;
 
-      const color = colorGeneratorService.getColor() || 'black';
-      const hash = Math.random().toString(36).substr(2, 5);
-      const id = `${attributeName}-${hash}`;
+    manipulator.add(id, attributeName, color, true);
 
-      manipulator.add(id, attributeName, color, true);
-
-      chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: manipulator.highlightedAttributes });
-    });
+    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: manipulator.highlightedAttributes });
   }
 
   removeHighlighter(id: string) {
-    chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      // TODO: delete wrapper
-      manipulator.remove(id);
+    manipulator.remove(id);
 
-      chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: manipulator.highlightedAttributes });
-    });
+    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: manipulator.highlightedAttributes });
   }
 
   toggleHighlighterVisibility(id: string) {
@@ -58,6 +50,8 @@ class Controller {
     } else {
       manipulator.show(id);
     }
+
+    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: manipulator.highlightedAttributes });
   }
 }
 
