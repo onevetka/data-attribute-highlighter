@@ -8,10 +8,10 @@
   font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;
+  z-index: 10000;
 
   display: none;
   visibility: hidden;
-  z-index: 100;
 }
 
 .tooltip-list-item {
