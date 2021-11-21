@@ -6,44 +6,52 @@ const getHash = () => {
 };
 
 type Selector = {
-  shadow: Shadow;
+  shadows: Array<Shadow>;
   tooltip: Tooltip;
 };
 
 class Highlighter {
-  public selectedElements: Record<string, Array<Selector>>;
+  public selectedElements: Record<string, Selector>;
 
   constructor() {
     this.selectedElements = {};
   }
 
   public add(element: HTMLElement, color: string, attributeValue: string) {
-    const hasSelectors = Boolean(element.dataset.highlightedElemId);
+    const hasSelector = Boolean(element.dataset.highlightedElemId);
     const id = element.dataset.highlightedElemId || getHash();
 
-    const selectors = hasSelectors ? this.selectedElements[id] : [];
-    const spreadSize = hasSelectors ? (selectors.length + 1) * 5 : 5;
+    const shadows = hasSelector ? this.selectedElements[id].shadows : [];
+    const spreadSize = hasSelector ? (shadows.length + 1) * 5 : 5;
+
+    const tooltip = hasSelector
+      ? this.selectedElements[id].tooltip
+      : new Tooltip();
+    const attributes = hasSelector ? tooltip.attributes : [];
 
     const shadow = new Shadow();
-    const tooltip = new Tooltip();
 
     shadow.color = color;
     shadow.spreadRadius = spreadSize;
 
-    tooltip.color = color;
+    const attribute = {
+      label: attributeValue,
+      color
+    };
+
+    tooltip.attributes = [...attributes, attribute];
     tooltip.element = element;
-    tooltip.label = attributeValue;
 
-    const selector = { shadow, tooltip };
-
-    this.selectedElements[id] = [...selectors, selector];
+    this.selectedElements[id] = {
+      shadows: [...shadows, shadow],
+      tooltip
+    };
 
     element.dataset.highlightedElemId = id;
-    element.style.boxShadow = this.getBoxShadow(this.selectedElements[id]);
-    TooltipService.addToElement(
-      element,
-      this.getTooltipLabel(this.selectedElements[id])
+    element.style.boxShadow = this.getBoxShadow(
+      this.selectedElements[id].shadows
     );
+    TooltipService.addToElement(element, tooltip);
   }
 
   public remove(element: HTMLElement, color: string) {
@@ -51,40 +59,43 @@ class Highlighter {
 
     if (!id) throw new Error("This element has not highlighted");
 
-    const originalSelectors = this.selectedElements[id];
+    const originalShadows = this.selectedElements[id].shadows;
+    const originalAttributes = this.selectedElements[id].tooltip.attributes;
 
-    const toRemoveIndex = originalSelectors.findIndex(
-      (selector) => selector.shadow.color === color
+    const toRemoveIndex = originalShadows.findIndex(
+      (shadow) => shadow.color === color
     );
 
     if (toRemoveIndex === -1) throw new Error("The element haven't this color");
 
-    const selectors = this.recomputeBordersWidth([
-      ...originalSelectors.slice(0, toRemoveIndex),
-      ...originalSelectors.slice(toRemoveIndex + 1)
+    const shadows = this.recomputeBordersWidth([
+      ...originalShadows.slice(0, toRemoveIndex),
+      ...originalShadows.slice(toRemoveIndex + 1)
     ]);
 
-    element.style.boxShadow = this.getBoxShadow(selectors);
+    const attributes = [
+      ...originalAttributes.slice(0, toRemoveIndex),
+      ...originalAttributes.slice(toRemoveIndex + 1)
+    ];
 
-    if (selectors.length === 0) {
+    element.style.boxShadow = this.getBoxShadow(shadows);
+
+    if (shadows.length === 0) {
       delete element.dataset.highlightedElemId;
     }
 
-    this.selectedElements[id] = selectors;
+    this.selectedElements[id].shadows = shadows;
+    this.selectedElements[id].tooltip.attributes = attributes;
   }
 
-  private getBoxShadow(selectors: Array<Selector>) {
-    return selectors.map((selector) => selector.shadow.computeCSS()).join(", ");
+  private getBoxShadow(shadows: Array<Shadow>) {
+    return shadows.map((shadow) => shadow.computeCSS()).join(", ");
   }
 
-  private getTooltipLabel(selectors: Array<Selector>) {
-    return selectors.map((selector) => selector.tooltip.label).join(", ");
-  }
-
-  private recomputeBordersWidth(selectors: Array<Selector>) {
-    return selectors.map((selector, index) => {
-      selector.shadow.spreadRadius = (index + 1) * 5;
-      return selector;
+  private recomputeBordersWidth(shadows: Array<Shadow>) {
+    return shadows.map((shadow, index) => {
+      shadow.spreadRadius = (index + 1) * 5;
+      return shadow;
     });
   }
 }

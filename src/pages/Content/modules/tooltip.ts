@@ -1,6 +1,11 @@
+type Attribute = {
+  label: string;
+  color: string;
+};
+
 export class Tooltip {
-  label: string = "";
-  color: string = "";
+  attributes: Array<Attribute> = [];
+
   element: HTMLElement | null = null;
 }
 
@@ -22,7 +27,7 @@ class TooltipService {
     this.tooltip = document.getElementById("tooltip") || addTooltipToDocument();
   }
 
-  public addToElement(element: HTMLElement, label: string) {
+  public addToElement(element: HTMLElement, tooltip: Tooltip) {
     if (element === null) {
       console.log("Can not read element");
       return null;
@@ -32,7 +37,14 @@ class TooltipService {
       const x = event.clientX;
       const y = event.clientY;
 
-      this.drawTooltipByCoordinates(x, y, label, this.tooltip);
+      const attributeViewList = tooltip.attributes.map(
+        (attribute) =>
+          `<div class="tooltip-list-item"><span class="color-indicator" style="background: ${attribute.color}"></span><span>${attribute.label}</span></div>`
+      );
+
+      this.tooltip.innerHTML = attributeViewList.join("");
+
+      this.drawTooltipByCoordinates(x, y, this.tooltip);
 
       if (event.target === element) {
         event.stopPropagation();
@@ -47,14 +59,12 @@ class TooltipService {
   private drawTooltipByCoordinates(
     x: number,
     y: number,
-    label: string,
     tooltip: HTMLElement | null
   ) {
     if (tooltip === null) {
       return null;
     }
 
-    tooltip.innerText = label;
     tooltip.style.left = `${x + 16}px`;
     tooltip.style.top = `${y + 16}px`;
     tooltip.style.display = "block";
