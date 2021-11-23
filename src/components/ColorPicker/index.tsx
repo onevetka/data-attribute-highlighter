@@ -1,4 +1,5 @@
-import React, { FormEvent, useState } from 'react';
+// Base
+import React, { useState } from 'react';
 import cx from 'classnames';
 
 // Components
@@ -18,9 +19,9 @@ interface ColorPickerProps {
 const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) => {
   const [color, setColor] = useState<string | undefined>(value);
 
-  const handleChange = (val: string) => {
-    onChange?.(val);
-    setColor(val);
+  const handleChange = (value: string) => {
+    onChange?.(value);
+    setColor(value);
   }
 
   const colorIndicator = <div style={disabled ? undefined : { backgroundColor: color }} className={cx(styles.colorIndicator, {
@@ -28,7 +29,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
   })} />
 
   return (
-    <Input maxLength={7} onChange={handleChange} value={value} className={styles.colorPicker} placeholder="#FFFFFF" additionalIcon={colorIndicator} disabled={disabled} />
+    <Input maxLength={7} onChange={handleChange} value={color} className={styles.colorPicker} placeholder="#FFFFFF" additionalIcon={colorIndicator} disabled={disabled} />
   );
 };
 

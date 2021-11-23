@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 // Constants
 import { HIGHLIGHTERS_FIELD } from "../../constants/store";
 
-const handleRemoveHighlighter = (id: string) => {
+const handleRemove = (id: string) => {
   // TODO: Add dispatchChromeMessage(type, payload);
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     const tabId = tabs[0].id || 0;
@@ -13,23 +13,23 @@ const handleRemoveHighlighter = (id: string) => {
   });
 }
 
-const handleToggleHighlighterVisibility = (id: string) => {
+const handleToggleVisibility = (id: string) => {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     const tabId = tabs[0].id || 0;
     chrome.tabs.sendMessage(tabId, { messageType: "toggle-highlighter-visibility", id });
   });
 }
 
+const handleChangeColor = (id: string, color: string) => {
+  // chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  //   const tabId = tabs[0].id || 0;
+  //   chrome.tabs.sendMessage(tabId, { messageType: "change-highlighter-color", id, color });
+  // });
+  console.log('>>>>', id, color)
+}
+
 const useAttributeList = () => {
   const [attributeList, setAttributeList] = useState<Array<any>>([]);
-
-  const handleToggleVisibility = (id: string) => {
-    handleToggleHighlighterVisibility(id);
-  };
-
-  const handleRemove = (id: string) => {
-    handleRemoveHighlighter(id);
-  }
 
   chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
     const highlightedAttributes = data[HIGHLIGHTERS_FIELD] || [];
@@ -44,6 +44,7 @@ const useAttributeList = () => {
         isHighlighted: isVisible,
         onClose: () => handleRemove(id),
         onToggleVisibility: () => handleToggleVisibility(id),
+        onChangeColor: (color: string) => handleChangeColor(id, color),
       });
     });
 

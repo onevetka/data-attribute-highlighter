@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import useAttributeList from "../../hooks/useAttributeList";
 
 const useController = () => {

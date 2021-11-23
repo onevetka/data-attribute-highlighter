@@ -18,6 +18,7 @@ const AttributeList: React.FC<any> = ({ className }) => {
           isHighlighted={item.isHighlighted}
           onClose={item.onClose}
           onToggleVisibility={item.onToggleVisibility}
+          onChangeColor={item.onChangeColor}
           key={item.id}
         />
       ))}

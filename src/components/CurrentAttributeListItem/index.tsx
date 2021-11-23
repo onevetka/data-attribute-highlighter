@@ -19,13 +19,14 @@ interface ListItemProps {
   isHighlighted: boolean;
   onClose: Function;
   onToggleVisibility: Function;
+  onChangeColor: Function;
 }
 
-const CurrentAttributeListItem: React.FC<ListItemProps> = ({ className, label, highlightingColor, isHighlighted, onClose, onToggleVisibility }) => {
+const CurrentAttributeListItem: React.FC<ListItemProps> = ({ className, label, highlightingColor, isHighlighted, onClose, onToggleVisibility, onChangeColor }) => {
   return (
     <div className={cx(styles.wrapper, className)}>
       <div className={cx(styles.label, { [styles.disabled]: !isHighlighted })}>{label}</div>
-      <ColorPicker value={highlightingColor} disabled={!isHighlighted} />
+      <ColorPicker onChange={onChangeColor} value={highlightingColor} disabled={!isHighlighted} />
       <IconButton onClick={onToggleVisibility as MouseEventHandler}>{isHighlighted ? <VisibilityOnIcon /> : <VisibilityOffIcon />}</IconButton>
       <IconButton onClick={onClose as MouseEventHandler}><CloseIcon /></IconButton>
     </div>
