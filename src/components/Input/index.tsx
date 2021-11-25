@@ -57,9 +57,13 @@ const Input: React.FC<InputProps> = ({
           {label}
         </div>
       )}
-      <div className={cx(styles.inputWrapper, { [styles.disabled]: disabled })}>
+      <div className={cx(
+        styles.inputWrapper,
+        status && statusStylesMap[status],
+        {[styles.disabled]: disabled })}
+      >
         <input
-          className={cx(styles.input, status && statusStylesMap[status])}
+          className={cx(styles.input)}
           value={value}
           placeholder={placeholder}
           onChange={handleChange}
@@ -72,9 +76,9 @@ const Input: React.FC<InputProps> = ({
           </div>
         )}
       </div>
-      {/* {status && (
+      {status && (
       <span className={cx(styles.status, statusStylesMap[status])}>{statusText}</span>
-    )} */}
+    )}
     </div>
   );
 };

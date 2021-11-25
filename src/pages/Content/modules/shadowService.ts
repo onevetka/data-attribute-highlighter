@@ -20,6 +20,7 @@ class ShadowService {
   }
 
   public static remove(originalShadows: Array<Shadow>, color: string) {
+    // !!! Maybe hold hash map with data attribute name as key
     const toRemoveIndex = originalShadows.findIndex(shadow => shadow.color === color);
 
     if (toRemoveIndex === -1) throw new Error("The element haven't this color");

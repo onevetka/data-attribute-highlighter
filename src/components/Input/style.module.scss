@@ -1,4 +1,5 @@
-.outer-field-wrapper {}
+.outer-field-wrapper {
+}
 
 .input-wrapper {
   position: relative;
@@ -9,10 +10,14 @@
   display: flex;
   align-items: center;
   width: 100%;
+
+  &.error {
+    outline: 2px solid #d84f4f;
+  }
 }
 
 .input-wrapper.disabled {
-  background-color: #1B1B1B;
+  background-color: #1b1b1b;
 }
 
 .input {
@@ -31,7 +36,7 @@
   font-family: Arial, Helvetica, sans-serif;
   font-size: 10px;
   text-align: left;
-  color: #B0B0B0;
+  color: #b0b0b0;
 }
 
 .additional-icon {
