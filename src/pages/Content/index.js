@@ -19,5 +19,9 @@ chrome.runtime.onMessage.addListener(
     if (request.messageType === 'toggle-highlighter-visibility') {
       controller.toggleHighlighterVisibility(request.id)
     }
+
+    if (request.messageType === 'change-highlighter-color') {
+      controller.setHighlighterColor(request.id, request.color);
+    }
   }
 );

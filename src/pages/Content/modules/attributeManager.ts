@@ -17,8 +17,6 @@ export type HighlighterData = {
   elements: Array<HTMLElement>;
 };
 
-//
-
 class AttributeManager {
   public highlightedAttributes: Record<string, HighlighterData>;
 
@@ -96,9 +94,7 @@ class AttributeManager {
   }
 
   public show(id: string) {
-    const attribute = this.highlightedAttributes[id];
-
-    const { elements, color, attributeName, isVisible } = attribute;
+    const { elements, color, attributeName, isVisible } = this.highlightedAttributes[id];
 
     if (isVisible) {
       console.log(`id: ${id} already showed`);
@@ -110,7 +106,7 @@ class AttributeManager {
       highlighter.add(element, color, attributeValue);
     });
 
-    attribute.isVisible = true;
+    this.highlightedAttributes[id].isVisible = true;
   }
 }
 

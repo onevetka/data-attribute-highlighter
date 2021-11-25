@@ -14,7 +14,7 @@ class Controller {
   /**
    * Provides methods for UI
    */
-  initHighlighters() {
+  public initHighlighters() {
     chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
       const highlightedAttributes: Record<string, HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
 
@@ -26,7 +26,7 @@ class Controller {
     });
   }
 
-  addHighlighter(attributeName: string) {
+  public addHighlighter(attributeName: string) {
     const color = colorGeneratorService.getColor() || 'black';
     const hash = Math.random().toString(36).substr(2, 5);
     const id = `${attributeName}-${hash}`;
@@ -36,13 +36,13 @@ class Controller {
     chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
   }
 
-  removeHighlighter(id: string) {
+  public removeHighlighter(id: string) {
     AttributeManager.remove(id);
 
     chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
   }
 
-  toggleHighlighterVisibility(id: string) {
+  public toggleHighlighterVisibility(id: string) {
     const { isVisible } = AttributeManager.highlightedAttributes[id];
 
     if (isVisible) {
@@ -52,6 +52,11 @@ class Controller {
     }
 
     chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
+  }
+
+  public setHighlighterColor(id: string, color: string) {
+    const {} = AttributeManager.highlightedAttributes[id];
+    
   }
 }
 

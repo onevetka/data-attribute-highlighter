@@ -21,11 +21,10 @@ const handleToggleVisibility = (id: string) => {
 }
 
 const handleChangeColor = (id: string, color: string) => {
-  // chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  //   const tabId = tabs[0].id || 0;
-  //   chrome.tabs.sendMessage(tabId, { messageType: "change-highlighter-color", id, color });
-  // });
-  console.log('>>>>', id, color)
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    const tabId = tabs[0].id || 0;
+    chrome.tabs.sendMessage(tabId, { messageType: "change-highlighter-color", id, color });
+  });
 }
 
 const useAttributeList = () => {
