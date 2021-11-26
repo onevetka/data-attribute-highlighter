@@ -43,7 +43,7 @@ class Highlighter {
     };
 
     element.dataset.highlightedElemId = id;
-    element.style.boxShadow = ShadowService.shadowArrayToCSS(shadows);
+    element.style.boxShadow = ShadowService.shadowListToCSS(shadows);
     tooltipService.addToElement(element, tooltip);
   }
 
@@ -67,7 +67,7 @@ class Highlighter {
       delete element.dataset.highlightedElemId;
     }
 
-    element.style.boxShadow = ShadowService.shadowArrayToCSS(shadows);
+    element.style.boxShadow = ShadowService.shadowListToCSS(shadows);
   }
 }
 

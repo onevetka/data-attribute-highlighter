@@ -33,7 +33,7 @@ class ShadowService {
     return shadows;
   }
 
-  public static shadowArrayToCSS(shadows: Array<Shadow>) {
+  public static shadowListToCSS(shadows: Array<Shadow>) {
     return shadows.map((shadow) => shadow.computeCSS()).join(", ");
   }
 
