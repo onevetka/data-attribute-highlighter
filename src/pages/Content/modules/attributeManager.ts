@@ -13,9 +13,11 @@ export function getListOfElementsWithAttribute(
 export type HighlighterData = {
   attributeName: string;
   color: string;
-  isVisible?: boolean;
+  isVisible: boolean;
   elements: Array<HTMLElement>;
 };
+
+//
 
 class AttributeManager {
   public highlightedAttributes: Record<string, HighlighterData>;
@@ -44,7 +46,7 @@ class AttributeManager {
     if (isVisible) {
       elements?.forEach((element) => {
         const attributeValue = element.getAttribute(attributeName) || "";
-        highlighter.add(element, color, attributeValue);
+        highlighter.add(element, color, attributeValue, id);
       });
     }
 
@@ -64,10 +66,10 @@ class AttributeManager {
       return;
     }
 
-    const { elements, color, isVisible } = attribute;
+    const { elements, isVisible } = attribute;
 
     if (isVisible) {
-      elements.forEach((element) => highlighter.remove(element, color));
+      elements.forEach((element) => highlighter.remove(element, id));
     }
 
     delete this.highlightedAttributes[id];
@@ -81,20 +83,22 @@ class AttributeManager {
       return;
     }
 
-    const { elements, color, isVisible } = attribute;
+    const { elements, isVisible } = attribute;
 
     if (!isVisible) {
       console.log(`Attribute with id: ${id} already hided`);
       return;
     }
 
-    elements.forEach((element) => highlighter.remove(element, color));
+    elements.forEach((element) => highlighter.remove(element, id));
 
     attribute.isVisible = false;
   }
 
   public show(id: string) {
-    const { elements, color, attributeName, isVisible } = this.highlightedAttributes[id];
+    const attribute = this.highlightedAttributes[id];
+
+    const { elements, color, attributeName, isVisible } = attribute;
 
     if (isVisible) {
       console.log(`id: ${id} already showed`);
@@ -103,10 +107,10 @@ class AttributeManager {
 
     elements.forEach((element) => {
       const attributeValue = element.getAttribute(attributeName) || "";
-      highlighter.add(element, color, attributeValue);
+      highlighter.add(element, color, attributeValue, id);
     });
 
-    this.highlightedAttributes[id].isVisible = true;
+    attribute.isVisible = true;
   }
 }
 

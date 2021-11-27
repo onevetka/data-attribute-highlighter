@@ -18,47 +18,59 @@ class TooltipService {
     this.tooltip = document.getElementById("tooltip") || addTooltipToDocument();
   }
 
-  public static create(element: HTMLElement, color: string, attributeValue: string) {
+  public static create(color: string, attributeValue: string, id: string) {
     const tooltip = new Tooltip();
 
     const attribute = {
       label: attributeValue,
-      color,
+      color
     };
 
-    const attributes = [attribute];
+    const attributes = { [id]: attribute };
 
-    tooltip.element = element;
     tooltip.attributes = attributes;
 
     return tooltip;
   }
 
-  public static add(tooltip: Tooltip, element: HTMLElement, color: string, attributeValue: string) {
-    // !!! Mutable data
+  public static add(
+    originalTooltip: Tooltip,
+    color: string,
+    attributeValue: string,
+    id: string
+  ) {
     const attribute = {
       label: attributeValue,
-      color,
+      color
     };
 
-    tooltip.attributes = [...tooltip.attributes, attribute];
+    const tooltip = { ...originalTooltip };
+
+    tooltip.attributes = { ...tooltip.attributes, [id]: attribute };
 
     return tooltip;
   }
 
-  public static remove(tooltip: Tooltip, element: HTMLElement, color: string) {
-    const toRemoveIndex = tooltip.attributes.findIndex(attribute => attribute.color === color);
+  public static remove(originalTooltip: Tooltip, id: string) {
+    const tooltip = { ...originalTooltip };
+
     const originalAttributes = tooltip.attributes;
 
-    const attributes = [
-      ...originalAttributes.slice(0, toRemoveIndex),
-      ...originalAttributes.slice(toRemoveIndex + 1)
-    ];
+    const attributes = { ...originalAttributes };
+
+    delete attributes[id];
 
     tooltip.attributes = attributes;
 
     return tooltip;
   }
+
+  public static getListOfAttributes(tooltip: Tooltip) {
+    const { attributes } = tooltip;
+    return Object.keys(attributes).map((key) => attributes[key]);
+  }
+
+  public removeFromElement(element: HTMLElement, tooltip: Tooltip) {}
 
   public addToElement(element: HTMLElement, tooltip: Tooltip) {
     if (element === null) {
@@ -70,7 +82,7 @@ class TooltipService {
       const x = event.clientX;
       const y = event.clientY;
 
-      const attributeViewList = tooltip.attributes.map(
+      const attributeViewList = TooltipService.getListOfAttributes(tooltip).map(
         (attribute) =>
           `<div class="tooltip-list-item"><span class="color-indicator" style="background: ${attribute.color}"></span><span>${attribute.label}</span></div>`
       );

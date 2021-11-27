@@ -6,12 +6,12 @@ import Tooltip from "./tooltip";
 import ShadowService from "./shadowService";
 import TooltipService, { tooltipService } from "./tooltipService";
 
-const getHash = () => {
-  return Math.random().toString(36).substr(2, 5);
+const getHash = (name: string) => {
+  return `${name}-${Math.random().toString(36).substr(2, 5)}`;
 };
 
 type Selector = {
-  shadows: Array<Shadow>;
+  shadows: Record<string, Shadow>;
   tooltip: Tooltip;
 };
 
@@ -22,52 +22,60 @@ class Highlighter {
     this.selectorsMap = {};
   }
 
-  public add(element: HTMLElement, color: string, attributeValue: string) {
+  public add(
+    element: HTMLElement,
+    color: string,
+    attributeValue: string,
+    id: string
+  ) {
     const hasSelector = Boolean(element.dataset.highlightedElemId);
-    const id = element.dataset.highlightedElemId || getHash();
+    const elementId =
+      element.dataset.highlightedElemId || getHash(attributeValue);
 
-    const originalShadow = this.selectorsMap[id]?.shadows;
-    const originalTooltip = this.selectorsMap[id]?.tooltip;
+    const originalShadow = this.selectorsMap[elementId]?.shadows;
+    const originalTooltip = this.selectorsMap[elementId]?.tooltip;
 
     const shadows = hasSelector
-      ? ShadowService.add(originalShadow, color)
-      : ShadowService.create(color);
+      ? ShadowService.add(originalShadow, color, id)
+      : ShadowService.create(color, id);
 
     const tooltip = hasSelector
-      ? TooltipService.add(originalTooltip, element, color, attributeValue)
-      : TooltipService.create(element, color, attributeValue);
+      ? TooltipService.add(originalTooltip, color, attributeValue, id)
+      : TooltipService.create(color, attributeValue, id);
 
-    this.selectorsMap[id] = {
+    this.selectorsMap[elementId] = {
       shadows,
       tooltip
     };
 
-    element.dataset.highlightedElemId = id;
-    element.style.boxShadow = ShadowService.shadowListToCSS(shadows);
+    element.dataset.highlightedElemId = elementId;
+    element.style.boxShadow = ShadowService.shadowArrayToCSS(shadows);
     tooltipService.addToElement(element, tooltip);
   }
 
-  public remove(element: HTMLElement, color: string) {
-    const id = element.dataset.highlightedElemId;
+  public remove(element: HTMLElement, id: string) {
+    const elementId = element.dataset.highlightedElemId;
 
-    if (!id) throw new Error("This element has not highlighted");
+    if (!elementId) throw new Error("This element has not highlighted");
 
-    const originalShadows = this.selectorsMap[id].shadows;
-    const originalTooltip = this.selectorsMap[id].tooltip;
+    const originalShadows = this.selectorsMap[elementId].shadows;
+    const originalTooltip = this.selectorsMap[elementId].tooltip;
 
-    const shadows = ShadowService.remove(originalShadows, color);
-    const tooltip = TooltipService.remove(originalTooltip, element, color);
+    const shadows = ShadowService.remove(originalShadows, id);
+    const tooltip = TooltipService.remove(originalTooltip, id);
 
-    this.selectorsMap[id] = {
+    this.selectorsMap[elementId] = {
       shadows,
-      tooltip,
-    }
+      tooltip
+    };
 
-    if (shadows.length === 0) {
+    if (Object.keys(shadows).length === 0) {
       delete element.dataset.highlightedElemId;
+      // tooltipService.removeFromElement(element, tooltip);
     }
 
-    element.style.boxShadow = ShadowService.shadowListToCSS(shadows);
+    element.style.boxShadow = ShadowService.shadowArrayToCSS(shadows);
+    tooltipService.addToElement(element, tooltip);
   }
 }
 

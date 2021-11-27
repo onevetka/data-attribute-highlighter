@@ -1,47 +1,52 @@
 import Shadow from "./shadow";
 
 class ShadowService {
-  public static create(color: string) {
+  public static create(color: string, key: string) {
     const shadow = new Shadow();
 
     shadow.color = color;
     shadow.spreadRadius = 5;
 
-    return [shadow];
+    return { [key]: shadow };
   }
 
-  public static add(shadows: Array<Shadow>, color: string) {
+  public static add(
+    shadows: Record<string, Shadow>,
+    color: string,
+    key: string
+  ) {
     const shadow = new Shadow();
 
     shadow.color = color;
-    shadow.spreadRadius = (shadows.length + 1) * 5;
+    shadow.spreadRadius = (Object.keys(shadows).length + 1) * 5;
 
-    return [...shadows, shadow];
+    return { ...shadows, [key]: shadow };
   }
 
-  public static remove(originalShadows: Array<Shadow>, color: string) {
-    // !!! Maybe hold hash map with data attribute name as key
-    const toRemoveIndex = originalShadows.findIndex(shadow => shadow.color === color);
+  public static remove(originalShadows: Record<string, Shadow>, key: string) {
+    const shadows = { ...originalShadows };
 
-    if (toRemoveIndex === -1) throw new Error("The element haven't this color");
+    delete shadows[key];
 
-    const shadows = this.recomputeBordersWidth([
-      ...originalShadows.slice(0, toRemoveIndex),
-      ...originalShadows.slice(toRemoveIndex + 1)
-    ]);
+    const result = this.recomputeBordersWidth(shadows);
 
-    return shadows;
+    return result;
   }
 
-  public static shadowListToCSS(shadows: Array<Shadow>) {
-    return shadows.map((shadow) => shadow.computeCSS()).join(", ");
+  public static shadowArrayToCSS(shadows: Record<string, Shadow>) {
+    return Object.keys(shadows)
+      .map((key) => shadows[key].computeCSS())
+      .join(", ");
   }
 
-  private static recomputeBordersWidth(shadows: Array<Shadow>) {
-    return shadows.map((shadow, index) => {
-      shadow.spreadRadius = (index + 1) * 5;
-      return shadow;
+  private static recomputeBordersWidth(
+    originalShadows: Record<string, Shadow>
+  ) {
+    const shadows = { ...originalShadows };
+    Object.keys(shadows).forEach((key, index) => {
+      shadows[key].spreadRadius = (index + 1) * 5;
     });
+    return shadows;
   }
 }
 

@@ -4,7 +4,5 @@ type Attribute = {
 };
 
 export default class Tooltip {
-  attributes: Array<Attribute> = [];
-
-  element: HTMLElement | null = null;
+  attributes: Record<string, Attribute> = {};
 }
