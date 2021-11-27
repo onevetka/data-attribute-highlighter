@@ -55,8 +55,14 @@ class Controller {
   }
 
   public setHighlighterColor(id: string, color: string) {
-    const {} = AttributeManager.highlightedAttributes[id];
-    
+    const highlighter = {...AttributeManager.highlightedAttributes[id]};
+    highlighter.color = color;
+
+    AttributeManager.highlightedAttributes[id] = highlighter;
+    AttributeManager.hide(id);
+    AttributeManager.show(id);
+
+    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
   }
 }
 
