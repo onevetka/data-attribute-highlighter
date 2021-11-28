@@ -1,5 +1,5 @@
 // Base
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import cx from 'classnames';
 import FormValidator from './formValidator';
 import debounce from 'lodash/debounce';
@@ -11,7 +11,6 @@ import Input, { InputStatus } from '../Input';
 
 // Assets
 import styles from './style.module.scss';
-import InputStories from '../Input/Input.stories';
 
 interface ColorPickerProps {
   value?: string;
@@ -40,9 +39,19 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
     setColor(value);
   }
 
-  const colorIndicator = <div style={disabled ? undefined : { backgroundColor: color }} className={cx(styles.colorIndicator, {
-    [styles.disabled]: disabled,
-  })} />
+  const colorIndicator = (
+    <input
+      type="color"
+      value={color}
+      onChange={(event: FormEvent<HTMLInputElement>) => {
+        const value = event.currentTarget.value;
+        handleChange(value);
+      }}
+      style={disabled ? undefined : { backgroundColor: color }}
+      className={cx(styles.colorIndicator, {
+        [styles.disabled]: disabled,
+      })}
+    />);
 
   return (
     <Input

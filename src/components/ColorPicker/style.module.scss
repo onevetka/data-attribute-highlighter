@@ -6,6 +6,15 @@
   width: 8px;
   height: 8px;
   border-radius: 4px;
+  -webkit-appearance: none;
+  border: none;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  &::-webkit-color-swatch {
+    border: none;
+  }
 
   &.disabled {
     background-color: black;
