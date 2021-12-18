@@ -51,7 +51,7 @@ const Input: React.FC<InputProps> = ({
   };
 
   return (
-    <div className={cx(styles.outerFieldWrapper, className)}>
+    <div className={cx(styles.outerFieldWrapper)}>
       {label && (
         <div className={styles.label}>
           {label}
@@ -60,6 +60,7 @@ const Input: React.FC<InputProps> = ({
       <div className={cx(
         styles.inputWrapper,
         status && statusStylesMap[status],
+        className,
         {[styles.disabled]: disabled })}
       >
         <input

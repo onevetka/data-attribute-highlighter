@@ -11,6 +11,7 @@ import Input, { InputStatus } from '../Input';
 
 // Assets
 import styles from './style.module.scss';
+import IconButton from '../IconButton';
 
 interface ColorPickerProps {
   value?: string;
@@ -40,30 +41,34 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
   }
 
   const colorIndicator = (
-    <input
-      type="color"
-      value={color}
-      onChange={(event: FormEvent<HTMLInputElement>) => {
-        const value = event.currentTarget.value;
-        handleChange(value);
-      }}
-      style={disabled ? undefined : { backgroundColor: color }}
-      className={cx(styles.colorIndicator, {
-        [styles.disabled]: disabled,
-      })}
-    />);
+    <label className={styles.indicatorWrapper} for="colorPicker">
+      <input
+        className={styles.colorIndicator}
+        id="colorPicker"
+        type="color"
+        value={color}
+        onChange={(event: FormEvent<HTMLInputElement>) => {
+          const value = event.currentTarget.value;
+          handleChange(value);
+        }}
+        style={disabled ? undefined : { backgroundColor: color }}
+      />
+    </label>
+  );
 
   return (
-    <Input
+    <div className={styles.wrapper}>
+      <Input
       onChange={handleChange}
       value={color}
-      className={styles.colorPicker}
+      className={styles.colorPickerInput}
       placeholder="#FFFFFF"
-      additionalIcon={colorIndicator}
       disabled={disabled}
       status={status}
       // statusText={statusText}
     />
+    {colorIndicator}
+    </div>
   );
 };
 
