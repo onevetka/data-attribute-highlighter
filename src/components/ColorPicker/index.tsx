@@ -1,17 +1,13 @@
 // Base
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, useRef } from 'react';
 import cx from 'classnames';
 import FormValidator from './formValidator';
 import debounce from 'lodash/debounce';
 
-const debounceFunc = debounce((func) => func(), 1000);
-
-// Components
-import Input, { InputStatus } from '../Input';
-
 // Assets
 import styles from './style.module.scss';
-import IconButton from '../IconButton';
+
+const debounceFunc = debounce((func) => func(), 1000);
 
 interface ColorPickerProps {
   value?: string;
@@ -23,17 +19,19 @@ interface ColorPickerProps {
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) => {
   const [color, setColor] = useState<string | undefined>(value);
-  const [status, setStatus] = useState<InputStatus | undefined>(undefined);
+  // const [status, setStatus] = useState<InputStatus | undefined>(undefined);
   // const [statusText, setStatusText] = useState<string | undefined>(undefined);
+
+  const {current: fieldId} = useRef("prefix-" + (Math.random().toString(36)+'00000000000000000').slice(2, 7));
 
   const handleChange = (event: FormEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
     onChange?.(value);
-    setStatus(undefined);
+    // setStatus(undefined);
     // setStatusText(undefined);
     debounceFunc(() => {
       if (!FormValidator.isValidColor(value)) {
-        setStatus(InputStatus.error);
+        // setStatus(InputStatus.error);
         // setStatusText('Invalid color');
         return;
       }
@@ -44,10 +42,10 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
   const colorIndicator = (
     <label className={cx(styles.indicatorWrapper, {
       [styles.disabled]: disabled,
-    })} htmlFor="colorPicker">
+    })} htmlFor={fieldId}>
       <input
         className={styles.colorIndicator}
-        id="colorPicker"
+        id={fieldId}
         type="color"
         value={disabled ? 'black' : color}
         onChange={handleChange}
@@ -56,18 +54,22 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
     </label>
   );
 
+  const colorInput = (
+    <input
+      onChange={handleChange}
+      value={color}
+      className={styles.colorPickerInput}
+      placeholder="#FFFFFF"
+      disabled={disabled}
+    />
+  )
+
   return (
     <div className={cx(styles.wrapper, {
       [styles.disabled]: disabled,
     })}>
-      <input
-        onChange={handleChange}
-        value={color}
-        className={styles.colorPickerInput}
-        placeholder="#FFFFFF"
-        disabled={disabled}
-      />
-    {colorIndicator}
+      {colorInput}
+      {colorIndicator}
     </div>
   );
 };
