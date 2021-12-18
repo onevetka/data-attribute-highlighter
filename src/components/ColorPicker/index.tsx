@@ -26,7 +26,8 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
   const [status, setStatus] = useState<InputStatus | undefined>(undefined);
   // const [statusText, setStatusText] = useState<string | undefined>(undefined);
 
-  const handleChange = (value: string) => {
+  const handleChange = (event: FormEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
     onChange?.(value);
     setStatus(undefined);
     // setStatusText(undefined);
@@ -49,10 +50,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
         id="colorPicker"
         type="color"
         value={disabled ? 'black' : color}
-        onChange={(event: FormEvent<HTMLInputElement>) => {
-          const value = event.currentTarget.value;
-          handleChange(value);
-        }}
+        onChange={handleChange}
         disabled={disabled}
       />
     </label>
@@ -62,15 +60,13 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
     <div className={cx(styles.wrapper, {
       [styles.disabled]: disabled,
     })}>
-      <Input
-      onChange={handleChange}
-      value={color}
-      className={styles.colorPickerInput}
-      placeholder="#FFFFFF"
-      disabled={disabled}
-      status={status}
-      // statusText={statusText}
-    />
+      <input
+        onChange={handleChange}
+        value={color}
+        className={styles.colorPickerInput}
+        placeholder="#FFFFFF"
+        disabled={disabled}
+      />
     {colorIndicator}
     </div>
   );
