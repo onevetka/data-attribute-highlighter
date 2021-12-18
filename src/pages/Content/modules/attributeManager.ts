@@ -20,6 +20,9 @@ export type HighlighterData = {
 //
 
 class AttributeManager {
+  /**
+   * Holds record with current highlighters added to app
+   */
   public highlightedAttributes: Record<string, HighlighterData>;
 
   constructor() {
