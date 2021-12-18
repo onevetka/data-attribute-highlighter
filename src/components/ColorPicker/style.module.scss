@@ -4,7 +4,11 @@
   width: 110px;
   border-radius: 6px;
   overflow: hidden;
-  background-color: black;
+  background-color: #000000;
+
+  &.disabled {
+    background-color: #1b1b1b;
+  }
 }
 
 .color-picker-input {
@@ -14,11 +18,15 @@
 
 .indicator-wrapper {
   display: flex;
-  background-color: black;
   cursor: pointer;
 
   &:hover {
     background-color: #2f2f2f;
+  }
+
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
   }
 }
 
@@ -35,9 +43,9 @@
   height: 32px;
   clip-path: circle(5px at center);
 
-  // &.disabled {
-  //   background-color: black;
-  // }
+  &.disabled {
+    background-color: black;
+  }
 }
 
 .color-indicator::-webkit-color-swatch {

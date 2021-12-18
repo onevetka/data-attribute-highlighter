@@ -41,23 +41,27 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
   }
 
   const colorIndicator = (
-    <label className={styles.indicatorWrapper} for="colorPicker">
+    <label className={cx(styles.indicatorWrapper, {
+      [styles.disabled]: disabled,
+    })} htmlFor="colorPicker">
       <input
         className={styles.colorIndicator}
         id="colorPicker"
         type="color"
-        value={color}
+        value={disabled ? 'black' : color}
         onChange={(event: FormEvent<HTMLInputElement>) => {
           const value = event.currentTarget.value;
           handleChange(value);
         }}
-        style={disabled ? undefined : { backgroundColor: color }}
+        disabled={disabled}
       />
     </label>
   );
 
   return (
-    <div className={styles.wrapper}>
+    <div className={cx(styles.wrapper, {
+      [styles.disabled]: disabled,
+    })}>
       <Input
       onChange={handleChange}
       value={color}

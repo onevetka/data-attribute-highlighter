@@ -11,10 +11,10 @@
   &.error {
     outline: 2px solid #d84f4f;
   }
-}
 
-.input-wrapper.disabled {
-  background-color: #1b1b1b;
+  &.disabled {
+    background-color: #1b1b1b;
+  }
 }
 
 .input {
