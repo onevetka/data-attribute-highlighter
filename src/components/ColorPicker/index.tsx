@@ -24,19 +24,25 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
 
   const {current: fieldId} = useRef("prefix-" + (Math.random().toString(36)+'00000000000000000').slice(2, 7));
 
-  const handleChange = (event: FormEvent<HTMLInputElement>) => {
+  const handleChangePicker = (event: FormEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
-    onChange?.(value);
-    // setStatus(undefined);
-    // setStatusText(undefined);
+
+    debounceFunc(() => {
+      setColor(value);
+      onChange?.(value);
+    });
+  }
+
+  const handleChangeInput = (event: FormEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+
     debounceFunc(() => {
       if (!FormValidator.isValidColor(value)) {
-        // setStatus(InputStatus.error);
-        // setStatusText('Invalid color');
         return;
       }
+      setColor(value);
+      onChange?.(value);
     });
-    setColor(value);
   }
 
   const colorIndicator = (
@@ -48,7 +54,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
         id={fieldId}
         type="color"
         value={disabled ? 'black' : color}
-        onChange={handleChange}
+        onChange={handleChangePicker}
         disabled={disabled}
       />
     </label>
@@ -56,7 +62,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
 
   const colorInput = (
     <input
-      onChange={handleChange}
+      onChange={handleChangeInput}
       value={color}
       className={styles.colorPickerInput}
       placeholder="#FFFFFF"

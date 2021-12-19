@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+
 .wrapper {
   display: flex;
   align-items: center;
@@ -21,19 +23,17 @@
   border: none;
   outline: none;
   padding: 0;
-  font-family: monospace;
+  font-family: 'IBM Plex Mono', monospace;
 }
 
 .indicator-wrapper {
   display: flex;
-  cursor: pointer;
 
   &:hover {
     background-color: #2f2f2f;
   }
 
   &.disabled {
-    cursor: default;
     pointer-events: none;
   }
 }
@@ -44,7 +44,6 @@
   appearance: none;
   border: none;
   padding: 0;
-  cursor: pointer;
   flex-shrink: 0;
   overflow: hidden;
   width: 32px;
