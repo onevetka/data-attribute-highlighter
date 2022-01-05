@@ -11,6 +11,10 @@
   &.disabled {
     background-color: #1b1b1b;
   }
+
+  &.error {
+    outline: 2px solid salmon;
+  }
 }
 
 .color-picker-input {

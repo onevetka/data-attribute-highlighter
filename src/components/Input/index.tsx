@@ -5,14 +5,14 @@ import cx from 'classnames';
 import styles from './style.module.scss';
 
 export enum InputStatus {
-  error = 'error',
+  Error = 'error',
   // warning = 'warning',
   // approved = 'approved',
   // pending = 'pending',
 }
 
 const statusStylesMap = {
-  [InputStatus.error]: styles.error,
+  [InputStatus.Error]: styles.error,
   // [InputStatus.warning]: styles.warning,
   // [InputStatus.approved]: styles.approved,
   // [InputStatus.pending]: styles.pending,
