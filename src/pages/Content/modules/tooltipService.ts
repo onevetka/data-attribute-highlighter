@@ -79,8 +79,6 @@ class TooltipService {
     tooltip.style.left = `${event.clientX + 10}px`;
 
     tooltip.style.top = `${event.clientY + 10}px`;
-
-    event.stopPropagation();
   }
 
   private static handleHideTooltipBuyMouseout(event: any) {
@@ -92,7 +90,6 @@ class TooltipService {
 
     tooltip.style.display = "none";
     tooltip.visibility = "hide";
-    event.stopPropagation();
   }
 
   private static handleShowTooltipByMouseover(event: any) {

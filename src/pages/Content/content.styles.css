@@ -16,6 +16,8 @@
 .tooltip-list-item {
   display: flex;
   align-items: center;
+  height: 18px;
+  line-height: 10px;
 }
 
 .tooltip-list-item:not(:last-child) {
@@ -39,8 +41,8 @@
 }
 
 .color-indicator {
-  width: 10px;
-  height: 10px;
+  width: 7px;
+  height: 7px;
   margin-right: 8px;
   border-radius: 50%;
 }
