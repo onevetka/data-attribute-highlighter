@@ -27,7 +27,7 @@ class Controller {
   }
 
   public addHighlighter(attributeName: string) {
-    const color = colorGeneratorService.getColor() || 'black';
+    const color = colorGeneratorService.getColor() || '#000000';
     const hash = Math.random().toString(36).substr(2, 5);
     const id = `${attributeName}-${hash}`;
 

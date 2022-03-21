@@ -27,7 +27,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
         className={styles.colorIndicator}
         id={fieldId}
         type="color"
-        value={disabled ? 'black' : value}
+        value={disabled ? '#000000' : value}
         onChange={handleChangePicker}
         disabled={disabled}
       />
