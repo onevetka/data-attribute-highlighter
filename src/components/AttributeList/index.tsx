@@ -3,14 +3,15 @@ import cx from 'classnames';
 import CurrentAttributeListItem from '../CurrentAttributeListItem';
 import styles from './style.module.scss';
 import useController from './useController';
+import ListSkeleton from '../ListSkeleton';
 
 const AttributeList: React.FC<any> = ({ className }) => {
   const { state } = useController();
-  const { items } = state;
+  const { items, hasItems } = state;
 
   return (
     <div className={cx(styles.wrapper, className)}>
-      {items.map((item: any) => (
+      {hasItems ? items.map((item: any) => (
         <CurrentAttributeListItem
           className={styles.listItem}
           label={item.label}
@@ -21,7 +22,7 @@ const AttributeList: React.FC<any> = ({ className }) => {
           onChangeColor={item.onChangeColor}
           key={item.id}
         />
-      ))}
+      )) : <ListSkeleton />}
     </div>
   )
 }

@@ -18,7 +18,7 @@ const Popup = () => {
     <div className={styles.app}>
       <header className={styles.appHeader}>
         <form className={styles.form} onSubmit={handleSave}>
-          <Input className={styles.attributeNameInput} label="Attribute name" value={currentValue} onChange={handleInputChange} />
+          <Input className={styles.attributeNameInput} label="Attribute name" value={currentValue} onChange={handleInputChange} placeholder="data-test" />
           <Button className={styles.highlightButton} type="submit">Highlight</Button>
         </form>
         <AttributeList className={styles.table} />

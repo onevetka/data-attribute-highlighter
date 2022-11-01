@@ -5,6 +5,7 @@ const useController = () => {
 
   const state = {
     items,
+    hasItems: items.length > 0
   }
 
   return {
