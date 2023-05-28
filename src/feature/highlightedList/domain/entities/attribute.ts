@@ -5,8 +5,8 @@ export interface Attribute {
 }
 
 export const attribute = (data: Partial<Attribute>): Attribute => ({
-    id: '',
-    color: '#000000',
-    isHighlighted: false,
-    ...data,
-  })
+  id: '',
+  color: '#FFFFFF',
+  isHighlighted: false,
+  ...data,
+});
