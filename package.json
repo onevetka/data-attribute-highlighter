@@ -16,15 +16,15 @@
   "dependencies": {
     "@hot-loader/react-dom": "^17.0.2",
     "@storybook/addon-actions": "^6.5.13",
-    "@storybook/addon-essentials": "^6.5.13",
+    "@storybook/addon-essentials": "^7.0.18",
     "@storybook/addon-links": "^6.5.13",
-    "@storybook/react": "^6.5.13",
+    "@storybook/react": "^7.0.18",
     "classnames": "^2.3.2",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hot-loader": "^4.13.0",
-    "sass": "^1.55.0"
+    "sass": "^1.62.1"
   },
   "devDependencies": {
     "@babel/core": "^7.17.0",
@@ -53,7 +53,6 @@
     "html-loader": "^3.1.0",
     "html-webpack-plugin": "^5.5.0",
     "jest": "^29.2.2",
-    "node-sass": "^6.0.1",
     "prettier": "^2.5.1",
     "sass-loader": "^12.6.0",
     "source-map-loader": "^3.0.1",
