@@ -1,5 +1,5 @@
 // Base
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // Constants
 import { HIGHLIGHTERS_FIELD } from "../../../constants/store";
