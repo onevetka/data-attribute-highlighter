@@ -5,7 +5,7 @@ import useController from './useController';
 // Components
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import AttributeList from '../../components/AttributeList';
+import AttributeList from '../../feature/highlightedList/ui/fragments/AttributeList'
 
 // Assets
 import styles from './style.module.scss';

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 // Constants
-import { HIGHLIGHTERS_FIELD } from "../../constants/store";
+import { HIGHLIGHTERS_FIELD } from "../../../constants/store";
 
 const handleRemove = (id: string) => {
   // TODO: Add dispatchChromeMessage(type, payload);

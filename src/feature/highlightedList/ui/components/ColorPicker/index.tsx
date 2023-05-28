@@ -1,7 +1,7 @@
 // Base
 import React from 'react';
 import cx from 'classnames';
-import { InputStatus } from '../Input';
+import { InputStatus } from '../../../../../components/Input';
 
 // Assets
 import styles from './style.module.scss';
@@ -15,14 +15,22 @@ interface ColorPickerProps {
   onBlur?: Function;
 }
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) => {
-  const { state, handleChangeInput, handleChangePicker } = useController(onChange);
+const ColorPicker: React.FC<ColorPickerProps> = ({
+  value,
+  onChange,
+  disabled,
+}) => {
+  const { state, handleChangeInput, handleChangePicker } =
+    useController(onChange);
   const { fieldId, status } = state;
 
   const colorIndicator = (
-    <label className={cx(styles.indicatorWrapper, {
-      [styles.disabled]: disabled,
-    })} htmlFor={fieldId}>
+    <label
+      className={cx(styles.indicatorWrapper, {
+        [styles.disabled]: disabled,
+      })}
+      htmlFor={fieldId}
+    >
       <input
         className={styles.colorIndicator}
         id={fieldId}
@@ -42,13 +50,15 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, disabled }) 
       placeholder="#FFFFFF"
       disabled={disabled}
     />
-  )
+  );
 
   return (
-    <div className={cx(styles.wrapper, {
-      [styles.disabled]: disabled,
-      [styles.error]: status === InputStatus.Error
-    })}>
+    <div
+      className={cx(styles.wrapper, {
+        [styles.disabled]: disabled,
+        [styles.error]: status === InputStatus.Error,
+      })}
+    >
       {colorInput}
       {colorIndicator}
     </div>

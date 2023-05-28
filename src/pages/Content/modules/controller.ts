@@ -1,4 +1,3 @@
-import AttributeList from "../../../components/AttributeList";
 import { HIGHLIGHTERS_FIELD } from "../../../constants/store";
 import colorGeneratorService from "../../../services/colorGenerator.service";
 import AttributeManager from "./attributeManager";

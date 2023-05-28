@@ -1,6 +1,6 @@
 import { debounce } from 'lodash';
 import { FormEvent, useRef, useState } from 'react';
-import { InputStatus } from '../Input';
+import { InputStatus } from '../../../../../components/Input';
 import FormValidator from './formValidator';
 
 const debounceFunc = debounce((func) => func(), 1000);

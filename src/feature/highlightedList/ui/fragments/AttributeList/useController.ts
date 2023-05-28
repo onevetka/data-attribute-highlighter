@@ -1,4 +1,4 @@
-import useAttributeList from "../../hooks/useAttributeList";
+import useAttributeList from "../../../hook/useAttributeList";
 
 const useController = () => {
   const items = useAttributeList();
