@@ -8,6 +8,7 @@ const debounceFunc = debounce((func) => func(), 1000);
 const useController = (onChange: Function | undefined) => {
   const [status, setStatus] = useState<InputStatus | undefined>(undefined);
 
+  // FIXME: UUID
   const {current: fieldId} = useRef("prefix-" + (Math.random().toString(36)+'00000000000000000').slice(2, 7));
 
   const handleChangePicker = (event: FormEvent<HTMLInputElement>) => {

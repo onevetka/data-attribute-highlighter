@@ -14,6 +14,7 @@ const AttributeList: React.FC<any> = ({ className }) => {
       {hasItems ? (
         items.map((item: any) => (
           <CurrentAttributeListItem
+            // state={} Даня предлагает сразу кидать стейт, и определить его интерфейс. Посмотреть как я сделал в Озоне
             className={styles.listItem}
             label={item.label}
             highlightingColor={item.color}
