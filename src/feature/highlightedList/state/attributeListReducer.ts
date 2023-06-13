@@ -4,9 +4,24 @@ import { AttributeListState } from "./attributeListState";
 export const attributeListReducer = (state: AttributeListState, action: AttributeListAction): AttributeListState => {
   switch (action.type) {
     case 'toggleHighlighting':
-      return {
-        ...state,
-        isHighlighted: !state.isHighlighted,
-      };
+      return toggleHighlightingAction(state);
+    case 'changeHighlightColor':
+      return changeHighlightColor(state, action);
+    default:
+      return state;
+  }
+}
+
+function toggleHighlightingAction(state: AttributeListState) {
+  return {
+    ...state,
+    isHighlighted: !state.isHighlighted,
+  }
+}
+
+function changeHighlightColor(state: AttributeListState, action: AttributeListAction) {
+  return {
+    ...state,
+    color: action.payload.color,
   }
 }
