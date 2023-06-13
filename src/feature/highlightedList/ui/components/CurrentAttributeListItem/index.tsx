@@ -11,6 +11,7 @@ import VisibilityOnIcon from '../../icons/VisibilityOnIcon';
 
 // Assets
 import styles from './style.module.scss';
+import { useViewModel } from '../../../state/useViewModel';
 
 interface ListItemProps {
   className?: string;
@@ -31,6 +32,8 @@ const CurrentAttributeListItem: React.FC<ListItemProps> = ({
   onToggleVisibility,
   onChangeColor,
 }) => {
+  const { state, dispatch } = useViewModel();
+
   return (
     <div className={cx(styles.wrapper, className)}>
       <div className={cx(styles.label, { [styles.disabled]: !isHighlighted })}>
@@ -39,10 +42,10 @@ const CurrentAttributeListItem: React.FC<ListItemProps> = ({
       <ColorPicker
         onChange={onChangeColor}
         value={highlightingColor}
-        disabled={!isHighlighted}
+        disabled={!state.isHighlighted}
       />
-      <IconButton onClick={onToggleVisibility as MouseEventHandler}>
-        {isHighlighted ? <VisibilityOnIcon /> : <VisibilityOffIcon />}
+      <IconButton onClick={() => dispatch({ type: 'toggleHighlighting' })}>
+        {state.isHighlighted ? <VisibilityOnIcon /> : <VisibilityOffIcon />}
       </IconButton>
       <IconButton onClick={onClose as MouseEventHandler}>
         <CloseIcon />
