@@ -7,27 +7,3 @@
   text-align: center;
   height: 100%;
 }
-
-.app-header {
-  width: 100%;
-  color: white;
-}
-
-.form {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  margin: 24px;
-}
-
-.table {
-  padding: 0 24px 16px 24px;
-}
-
-.attribute-name-input {
-  flex-grow: 1;
-}
-
-.highlight-button {
-  flex-grow: 0;
-}

@@ -3,19 +3,33 @@ import { attributeListItemState, attributeListState } from "../attributeListStat
 import { attributeListReducer } from "../attributeListReducer";
 
 test('Should invert the highlight flag when calling the toggleHighlighting action', () => {
+  const initialState = attributeListState({ attributeList: [attributeListItemState()]});
+
   expect(
-    attributeListReducer(
-      attributeListState(),
-      { type: 'toggleHighlighting', payload: { id: 0 }}
-    )
+    attributeListReducer(initialState, { type: 'toggleHighlighting', payload: { id: 0 }})
   ).toEqual(attributeListState({ attributeList: [attributeListItemState({ isHighlighted: true })] }));
 });
 
 test('Should change color, when calling changeHighlightColor action', () => {
+  const initialState = attributeListState({ attributeList: [attributeListItemState()]});
+
   expect(
-    attributeListReducer(
-      attributeListState(),
-      { type: 'changeHighlightColor', payload: { color: '#EDEDED', id: 0 }}
-    )
+    attributeListReducer(initialState, { type: 'changeHighlightColor', payload: { color: '#EDEDED', id: 0 }})
   ).toEqual(attributeListState({ attributeList: [attributeListItemState({ color: '#EDEDED' })]}));
+});
+
+test('Should delete item from list, when calling deleteItem action', () => {
+  const initialState = attributeListState({ attributeList: [attributeListItemState()]});
+
+  expect(
+    attributeListReducer(initialState, { type: 'deleteItem', payload: { id: 0 }})
+  ).toEqual(attributeListState());
+});
+
+test('Should change attribute name input value, when calling changeAttributeNameInputValue action', () => {
+  const initialState = attributeListState();
+
+  expect(
+    attributeListReducer(initialState, { type: 'changeAttributeNameInputValue', payload: { name: 'className' }})
+  ).toEqual(attributeListState({ attributeNameInputValue: 'className' }));
 });

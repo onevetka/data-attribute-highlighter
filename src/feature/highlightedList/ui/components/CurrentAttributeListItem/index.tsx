@@ -9,9 +9,6 @@ import CloseIcon from '../../icons/CloseIcon';
 import VisibilityOffIcon from '../../icons/VisibilityOffIcon';
 import VisibilityOnIcon from '../../icons/VisibilityOnIcon';
 
-// State
-import { useViewModel } from '../../../state/useViewModel';
-
 // Assets
 import styles from './style.module.scss';
 
@@ -21,7 +18,7 @@ interface ListItemProps {
   highlightingColor: string;
   isHighlighted: boolean;
   onClose: Function;
-  onToggleVisibility: Function;
+  onToggleVisibility: MouseEventHandler;
   onChangeColor: Function;
 }
 
@@ -34,26 +31,22 @@ const CurrentAttributeListItem: React.FC<ListItemProps> = ({
   onToggleVisibility,
   onChangeColor,
 }) => {
-  const { state, dispatch } = useViewModel();
-
   return (
     <div className={cx(styles.wrapper, className)}>
       <div
         className={cx(styles.label, {
-          [styles.disabled]: !state.isHighlighted,
+          [styles.disabled]: !isHighlighted,
         })}
       >
         {label}
       </div>
       <ColorPicker
-        onChange={(value: string) =>
-          dispatch({ type: 'changeHighlightColor', payload: { color: value } })
-        }
-        value={state.color}
-        disabled={!state.isHighlighted}
+        onChange={onChangeColor}
+        value={highlightingColor}
+        disabled={!isHighlighted}
       />
-      <IconButton onClick={() => dispatch({ type: 'toggleHighlighting' })}>
-        {state.isHighlighted ? <VisibilityOnIcon /> : <VisibilityOffIcon />}
+      <IconButton onClick={onToggleVisibility}>
+        {isHighlighted ? <VisibilityOnIcon /> : <VisibilityOffIcon />}
       </IconButton>
       <IconButton onClick={onClose as MouseEventHandler}>
         <CloseIcon />
