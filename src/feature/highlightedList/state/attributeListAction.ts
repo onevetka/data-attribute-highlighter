@@ -1,17 +1,16 @@
-export interface AttributeListAction {
-  type: '' | 'toggleHighlighting' | 'changeHighlightColor'
+export interface ToggleHighlightingAction {
+  type: 'toggleHighlighting'
   payload: {
+    id: number,
+  }
+}
+
+export interface ChangeHighlightColorAction {
+  type: 'changeHighlightColor'
+  payload: {
+    id: number,
     color: string;
   }
 }
 
-export const attributeListAction = (data: Partial<AttributeListAction> = {}): AttributeListAction => {
-  return {
-    type: '',
-    payload: {
-      color: '',
-      ...data.payload,
-    },
-    ...data,
-  }
-}
+export type AttributeListAction = ToggleHighlightingAction | ChangeHighlightColorAction;

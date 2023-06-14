@@ -1,21 +1,21 @@
-import { attributeListAction } from "../attributeListAction";
-import { attributeListState } from "../attributeListState";
+
+import { attributeListItemState, attributeListState } from "../attributeListState";
 import { attributeListReducer } from "../attributeListReducer";
 
 test('Should invert the highlight flag when calling the toggleHighlighting action', () => {
   expect(
     attributeListReducer(
       attributeListState(),
-      attributeListAction({ type: 'toggleHighlighting'})
+      { type: 'toggleHighlighting', payload: { id: 0 }}
     )
-  ).toEqual(attributeListState({ isHighlighted: true }));
+  ).toEqual(attributeListState({ attributeList: [attributeListItemState({ isHighlighted: true })] }));
 });
 
 test('Should change color, when calling changeHighlightColor action', () => {
   expect(
     attributeListReducer(
       attributeListState(),
-      attributeListAction({ type: 'changeHighlightColor', payload: { color: '#EDEDED'}})
+      { type: 'changeHighlightColor', payload: { color: '#EDEDED', id: 0 }}
     )
-  ).toEqual(attributeListState({ color: '#EDEDED'}));
+  ).toEqual(attributeListState({ attributeList: [attributeListItemState({ color: '#EDEDED' })]}));
 });

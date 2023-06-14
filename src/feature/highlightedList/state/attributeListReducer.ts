@@ -1,4 +1,4 @@
-import { AttributeListAction } from "./attributeListAction";
+import { AttributeListAction, ChangeHighlightColorAction } from "./attributeListAction";
 import { AttributeListState } from "./attributeListState";
 
 export const attributeListReducer = (state: AttributeListState, action: AttributeListAction): AttributeListState => {
@@ -19,7 +19,7 @@ function toggleHighlightingAction(state: AttributeListState) {
   }
 }
 
-function changeHighlightColor(state: AttributeListState, action: AttributeListAction) {
+function changeHighlightColor(state: AttributeListState, action: ChangeHighlightColorAction) {
   return {
     ...state,
     color: action.payload.color,

@@ -9,9 +9,11 @@ import CloseIcon from '../../icons/CloseIcon';
 import VisibilityOffIcon from '../../icons/VisibilityOffIcon';
 import VisibilityOnIcon from '../../icons/VisibilityOnIcon';
 
+// State
+import { useViewModel } from '../../../state/useViewModel';
+
 // Assets
 import styles from './style.module.scss';
-import { useViewModel } from '../../../state/useViewModel';
 
 interface ListItemProps {
   className?: string;
@@ -36,12 +38,18 @@ const CurrentAttributeListItem: React.FC<ListItemProps> = ({
 
   return (
     <div className={cx(styles.wrapper, className)}>
-      <div className={cx(styles.label, { [styles.disabled]: !isHighlighted })}>
+      <div
+        className={cx(styles.label, {
+          [styles.disabled]: !state.isHighlighted,
+        })}
+      >
         {label}
       </div>
       <ColorPicker
-        onChange={onChangeColor}
-        value={highlightingColor}
+        onChange={(value: string) =>
+          dispatch({ type: 'changeHighlightColor', payload: { color: value } })
+        }
+        value={state.color}
         disabled={!state.isHighlighted}
       />
       <IconButton onClick={() => dispatch({ type: 'toggleHighlighting' })}>
