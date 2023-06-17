@@ -27,4 +27,13 @@ export interface ChangeAttributeNameInputValueAction {
   }
 }
 
-export type AttributeListAction = ToggleHighlightingAction | ChangeHighlightColorAction | DeleteItemAction | ChangeAttributeNameInputValueAction;
+export interface SaveNewAttributeAction {
+  type: 'saveNewAttribute'
+}
+
+export type AttributeListAction =
+  ToggleHighlightingAction |
+  ChangeHighlightColorAction |
+  DeleteItemAction |
+  ChangeAttributeNameInputValueAction |
+  SaveNewAttributeAction;

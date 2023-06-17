@@ -11,6 +11,8 @@ export const attributeListReducer = (state: AttributeListState, action: Attribut
       return deleteItem(state, action);
     case 'changeAttributeNameInputValue':
       return changeAttributeNameInputValue(state, action);
+    case 'saveNewAttribute':
+      return saveNewAttribute(state)
     default:
       return state;
   }
@@ -62,5 +64,16 @@ function changeAttributeNameInputValue(state: AttributeListState, action: Change
   return {
     ...state,
     attributeNameInputValue: name,
+  }
+}
+
+function saveNewAttribute(state: AttributeListState): AttributeListState {
+  return {
+    ...state,
+    attributeNameInputValue: '',
+    attributeList: [
+      attributeListItemState({ name: state.attributeNameInputValue, isHighlighted: true }),
+      ...state.attributeList
+    ]
   }
 }

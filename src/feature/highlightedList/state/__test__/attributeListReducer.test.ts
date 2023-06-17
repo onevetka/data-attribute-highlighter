@@ -33,3 +33,15 @@ test('Should change attribute name input value, when calling changeAttributeName
     attributeListReducer(initialState, { type: 'changeAttributeNameInputValue', payload: { name: 'className' }})
   ).toEqual(attributeListState({ attributeNameInputValue: 'className' }));
 });
+
+test('Should add new item to list and clear attributeNameInputValue, when calling saveNewAttribute action', () => {
+  const initialState = attributeListState();
+
+  const state =  attributeListReducer(initialState, { type: 'changeAttributeNameInputValue', payload: { name: 'className' }});
+
+  expect(
+    attributeListReducer(state, { type: 'saveNewAttribute' })
+  ).toEqual(attributeListState({ attributeNameInputValue: '', attributeList: [attributeListItemState({
+    name: 'className'
+  })] }));
+});

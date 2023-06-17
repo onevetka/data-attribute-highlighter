@@ -15,7 +15,13 @@ export const Attributes: React.FC = () => {
 
   return (
     <div className={styles.wrapper}>
-      <form className={styles.form} onSubmit={() => null}>
+      <form
+        className={styles.form}
+        onSubmit={(event) => {
+          event.preventDefault();
+          dispatch({ type: 'saveNewAttribute' });
+        }}
+      >
         <Input
           className={styles.attributeNameInput}
           label="Attribute name"
