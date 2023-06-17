@@ -7,9 +7,9 @@ const darkModeColors = [
   '#BCEB02', // Toxic
 ];
 
-const lightModeColors = [
-  '#0773F7', // Blue
-];
+// const lightModeColors = [
+//   '#0773F7', // Blue
+// ];
 
 class ColorGeneratorService {
   queueOfColors: Array<string>;

@@ -13,6 +13,8 @@ import { useViewModel } from '../../../state/useViewModel';
 export const Attributes: React.FC = () => {
   const { state, dispatch } = useViewModel();
 
+  // FIXME: Перенести методы во вью модель
+
   return (
     <div className={styles.wrapper}>
       <form
