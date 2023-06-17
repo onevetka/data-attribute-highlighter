@@ -1,9 +1,12 @@
-import { AppError } from "../domain/enitity/appError";
+import { AppError } from "../domain/entity/appError";
 
-export interface AppErrorState {
+export interface AppErrorData {
   errors: AppError[],
 }
 
-export const appErrorState = () => ({
+export type AppErrorState = AppErrorData;
+
+export const appErrorState = (data: Partial<AppErrorData> = {}): AppErrorData => ({
   errors: [],
+  ...data,
 })

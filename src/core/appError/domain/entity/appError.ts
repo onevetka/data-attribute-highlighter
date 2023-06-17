@@ -6,9 +6,9 @@ export interface AppError {
 
 export const appError = (data: Partial<AppError>): AppError => {
   return {
-    ...data,
     code: '',
     message: '',
     path: [],
+    ...data,
   }
 }
