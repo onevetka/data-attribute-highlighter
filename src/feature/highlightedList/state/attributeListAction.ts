@@ -1,3 +1,5 @@
+import { Status } from "../../../core/status/domain/entity/status";
+
 export interface ToggleHighlightingAction {
   type: 'toggleHighlighting'
   payload: {
@@ -31,9 +33,17 @@ export interface SaveNewAttributeAction {
   type: 'saveNewAttribute'
 }
 
+export interface ChangeAttributeNameInputStatusAction {
+  type: 'changeAttributeNameInputStatus'
+  payload: {
+    status: Status;
+  }
+}
+
 export type AttributeListAction =
   ToggleHighlightingAction |
   ChangeHighlightColorAction |
   DeleteItemAction |
   ChangeAttributeNameInputValueAction |
-  SaveNewAttributeAction;
+  SaveNewAttributeAction |
+  ChangeAttributeNameInputStatusAction;

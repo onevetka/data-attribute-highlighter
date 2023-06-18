@@ -1,6 +1,7 @@
 
 import { attributeListItemState, attributeListState } from "../attributeListState";
 import { attributeListReducer } from "../attributeListReducer";
+import { Status } from "../../../../core/status/domain/entity/status";
 
 test('Should invert the highlight flag when calling the toggleHighlighting action', () => {
   const initialState = attributeListState({ attributeList: [attributeListItemState()]});
@@ -45,4 +46,12 @@ test('Should add new item with name and highlighted flag to list and clear attri
     name: 'className',
     isHighlighted: true,
   })] }));
+});
+
+test('Should set status to attributeNameInputStatus, when calling changeAttributeNameInputStatus action', () => {
+  const initialState = attributeListState();
+
+  expect(
+    attributeListReducer(initialState, { type: 'changeAttributeNameInputStatus', payload: { status: Status.Error }})
+  ).toEqual(attributeListState({ attributeNameInputStatus: Status.Error }));
 });

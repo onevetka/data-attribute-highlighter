@@ -1,5 +1,4 @@
-import React, { FormEvent } from 'react';
-import styles from './style.module.scss';
+import React from 'react';
 
 // Components
 import Input from '../../../../../components/Input';
@@ -9,6 +8,9 @@ import CurrentAttributeListItem from '../../components/CurrentAttributeListItem'
 
 // State
 import { useViewModel } from '../../../state/useViewModel';
+
+// Assets
+import styles from './style.module.scss';
 
 export const Attributes: React.FC = () => {
   const {
@@ -32,6 +34,7 @@ export const Attributes: React.FC = () => {
           value={state.attributeNameInputValue}
           onChange={changeAttributeNameInput}
           placeholder="data-test"
+          status={state.attributeNameInputStatus}
         />
         <Button className={styles.highlightButton} type="submit">
           Highlight

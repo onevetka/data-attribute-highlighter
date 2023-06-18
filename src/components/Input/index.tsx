@@ -1,21 +1,24 @@
-import React, { FormEvent, ReactElement } from 'react';
+import React, { FocusEventHandler, FormEvent, ReactElement } from 'react';
 import cx from 'classnames';
 
 // Assets
 import styles from './style.module.scss';
+import { Status } from '../../core/status/domain/entity/status';
 
 export enum InputStatus {
-  Error = 'error',
+  'Default' = 'default',
+  'Error' = 'error',
   // warning = 'warning',
   // approved = 'approved',
   // pending = 'pending',
 }
 
 const statusStylesMap = {
-  [InputStatus.Error]: styles.error,
-  // [InputStatus.warning]: styles.warning,
-  // [InputStatus.approved]: styles.approved,
-  // [InputStatus.pending]: styles.pending,
+  [Status.Default]: undefined,
+  [Status.Error]: styles.error,
+  // [Status.warning]: styles.warning,
+  // [Status.approved]: styles.approved,
+  // [Status.pending]: styles.pending,
 };
 
 interface InputProps {
@@ -26,11 +29,11 @@ interface InputProps {
   value?: string;
   placeholder?: string;
   maxLength?: number;
-  status?: InputStatus;
+  status?: Status;
   statusText?: string;
   onChange?: Function;
   onFocus?: Function;
-  onBlur?: Function;
+  onBlur?: FocusEventHandler<HTMLInputElement> ;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -40,6 +43,7 @@ const Input: React.FC<InputProps> = ({
   additionalIcon,
   placeholder,
   onChange,
+  onBlur,
   disabled,
   maxLength,
   status,
@@ -67,6 +71,7 @@ const Input: React.FC<InputProps> = ({
           value={value}
           placeholder={placeholder}
           onChange={handleChange}
+          onBlur={onBlur}
           disabled={disabled}
           maxLength={maxLength}
         />

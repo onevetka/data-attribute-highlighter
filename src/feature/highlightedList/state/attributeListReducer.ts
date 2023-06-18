@@ -1,4 +1,4 @@
-import { AttributeListAction, ChangeAttributeNameInputValueAction, ChangeHighlightColorAction, DeleteItemAction, ToggleHighlightingAction } from "./attributeListAction";
+import { AttributeListAction, ChangeAttributeNameInputStatusAction, ChangeAttributeNameInputValueAction, ChangeHighlightColorAction, DeleteItemAction, ToggleHighlightingAction } from "./attributeListAction";
 import { AttributeListState, attributeListItemState } from "./attributeListState";
 
 export const attributeListReducer = (state: AttributeListState, action: AttributeListAction): AttributeListState => {
@@ -12,7 +12,9 @@ export const attributeListReducer = (state: AttributeListState, action: Attribut
     case 'changeAttributeNameInputValue':
       return changeAttributeNameInputValue(state, action);
     case 'saveNewAttribute':
-      return saveNewAttribute(state)
+      return saveNewAttribute(state);
+    case 'changeAttributeNameInputStatus':
+      return changeAttributeNameInputStatus(state, action);
     default:
       return state;
   }
@@ -76,4 +78,11 @@ function saveNewAttribute(state: AttributeListState): AttributeListState {
       ...state.attributeList
     ]
   }
+}
+
+function changeAttributeNameInputStatus(state: AttributeListState, action: ChangeAttributeNameInputStatusAction): AttributeListState {
+  return {
+    ...state,
+    attributeNameInputStatus: action.payload.status,
+  };
 }
