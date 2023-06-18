@@ -13,9 +13,17 @@ export default {
 
 const Template: ComponentStory<typeof CurrentAttributeListItem> = () => {
   const [color, setColor] = useState('#0670EF');
-  return <CurrentAttributeListItem label="data-tnav" highlightingColor={color} onClose={() => { }} onToggleVisibility={() => { }} onChangeColor={setColor} isHighlighted={false} />;
+  return (
+    <CurrentAttributeListItem
+      label="data-tnav"
+      highlightingColor={color}
+      onClose={() => {}}
+      onToggleVisibility={() => {}}
+      onChangeColor={setColor}
+      isHighlighted={false}
+    />
+  );
 };
 
 export const Default = Template.bind({});
-Default.args = {
-};
+Default.args = {};

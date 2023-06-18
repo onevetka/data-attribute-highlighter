@@ -33,7 +33,7 @@ interface InputProps {
   statusText?: string;
   onChange?: Function;
   onFocus?: Function;
-  onBlur?: FocusEventHandler<HTMLInputElement> ;
+  onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -56,15 +56,11 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <div className={cx(styles.outerFieldWrapper, className)}>
-      {label && (
-        <div className={styles.label}>
-          {label}
-        </div>
-      )}
-      <div className={cx(
-        styles.inputWrapper,
-        status && statusStylesMap[status],
-        {[styles.disabled]: disabled })}
+      {label && <div className={styles.label}>{label}</div>}
+      <div
+        className={cx(styles.inputWrapper, status && statusStylesMap[status], {
+          [styles.disabled]: disabled,
+        })}
       >
         <input
           className={cx(styles.input)}
@@ -76,14 +72,14 @@ const Input: React.FC<InputProps> = ({
           maxLength={maxLength}
         />
         {additionalIcon && (
-          <div className={styles.additionalIcon}>
-            {additionalIcon}
-          </div>
+          <div className={styles.additionalIcon}>{additionalIcon}</div>
         )}
       </div>
       {status && (
-      <span className={cx(styles.status, statusStylesMap[status])}>{statusText}</span>
-    )}
+        <span className={cx(styles.status, statusStylesMap[status])}>
+          {statusText}
+        </span>
+      )}
     </div>
   );
 };

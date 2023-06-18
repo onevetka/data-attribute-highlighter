@@ -68,10 +68,10 @@ var options = {
             options: {
               modules: {
                 auto: true,
-                localIdentName: "[local]--[hash:base64:5]",
-                exportLocalsConvention: "camelCase",
+                localIdentName: '[local]--[hash:base64:5]',
+                exportLocalsConvention: 'camelCase',
               },
-            }
+            },
           },
           {
             loader: 'sass-loader',

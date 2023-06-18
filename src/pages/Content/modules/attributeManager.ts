@@ -1,4 +1,4 @@
-import highlighter from "./highlighter";
+import highlighter from './highlighter';
 
 export function getListOfElementsWithAttribute(
   attributeName: string
@@ -48,7 +48,7 @@ class AttributeManager {
 
     if (isVisible) {
       elements?.forEach((element) => {
-        const attributeValue = element.getAttribute(attributeName) || "";
+        const attributeValue = element.getAttribute(attributeName) || '';
         highlighter.add(element, color, attributeValue, id);
       });
     }
@@ -57,7 +57,7 @@ class AttributeManager {
       attributeName,
       color,
       isVisible,
-      elements
+      elements,
     };
   }
 
@@ -109,7 +109,7 @@ class AttributeManager {
     }
 
     elements.forEach((element) => {
-      const attributeValue = element.getAttribute(attributeName) || "";
+      const attributeValue = element.getAttribute(attributeName) || '';
       highlighter.add(element, color, attributeValue, id);
     });
 

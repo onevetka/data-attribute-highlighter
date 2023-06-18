@@ -1,22 +1,24 @@
-import { AppError } from "../domain/entity/appError"
+import { AppError } from '../domain/entity/appError';
 
 export interface SetErrorsAction {
-  type: 'setErrors'
+  type: 'setErrors';
   payload: {
-    errors: AppError[],
-  }
+    errors: AppError[];
+  };
 }
 
 export interface clearErrorsAction {
-  type: 'clearErrors'
+  type: 'clearErrors';
 }
 
 export interface clearErrorsByPathAction {
-  type: 'clearErrorsByPath'
+  type: 'clearErrorsByPath';
   payload: {
-    path: string[],
-  }
+    path: string[];
+  };
 }
 
-
-export type AppErrorAction = SetErrorsAction | clearErrorsAction | clearErrorsByPathAction;
+export type AppErrorAction =
+  | SetErrorsAction
+  | clearErrorsAction
+  | clearErrorsByPathAction;

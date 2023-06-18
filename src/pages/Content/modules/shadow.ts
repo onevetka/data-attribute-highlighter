@@ -8,7 +8,7 @@ class Shadow {
   public blurRadius: number;
   public spreadRadius: number;
   public color: string;
-  public notation: "px" | "rem";
+  public notation: 'px' | 'rem';
 
   constructor() {
     this.inset = false;
@@ -16,12 +16,12 @@ class Shadow {
     this.offsetY = 0;
     this.blurRadius = 0;
     this.spreadRadius = 0;
-    this.color = "#000000";
-    this.notation = "px";
+    this.color = '#000000';
+    this.notation = 'px';
   }
 
   public computeCSS() {
-    const insetCSS = this.inset ? "inset " : "";
+    const insetCSS = this.inset ? 'inset ' : '';
     const offsetXCSS = `${this.offsetX}${this.notation}`;
     const offsetYCSS = `${this.offsetY}${this.notation}`;
     const blurRadiusCSS = `${this.blurRadius}${this.notation}`;

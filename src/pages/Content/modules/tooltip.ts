@@ -2,10 +2,10 @@ export default class Tooltip {
   holdingElement: HTMLElement;
 
   constructor() {
-    const element = document.createElement("div");
+    const element = document.createElement('div');
     this.holdingElement = element;
-    this.holdingElement.className = "tooltip";
-    this.holdingElement.id = "tooltip";
+    this.holdingElement.className = 'tooltip';
+    this.holdingElement.id = 'tooltip';
   }
 
   setLabel(label: string) {

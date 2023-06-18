@@ -1,7 +1,20 @@
-import { AttributeListAction, ChangeAttributeNameInputStatusAction, ChangeAttributeNameInputValueAction, ChangeHighlightColorAction, DeleteItemAction, ToggleHighlightingAction } from "./attributeListAction";
-import { AttributeListState, attributeListItemState } from "./attributeListState";
+import {
+  AttributeListAction,
+  ChangeAttributeNameInputStatusAction,
+  ChangeAttributeNameInputValueAction,
+  ChangeHighlightColorAction,
+  DeleteItemAction,
+  ToggleHighlightingAction,
+} from './attributeListAction';
+import {
+  AttributeListState,
+  attributeListItemState,
+} from './attributeListState';
 
-export const attributeListReducer = (state: AttributeListState, action: AttributeListAction): AttributeListState => {
+export const attributeListReducer = (
+  state: AttributeListState,
+  action: AttributeListAction
+): AttributeListState => {
   switch (action.type) {
     case 'toggleHighlighting':
       return toggleHighlightingAction(state, action);
@@ -18,24 +31,33 @@ export const attributeListReducer = (state: AttributeListState, action: Attribut
     default:
       return state;
   }
-}
+};
 
-function toggleHighlightingAction(state: AttributeListState, action: ToggleHighlightingAction) {
+function toggleHighlightingAction(
+  state: AttributeListState,
+  action: ToggleHighlightingAction
+) {
   const id = action.payload.id;
 
   return {
     ...state,
     attributeList: state.attributeList.map((attribute, index) => {
       if (index === id) {
-        return attributeListItemState({ ...attribute, isHighlighted: !attribute.isHighlighted });
+        return attributeListItemState({
+          ...attribute,
+          isHighlighted: !attribute.isHighlighted,
+        });
       }
 
-      return attribute
-    })
-  }
+      return attribute;
+    }),
+  };
 }
 
-function changeHighlightColor(state: AttributeListState, action: ChangeHighlightColorAction): AttributeListState {
+function changeHighlightColor(
+  state: AttributeListState,
+  action: ChangeHighlightColorAction
+): AttributeListState {
   const id = action.payload.id;
   const color = action.payload.color;
 
@@ -43,30 +65,36 @@ function changeHighlightColor(state: AttributeListState, action: ChangeHighlight
     ...state,
     attributeList: state.attributeList.map((attribute, index) => {
       if (index === id) {
-        return attributeListItemState({ ...attribute, color, })
+        return attributeListItemState({ ...attribute, color });
       }
-      
+
       return attribute;
-    })
-  }
+    }),
+  };
 }
 
-function deleteItem(state: AttributeListState, action: DeleteItemAction): AttributeListState {
+function deleteItem(
+  state: AttributeListState,
+  action: DeleteItemAction
+): AttributeListState {
   const id = action.payload.id;
 
   return {
     ...state,
-    attributeList: state.attributeList.filter((_, index) => index !== id)
-  }
+    attributeList: state.attributeList.filter((_, index) => index !== id),
+  };
 }
 
-function changeAttributeNameInputValue(state: AttributeListState, action: ChangeAttributeNameInputValueAction): AttributeListState {
+function changeAttributeNameInputValue(
+  state: AttributeListState,
+  action: ChangeAttributeNameInputValueAction
+): AttributeListState {
   const name = action.payload.name;
 
   return {
     ...state,
     attributeNameInputValue: name,
-  }
+  };
 }
 
 function saveNewAttribute(state: AttributeListState): AttributeListState {
@@ -74,13 +102,19 @@ function saveNewAttribute(state: AttributeListState): AttributeListState {
     ...state,
     attributeNameInputValue: '',
     attributeList: [
-      attributeListItemState({ name: state.attributeNameInputValue, isHighlighted: true }),
-      ...state.attributeList
-    ]
-  }
+      attributeListItemState({
+        name: state.attributeNameInputValue,
+        isHighlighted: true,
+      }),
+      ...state.attributeList,
+    ],
+  };
 }
 
-function changeAttributeNameInputStatus(state: AttributeListState, action: ChangeAttributeNameInputStatusAction): AttributeListState {
+function changeAttributeNameInputStatus(
+  state: AttributeListState,
+  action: ChangeAttributeNameInputStatusAction
+): AttributeListState {
   return {
     ...state,
     attributeNameInputStatus: action.payload.status,

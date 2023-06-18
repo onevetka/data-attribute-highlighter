@@ -1,4 +1,4 @@
 {
   "editor.formatOnSave": true,
-  "eslint.run": "onType",
+  "eslint.run": "onType"
 }

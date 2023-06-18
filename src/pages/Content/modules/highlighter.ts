@@ -1,11 +1,11 @@
 // Entity
-import Shadow from "./shadow";
-import Tooltip from "./tooltip";
-import Attribute from "./attribute";
+import Shadow from './shadow';
+import Tooltip from './tooltip';
+import Attribute from './attribute';
 
 // Services
-import ShadowService from "./shadowService";
-import TooltipService from "./tooltipService";
+import ShadowService from './shadowService';
+import TooltipService from './tooltipService';
 
 const getHash = (name: string) => {
   return `${name}-${Math.random().toString(36).substr(2, 5)}`;
@@ -54,7 +54,7 @@ class Highlighter {
     this.selectorsMap[elementId] = {
       shadows,
       tooltip,
-      attributes
+      attributes,
     };
 
     element.dataset.highlightedElemId = elementId;
@@ -66,7 +66,7 @@ class Highlighter {
   public remove(element: HTMLElement, id: string) {
     const elementId = element.dataset.highlightedElemId;
 
-    if (!elementId) throw new Error("This element has not highlighted");
+    if (!elementId) throw new Error('This element has not highlighted');
 
     const originalShadows = this.selectorsMap[elementId].shadows;
     const originalAttributes = this.selectorsMap[elementId]?.attributes;
@@ -80,7 +80,7 @@ class Highlighter {
     this.selectorsMap[elementId] = {
       shadows,
       tooltip,
-      attributes
+      attributes,
     };
 
     if (Object.keys(shadows).length === 0) {

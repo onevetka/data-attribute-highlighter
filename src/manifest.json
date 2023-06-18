@@ -14,17 +14,9 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "<all_urls>"
-      ],
-      "js": [
-        "contentScript.bundle.js"
-      ],
-      "css": [
-        "content.styles.css"
-      ]
+      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "js": ["contentScript.bundle.js"],
+      "css": ["content.styles.css"]
     }
   ],
   "devtools_page": "devtools.html",
@@ -38,8 +30,5 @@
       "matches": []
     }
   ],
-  "permissions": [
-    "storage",
-    "activeTab"
-  ]
+  "permissions": ["storage", "activeTab"]
 }

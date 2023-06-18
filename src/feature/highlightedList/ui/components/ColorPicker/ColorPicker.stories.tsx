@@ -17,5 +17,4 @@ const Template: ComponentStory<typeof ColorPicker> = ({ ...args }) => {
 };
 
 export const Default = Template.bind({});
-Default.args = {
-};
+Default.args = {};

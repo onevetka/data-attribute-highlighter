@@ -1,22 +1,22 @@
 .skeleton-wrapper {
-    display: flex;
-    align-items: center;
-    position: relative;
-    flex-direction: column;
-    gap: 14px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .skeleton-item {
-    width: 100%;
-    height: 32px;
-    border-radius: 6px;
-    background: #1A1A1A;
-    overflow: hidden;
-    position: relative;
+  width: 100%;
+  height: 32px;
+  border-radius: 6px;
+  background: #1a1a1a;
+  overflow: hidden;
+  position: relative;
 }
 
 .label {
-    color: white;
-    position: absolute;
-    top: 36px;
+  color: white;
+  position: absolute;
+  top: 36px;
 }

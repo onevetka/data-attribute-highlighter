@@ -15,7 +15,11 @@ export default {
   },
 } as ComponentMeta<typeof Input>;
 
-const Template: ComponentStory<typeof Input> = ({ value, onChange, ...args }) => {
+const Template: ComponentStory<typeof Input> = ({
+  value,
+  onChange,
+  ...args
+}) => {
   const [inputValue, setValue] = useState('');
 
   return <Input onChange={setValue} value={inputValue} {...args} />;

@@ -1,4 +1,6 @@
-export function getListOfElementsWithAttribute(attributeName: string): Array<HTMLElement> {
+export function getListOfElementsWithAttribute(
+  attributeName: string
+): Array<HTMLElement> {
   const foundElements = document.querySelectorAll(`[${attributeName}]`);
   const foundElementsList = Array.from(foundElements);
 

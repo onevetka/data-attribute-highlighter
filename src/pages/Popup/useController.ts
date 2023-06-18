@@ -11,13 +11,16 @@ const useController = () => {
       // TODO: Create constant
       const tabId = tabs[0].id || 0;
 
-      chrome.tabs.sendMessage(tabId, { messageType: "highlight-data", attributeName: currentValue });
+      chrome.tabs.sendMessage(tabId, {
+        messageType: 'highlight-data',
+        attributeName: currentValue,
+      });
     });
-  }
+  };
 
   const state = { currentValue };
 
-  return { state, handleSave, handleInputChange: setCurrentValue }
-}
+  return { state, handleSave, handleInputChange: setCurrentValue };
+};
 
-export default useController
+export default useController;

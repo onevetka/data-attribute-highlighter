@@ -1,11 +1,11 @@
-import Attribute from "./attribute";
-import Tooltip from "./tooltip";
+import Attribute from './attribute';
+import Tooltip from './tooltip';
 
 class TooltipService {
   public static create(color: string, attributeValue: string, id: string) {
     const attribute: Attribute = {
       value: attributeValue,
-      color
+      color,
     };
 
     const attributes = { [id]: attribute };
@@ -21,7 +21,7 @@ class TooltipService {
   ) {
     const attribute: Attribute = {
       value: attributeValue,
-      color
+      color,
     };
 
     const attributes = { ...originalAttributes, [id]: attribute };
@@ -45,23 +45,23 @@ class TooltipService {
       (key: string) =>
         `<div class="tooltip-list-item"><span class="color-indicator" style="background: ${attributes[key].color}"></span><span>${attributes[key].value}</span></div>`
     );
-    return attributeViewList.join("");
+    return attributeViewList.join('');
   }
 
   public static hangOnElement(element: HTMLElement, tooltip: Tooltip) {
     element.appendChild(tooltip.holdingElement);
 
-    element.addEventListener("mousemove", this.handleDrawTooltipByMousemove);
-    element.addEventListener("mouseout", this.handleHideTooltipBuyMouseout);
-    element.addEventListener("mouseover", this.handleShowTooltipByMouseover);
+    element.addEventListener('mousemove', this.handleDrawTooltipByMousemove);
+    element.addEventListener('mouseout', this.handleHideTooltipBuyMouseout);
+    element.addEventListener('mouseover', this.handleShowTooltipByMouseover);
   }
 
   public static removeFromElement(element: HTMLElement, tooltip: Tooltip) {
     element.removeChild(tooltip.holdingElement);
 
-    element.removeEventListener("mousemove", this.handleDrawTooltipByMousemove);
-    element.removeEventListener("mouseout", this.handleHideTooltipBuyMouseout);
-    element.removeEventListener("mouseover", this.handleShowTooltipByMouseover);
+    element.removeEventListener('mousemove', this.handleDrawTooltipByMousemove);
+    element.removeEventListener('mouseout', this.handleHideTooltipBuyMouseout);
+    element.removeEventListener('mouseover', this.handleShowTooltipByMouseover);
   }
 
   /**
@@ -70,7 +70,7 @@ class TooltipService {
    */
 
   private static handleDrawTooltipByMousemove(event: any) {
-    const tooltip = event.currentTarget.querySelector(":scope > .tooltip");
+    const tooltip = event.currentTarget.querySelector(':scope > .tooltip');
 
     if (!tooltip) {
       return;
@@ -82,34 +82,33 @@ class TooltipService {
   }
 
   private static handleHideTooltipBuyMouseout(event: any) {
-    const tooltip = event.currentTarget.querySelector(":scope > .tooltip");
+    const tooltip = event.currentTarget.querySelector(':scope > .tooltip');
 
     if (!tooltip) {
       return;
     }
 
-    tooltip.style.display = "none";
-    tooltip.visibility = "hide";
+    tooltip.style.display = 'none';
+    tooltip.visibility = 'hide';
   }
 
   private static handleShowTooltipByMouseover(event: any) {
-    const tooltip = event.currentTarget.querySelector(":scope > .tooltip");
+    const tooltip = event.currentTarget.querySelector(':scope > .tooltip');
 
     if (!tooltip) {
       return;
     }
 
-    const relatedTooltip = event.relatedTarget?.querySelector(
-      ":scope > .tooltip"
-    );
+    const relatedTooltip =
+      event.relatedTarget?.querySelector(':scope > .tooltip');
 
     if (relatedTooltip) {
-      relatedTooltip.style.display = "none";
-      relatedTooltip.visibility = "hide";
+      relatedTooltip.style.display = 'none';
+      relatedTooltip.visibility = 'hide';
     }
 
-    tooltip.style.display = "block";
-    tooltip.visibility = "visible";
+    tooltip.style.display = 'block';
+    tooltip.visibility = 'visible';
 
     event.stopPropagation();
   }

@@ -1,49 +1,49 @@
-import { Status } from "../../../core/status/domain/entity/status";
+import { Status } from '../../../core/status/domain/entity/status';
 
 export interface ToggleHighlightingAction {
-  type: 'toggleHighlighting'
+  type: 'toggleHighlighting';
   payload: {
-    id: number,
-  }
+    id: number;
+  };
 }
 
 export interface ChangeHighlightColorAction {
-  type: 'changeHighlightColor'
+  type: 'changeHighlightColor';
   payload: {
-    id: number,
+    id: number;
     color: string;
-  }
+  };
 }
 
 export interface DeleteItemAction {
-  type: 'deleteItem'
+  type: 'deleteItem';
   payload: {
-    id: number,
-  }
+    id: number;
+  };
 }
 
 export interface ChangeAttributeNameInputValueAction {
-  type: 'changeAttributeNameInputValue'
+  type: 'changeAttributeNameInputValue';
   payload: {
     name: string;
-  }
+  };
 }
 
 export interface SaveNewAttributeAction {
-  type: 'saveNewAttribute'
+  type: 'saveNewAttribute';
 }
 
 export interface ChangeAttributeNameInputStatusAction {
-  type: 'changeAttributeNameInputStatus'
+  type: 'changeAttributeNameInputStatus';
   payload: {
     status: Status;
-  }
+  };
 }
 
 export type AttributeListAction =
-  ToggleHighlightingAction |
-  ChangeHighlightColorAction |
-  DeleteItemAction |
-  ChangeAttributeNameInputValueAction |
-  SaveNewAttributeAction |
-  ChangeAttributeNameInputStatusAction;
+  | ToggleHighlightingAction
+  | ChangeHighlightColorAction
+  | DeleteItemAction
+  | ChangeAttributeNameInputValueAction
+  | SaveNewAttributeAction
+  | ChangeAttributeNameInputStatusAction;

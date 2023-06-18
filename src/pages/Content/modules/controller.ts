@@ -1,13 +1,13 @@
-import { HIGHLIGHTERS_FIELD } from "../../../constants/store";
-import colorGeneratorService from "../../../services/colorGenerator.service";
-import AttributeManager from "./attributeManager";
+import { HIGHLIGHTERS_FIELD } from '../../../constants/store';
+import colorGeneratorService from '../../../services/colorGenerator.service';
+import AttributeManager from './attributeManager';
 
 export type HighlighterData = {
   attributeName: string;
   color: string;
   isVisible: boolean;
   elements: Array<HTMLElement>;
-}
+};
 
 class Controller {
   /**
@@ -15,10 +15,11 @@ class Controller {
    */
   public initHighlighters() {
     chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes: Record<string, HighlighterData> = data[HIGHLIGHTERS_FIELD] || [];
+      const highlightedAttributes: Record<string, HighlighterData> =
+        data[HIGHLIGHTERS_FIELD] || [];
 
       Object.keys(highlightedAttributes).forEach((id) => {
-        const {color, attributeName, isVisible} = highlightedAttributes[id];
+        const { color, attributeName, isVisible } = highlightedAttributes[id];
 
         AttributeManager.add(id, attributeName, color, isVisible);
       });
@@ -32,13 +33,17 @@ class Controller {
 
     AttributeManager.add(id, attributeName, color, true);
 
-    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
+    chrome.storage.local.set({
+      [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes,
+    });
   }
 
   public removeHighlighter(id: string) {
     AttributeManager.remove(id);
 
-    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
+    chrome.storage.local.set({
+      [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes,
+    });
   }
 
   public toggleHighlighterVisibility(id: string) {
@@ -50,18 +55,22 @@ class Controller {
       AttributeManager.show(id);
     }
 
-    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
+    chrome.storage.local.set({
+      [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes,
+    });
   }
 
   public setHighlighterColor(id: string, color: string) {
-    const highlighter = {...AttributeManager.highlightedAttributes[id]};
+    const highlighter = { ...AttributeManager.highlightedAttributes[id] };
     highlighter.color = color;
 
     AttributeManager.highlightedAttributes[id] = highlighter;
     AttributeManager.hide(id);
     AttributeManager.show(id);
 
-    chrome.storage.local.set({ [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes });
+    chrome.storage.local.set({
+      [HIGHLIGHTERS_FIELD]: AttributeManager.highlightedAttributes,
+    });
   }
 }
 

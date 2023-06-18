@@ -9,7 +9,9 @@ const useController = (onChange: Function | undefined) => {
   const [status, setStatus] = useState<InputStatus | undefined>(undefined);
 
   // FIXME: UUID
-  const {current: fieldId} = useRef("prefix-" + (Math.random().toString(36)+'00000000000000000').slice(2, 7));
+  const { current: fieldId } = useRef(
+    'prefix-' + (Math.random().toString(36) + '00000000000000000').slice(2, 7)
+  );
 
   const handleChangePicker = (event: FormEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
@@ -19,7 +21,7 @@ const useController = (onChange: Function | undefined) => {
     });
 
     setStatus(undefined);
-  }
+  };
 
   const handleChangeInput = (event: FormEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
@@ -33,18 +35,18 @@ const useController = (onChange: Function | undefined) => {
         setStatus(undefined);
       }
     });
-  }
+  };
 
   const state = {
     fieldId,
     status,
-  }
+  };
 
   return {
     state,
     handleChangePicker,
     handleChangeInput,
-  }
-}
+  };
+};
 
-export default useController
+export default useController;
