@@ -6,5 +6,9 @@
   ],
   "globals": {
     "chrome": "readonly"
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error"
   }
 }

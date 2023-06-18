@@ -19,15 +19,12 @@ export const Attributes: React.FC = () => {
     changeAttributeNameInput,
     removeAttribute,
     toggleAttributeVisibility,
-    changeAttributeColor
+    changeAttributeColor,
   } = useViewModel();
 
   return (
     <div className={styles.wrapper}>
-      <form
-        className={styles.form}
-        onSubmit={highlightAttribute}
-      >
+      <form className={styles.form} onSubmit={highlightAttribute}>
         <Input
           className={styles.attributeNameInput}
           label="Attribute name"
@@ -51,7 +48,9 @@ export const Attributes: React.FC = () => {
               isHighlighted={item.isHighlighted}
               onClose={() => removeAttribute(index)}
               onToggleVisibility={() => toggleAttributeVisibility(index)}
-              onChangeColor={(color: string) => changeAttributeColor(index, color)}
+              onChangeColor={(color: string) =>
+                changeAttributeColor(index, color)
+              }
               key={index} // FIXME
             />
           ))

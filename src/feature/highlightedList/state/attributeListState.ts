@@ -1,4 +1,4 @@
-import { Status } from "../../../core/status/domain/entity/status";
+import { Status } from '../../../core/status/domain/entity/status';
 
 export interface AttributeListItemState {
   name: string;
@@ -6,14 +6,16 @@ export interface AttributeListItemState {
   color: string;
 }
 
-export const attributeListItemState = (data: Partial<AttributeListItemState> = {}): AttributeListItemState => {
+export const attributeListItemState = (
+  data: Partial<AttributeListItemState> = {}
+): AttributeListItemState => {
   return {
     name: '',
     isHighlighted: false,
     color: '#000000',
     ...data,
-  }
-}
+  };
+};
 
 export interface AttributeListState {
   attributeNameInputValue: string;
@@ -21,11 +23,13 @@ export interface AttributeListState {
   attributeNameInputStatus: Status;
 }
 
-export const attributeListState = (data: Partial<AttributeListState> = {}): AttributeListState => {
+export const attributeListState = (
+  data: Partial<AttributeListState> = {}
+): AttributeListState => {
   return {
     attributeNameInputValue: '',
     attributeNameInputStatus: Status.Default,
     attributeList: data.attributeList?.map(attributeListItemState) || [],
     ...data,
-  }
-}
+  };
+};
