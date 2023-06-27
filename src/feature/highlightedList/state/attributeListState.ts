@@ -1,9 +1,10 @@
+import { Color } from '../../../core/color/domain/entity/color';
 import { Status } from '../../../core/status/domain/entity/status';
 
 export interface AttributeListItemState {
   name: string;
   isHighlighted: boolean;
-  color: string;
+  color: Color;
 }
 
 export const attributeListItemState = (

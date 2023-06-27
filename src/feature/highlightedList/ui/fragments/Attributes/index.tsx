@@ -11,6 +11,7 @@ import { useViewModel } from '../../../state/useViewModel';
 
 // Assets
 import styles from './style.module.scss';
+import { Color } from '../../../../../core/color/domain/entity/color';
 
 export const Attributes: React.FC = () => {
   const {
@@ -48,7 +49,7 @@ export const Attributes: React.FC = () => {
               isHighlighted={item.isHighlighted}
               onClose={() => removeAttribute(index)}
               onToggleVisibility={() => toggleAttributeVisibility(index)}
-              onChangeColor={(color: string) =>
+              onChangeColor={(color: Color) =>
                 changeAttributeColor(index, color)
               }
               key={index} // FIXME

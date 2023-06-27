@@ -4,6 +4,7 @@ import {
 } from '../attributeListState';
 import { attributeListReducer } from '../attributeListReducer';
 import { Status } from '../../../../core/status/domain/entity/status';
+import { getRandomColor } from '../../../../shared/color/domain/lib/getRandomColor';
 
 test('Should invert the highlight flag when calling the toggleHighlighting action', () => {
   const initialState = attributeListState({
@@ -78,6 +79,7 @@ test('Should add new item with name and highlighted flag to list and clear attri
         attributeListItemState({
           name: 'className',
           isHighlighted: true,
+          color: getRandomColor({ knownColors: [] }),
         }),
       ],
     })

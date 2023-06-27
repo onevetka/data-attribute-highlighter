@@ -1,3 +1,4 @@
+import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
 import {
   AttributeListAction,
   ChangeAttributeNameInputStatusAction,
@@ -105,6 +106,9 @@ function saveNewAttribute(state: AttributeListState): AttributeListState {
       attributeListItemState({
         name: state.attributeNameInputValue,
         isHighlighted: true,
+        color: getRandomColor({
+          knownColors: state.attributeList.map((attribute) => attribute.color),
+        }),
       }),
       ...state.attributeList,
     ],

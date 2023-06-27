@@ -6,6 +6,7 @@ import {
 } from './attributeListState';
 import { AttributeListAction } from './attributeListAction';
 import { Status } from '../../../core/status/domain/entity/status';
+import { Color } from '../../../core/color/domain/entity/color';
 
 export const getActions = (name: string): AttributeListAction[] => {
   if (name.length === 0) {
@@ -65,7 +66,7 @@ export const useViewModel = () => {
     dispatch({ type: 'toggleHighlighting', payload: { id: index } });
   };
 
-  const changeAttributeColor = (index: number, color: string) => {
+  const changeAttributeColor = (index: number, color: Color) => {
     dispatch({
       type: 'changeHighlightColor',
       payload: { id: index, color },
