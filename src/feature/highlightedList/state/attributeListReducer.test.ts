@@ -1,10 +1,10 @@
 import {
   attributeListItemState,
   attributeListState,
-} from '../attributeListState';
-import { attributeListReducer } from '../attributeListReducer';
-import { Status } from '../../../../core/status/domain/entity/status';
-import { getRandomColor } from '../../../../shared/color/domain/lib/getRandomColor';
+} from './attributeListState';
+import { attributeListReducer } from './attributeListReducer';
+import { Status } from '../../../core/status/domain/entity/status';
+import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
 
 test('Should invert the highlight flag when calling the toggleHighlighting action', () => {
   const initialState = attributeListState({
@@ -64,7 +64,7 @@ test('Should change attribute name input value, when calling changeAttributeName
   ).toEqual(attributeListState({ attributeNameInputValue: 'className' }));
 });
 
-test('Should add new item with name and highlighted flag to list and clear attributeNameInputValue, when calling saveNewAttribute action', () => {
+test('Should add new item with name and highlighted flag to list and clear attributeNameInputValue, when calling saveNewAttribute action with correct name', () => {
   const initialState = attributeListState();
 
   const state = attributeListReducer(initialState, {
@@ -82,6 +82,22 @@ test('Should add new item with name and highlighted flag to list and clear attri
           color: getRandomColor({ knownColors: [] }),
         }),
       ],
+    })
+  );
+});
+
+test('Action saveNewAttribute should set error if name is too short', () => {
+  const initialState = attributeListState();
+
+  const state = attributeListReducer(initialState, {
+    type: 'changeAttributeNameInputValue',
+    payload: { name: '' },
+  });
+
+  expect(attributeListReducer(state, { type: 'saveNewAttribute' })).toEqual(
+    attributeListState({
+      attributeNameInputValue: '',
+      attributeNameInputStatus: Status.Error,
     })
   );
 });

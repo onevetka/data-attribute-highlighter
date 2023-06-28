@@ -1,10 +1,20 @@
-module.exports = {
-  roots: ['<rootDir>/src'],
-  testMatch: [
-    '**/__tests__/**/*.+(ts|tsx|js)',
-    '**/?(*.)+(spec|test).+(ts|tsx|js)',
-  ],
+const config = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testRegex: 'src.*\\.test\\.(ts|js|tsx|jsx)$',
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
   },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'cjs'],
+  extensionsToTreatAsEsm: ['.ts'],
+  automock: false,
+  resetMocks: false,
+  verbose: true,
 };
+
+module.exports = config;

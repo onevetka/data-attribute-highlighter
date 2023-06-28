@@ -4,28 +4,28 @@ import {
   attributeListItemState,
   attributeListState,
 } from './attributeListState';
-import { AttributeListAction } from './attributeListAction';
+// import { AttributeListAction } from './attributeListAction';
 import { Status } from '../../../core/status/domain/entity/status';
 import { Color } from '../../../core/color/domain/entity/color';
 
-export const getActions = (name: string): AttributeListAction[] => {
-  if (name.length === 0) {
-    return [
-      {
-        type: 'changeAttributeNameInputStatus',
-        payload: { status: Status.Error },
-      },
-    ];
-  }
+// export const getActions = (name: string): AttributeListAction[] => {
+//   if (name.length === 0) {
+//     return [
+//       {
+//         type: 'changeAttributeNameInputStatus',
+//         payload: { status: Status.Error },
+//       },
+//     ];
+//   }
 
-  return [
-    { type: 'saveNewAttribute' },
-    {
-      type: 'changeAttributeNameInputStatus',
-      payload: { status: Status.Default },
-    },
-  ];
-};
+//   return [
+//     { type: 'saveNewAttribute' },
+//     {
+//       type: 'changeAttributeNameInputStatus',
+//       payload: { status: Status.Default },
+//     },
+//   ];
+// };
 
 export const useViewModel = () => {
   const [state, dispatch] = useReducer(
@@ -42,9 +42,9 @@ export const useViewModel = () => {
   const highlightAttribute = (event: FormEvent) => {
     event.preventDefault();
 
-    const actions = getActions(state.attributeNameInputValue);
-
-    actions.forEach((action) => dispatch(action));
+    dispatch({
+      type: 'saveNewAttribute',
+    });
   };
 
   const changeAttributeNameInput = (name: string) => {

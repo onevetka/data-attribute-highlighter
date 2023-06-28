@@ -1,3 +1,8 @@
+import { Result } from 'true-myth';
+import {
+  AppError,
+  appError,
+} from '../../../core/appError/domain/entity/appError';
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
 import {
   AttributeListAction,
@@ -11,6 +16,7 @@ import {
   AttributeListState,
   attributeListItemState,
 } from './attributeListState';
+import { Status } from '../../../core/status/domain/entity/status';
 
 export const attributeListReducer = (
   state: AttributeListState,
@@ -98,21 +104,48 @@ function changeAttributeNameInputValue(
   };
 }
 
+export interface AttributeName {
+  name: string;
+}
+
+export const attributeName = (
+  data: AttributeName
+): Result<AttributeName, AppError> => {
+  if (data.name.length === 0) {
+    return Result.err(appError({ message: 'Name is too short' }));
+  }
+
+  return Result.ok({
+    ...data,
+  });
+};
+
 function saveNewAttribute(state: AttributeListState): AttributeListState {
-  return {
-    ...state,
-    attributeNameInputValue: '',
-    attributeList: [
-      attributeListItemState({
-        name: state.attributeNameInputValue,
-        isHighlighted: true,
-        color: getRandomColor({
-          knownColors: state.attributeList.map((attribute) => attribute.color),
-        }),
+  const attributeNameResult = attributeName({
+    name: state.attributeNameInputValue,
+  });
+
+  if (attributeNameResult.isErr) {
+    return {
+      ...state,
+      attributeNameInputValue: '',
+      attributeNameInputStatus: Status.Error,
+    };
+  } else {
+    const newItem = attributeListItemState({
+      name: state.attributeNameInputValue,
+      isHighlighted: true,
+      color: getRandomColor({
+        knownColors: state.attributeList.map((attribute) => attribute.color),
       }),
-      ...state.attributeList,
-    ],
-  };
+    });
+
+    return {
+      ...state,
+      attributeNameInputValue: '',
+      attributeList: [newItem, ...state.attributeList],
+    };
+  }
 }
 
 function changeAttributeNameInputStatus(
