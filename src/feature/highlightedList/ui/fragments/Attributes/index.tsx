@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 
 // Components
 import Input from '../../../../../components/Input';
@@ -25,7 +25,13 @@ export const Attributes: React.FC = () => {
 
   return (
     <div className={styles.wrapper}>
-      <form className={styles.form} onSubmit={highlightAttribute}>
+      <form
+        className={styles.form}
+        onSubmit={(event: FormEvent) => {
+          event.preventDefault();
+          highlightAttribute();
+        }}
+      >
         <Input
           className={styles.attributeNameInput}
           label="Attribute name"

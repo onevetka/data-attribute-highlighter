@@ -1,31 +1,11 @@
-import { FormEvent, useReducer } from 'react';
+import { useReducer } from 'react';
 import { attributeListReducer } from './attributeListReducer';
 import {
   attributeListItemState,
   attributeListState,
 } from './attributeListState';
-// import { AttributeListAction } from './attributeListAction';
 import { Status } from '../../../core/status/domain/entity/status';
 import { Color } from '../../../core/color/domain/entity/color';
-
-// export const getActions = (name: string): AttributeListAction[] => {
-//   if (name.length === 0) {
-//     return [
-//       {
-//         type: 'changeAttributeNameInputStatus',
-//         payload: { status: Status.Error },
-//       },
-//     ];
-//   }
-
-//   return [
-//     { type: 'saveNewAttribute' },
-//     {
-//       type: 'changeAttributeNameInputStatus',
-//       payload: { status: Status.Default },
-//     },
-//   ];
-// };
 
 export const useViewModel = () => {
   const [state, dispatch] = useReducer(
@@ -39,15 +19,14 @@ export const useViewModel = () => {
     })
   );
 
-  const highlightAttribute = (event: FormEvent) => {
-    event.preventDefault();
-
+  const highlightAttribute = () => {
     dispatch({
       type: 'saveNewAttribute',
     });
   };
 
   const changeAttributeNameInput = (name: string) => {
+    // FIXME: Это не закреплено в тестах. Убрать, вынести внутрь changeAttributeNameInputValue
     dispatch({
       type: 'changeAttributeNameInputStatus',
       payload: { status: Status.Default },

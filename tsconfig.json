@@ -14,7 +14,7 @@
     "resolveJsonModule": true,
     "noEmit": false,
     "jsx": "react",
-    "types": ["jest", "node", "@types/jest"]
+    "types": ["jest", "node", "@types/jest", "chrome"]
   },
   "include": ["src", "types"],
   "exclude": ["build", "node_modules"]
