@@ -1,8 +1,3 @@
-import { Result } from 'true-myth';
-import {
-  AppError,
-  appError,
-} from '../../../core/appError/domain/entity/appError';
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
 import {
   AttributeListAction,
@@ -18,6 +13,7 @@ import {
 } from './attributeListState';
 import { Status } from '../../../core/status/domain/entity/status';
 import { AttributeListEffect } from './attributeListEffect';
+import { attributeName } from '../domain/entity/attributeName';
 
 export interface AttributeListResult {
   state: AttributeListState;
@@ -27,27 +23,25 @@ export interface AttributeListResult {
 export const attributeListReducer = (
   state: AttributeListState,
   action: AttributeListAction
-): AttributeListState => {
-  const newState = (() => {
+): AttributeListResult => {
+  const result = (() => {
     switch (action.type) {
       case 'toggleHighlighting':
-        return toggleHighlighting(state, action).state;
+        return toggleHighlighting(state, action);
       case 'changeHighlightColor':
-        return changeHighlightColor(state, action).state;
+        return changeHighlightColor(state, action);
       case 'deleteItem':
-        return deleteItem(state, action).state;
+        return deleteItem(state, action);
       case 'changeAttributeNameInputValue':
-        return changeAttributeNameInputValue(state, action).state;
+        return changeAttributeNameInputValue(state, action);
       case 'saveNewAttribute':
-        return saveNewAttribute(state).state;
+        return saveNewAttribute(state);
       case 'changeAttributeNameInputStatus':
-        return changeAttributeNameInputStatus(state, action).state;
-      default:
-        return state;
+        return changeAttributeNameInputStatus(state, action);
     }
   })();
 
-  return newState;
+  return result;
 };
 
 function toggleHighlighting(
@@ -122,20 +116,6 @@ function changeAttributeNameInputValue(
 
   return { state: newState, effects: [] };
 }
-
-export interface AttributeName {
-  name: string;
-}
-
-export const attributeName = (
-  data: AttributeName
-): Result<AttributeName, AppError> => {
-  if (data.name.length === 0) {
-    return Result.err(appError({ message: 'Name is too short' }));
-  }
-
-  return Result.ok(data);
-};
 
 function saveNewAttribute(state: AttributeListState): AttributeListResult {
   const attributeNameResult = attributeName({

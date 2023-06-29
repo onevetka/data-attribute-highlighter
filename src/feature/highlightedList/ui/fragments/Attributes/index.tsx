@@ -22,6 +22,9 @@ export const Attributes: React.FC = () => {
         className={styles.form}
         onSubmit={(event: FormEvent) => {
           event.preventDefault();
+          handleAction({
+            type: 'saveNewAttribute',
+          });
         }}
       >
         <Input

@@ -31,8 +31,9 @@ export const useViewModel = () => {
   );
 
   const handleAction = (action: AttributeListAction) => {
-    const newState = attributeListReducer(state, action);
+    const { state: newState, effects } = attributeListReducer(state, action);
     dispatch({ state: newState });
+    console.log('effects :>> ', effects);
   };
 
   return {
