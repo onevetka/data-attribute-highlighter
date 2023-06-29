@@ -14,15 +14,7 @@ import styles from './style.module.scss';
 import { Color } from '../../../../../core/color/domain/entity/color';
 
 export const Attributes: React.FC = () => {
-  const {
-    state,
-    handleAction,
-    // highlightAttribute,
-    // changeAttributeNameInput,
-    // removeAttribute,
-    // toggleAttributeVisibility,
-    // changeAttributeColor,
-  } = useViewModel();
+  const { state, handleAction } = useViewModel();
 
   return (
     <div className={styles.wrapper}>
@@ -30,14 +22,18 @@ export const Attributes: React.FC = () => {
         className={styles.form}
         onSubmit={(event: FormEvent) => {
           event.preventDefault();
-          // highlightAttribute();
         }}
       >
         <Input
           className={styles.attributeNameInput}
           label="Attribute name"
           value={state.attributeNameInputValue}
-          // onChange={changeAttributeNameInput}
+          onChange={(name: string) =>
+            handleAction({
+              type: 'changeAttributeNameInputValue',
+              payload: { name },
+            })
+          }
           placeholder="data-test"
           status={state.attributeNameInputStatus}
         />
@@ -54,14 +50,21 @@ export const Attributes: React.FC = () => {
               label={item.name}
               highlightingColor={item.color}
               isHighlighted={item.isHighlighted}
-              onClose={() => null}
+              onClose={() =>
+                handleAction({ type: 'deleteItem', payload: { id: index } })
+              }
               onToggleVisibility={() =>
                 handleAction({
                   type: 'toggleHighlighting',
                   payload: { id: index },
                 })
               }
-              onChangeColor={(color: Color) => null}
+              onChangeColor={(color: Color) =>
+                handleAction({
+                  type: 'changeHighlightColor',
+                  payload: { id: index, color },
+                })
+              }
               key={index} // FIXME
             />
           ))
