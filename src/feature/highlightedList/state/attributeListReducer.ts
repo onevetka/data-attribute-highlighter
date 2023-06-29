@@ -39,6 +39,17 @@ export const attributeListReducer = (
   }
 };
 
+interface StateUpdaterAction {
+  state: AttributeListState;
+}
+
+export const stateUpdater = (
+  state: AttributeListState,
+  action: StateUpdaterAction
+): AttributeListState => {
+  return action.state;
+};
+
 function toggleHighlightingAction(
   state: AttributeListState,
   action: ToggleHighlightingAction

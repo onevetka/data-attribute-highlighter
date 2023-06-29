@@ -16,11 +16,12 @@ import { Color } from '../../../../../core/color/domain/entity/color';
 export const Attributes: React.FC = () => {
   const {
     state,
-    highlightAttribute,
-    changeAttributeNameInput,
-    removeAttribute,
-    toggleAttributeVisibility,
-    changeAttributeColor,
+    handleAction,
+    // highlightAttribute,
+    // changeAttributeNameInput,
+    // removeAttribute,
+    // toggleAttributeVisibility,
+    // changeAttributeColor,
   } = useViewModel();
 
   return (
@@ -29,14 +30,14 @@ export const Attributes: React.FC = () => {
         className={styles.form}
         onSubmit={(event: FormEvent) => {
           event.preventDefault();
-          highlightAttribute();
+          // highlightAttribute();
         }}
       >
         <Input
           className={styles.attributeNameInput}
           label="Attribute name"
           value={state.attributeNameInputValue}
-          onChange={changeAttributeNameInput}
+          // onChange={changeAttributeNameInput}
           placeholder="data-test"
           status={state.attributeNameInputStatus}
         />
@@ -53,11 +54,14 @@ export const Attributes: React.FC = () => {
               label={item.name}
               highlightingColor={item.color}
               isHighlighted={item.isHighlighted}
-              onClose={() => removeAttribute(index)}
-              onToggleVisibility={() => toggleAttributeVisibility(index)}
-              onChangeColor={(color: Color) =>
-                changeAttributeColor(index, color)
+              onClose={() => null}
+              onToggleVisibility={() =>
+                handleAction({
+                  type: 'toggleHighlighting',
+                  payload: { id: index },
+                })
               }
+              onChangeColor={(color: Color) => null}
               key={index} // FIXME
             />
           ))
