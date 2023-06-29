@@ -53,15 +53,35 @@ test('Should delete item from list, when calling deleteItem action', () => {
   ).toEqual(attributeListState());
 });
 
-test('Should change attribute name input value, when calling changeAttributeNameInputValue action', () => {
-  const initialState = attributeListState();
+test('Action changeAttributeNameInputValue should change attribute name input value', () => {
+  const state = attributeListState();
 
   expect(
-    attributeListReducer(initialState, {
+    attributeListReducer(state, {
       type: 'changeAttributeNameInputValue',
       payload: { name: 'className' },
     })
   ).toEqual(attributeListState({ attributeNameInputValue: 'className' }));
+});
+
+test('Action changeAttributeNameInputValue should clear input status', () => {
+  const state = attributeListState();
+  const stateWithError = attributeListReducer(state, {
+    type: 'changeAttributeNameInputStatus',
+    payload: { status: Status.Error },
+  });
+
+  expect(
+    attributeListReducer(stateWithError, {
+      type: 'changeAttributeNameInputValue',
+      payload: { name: 'className' },
+    })
+  ).toEqual(
+    attributeListState({
+      attributeNameInputValue: 'className',
+      attributeNameInputStatus: Status.Default,
+    })
+  );
 });
 
 test('Should add new item with name and highlighted flag to list and clear attributeNameInputValue, when calling saveNewAttribute action with correct name', () => {
@@ -86,7 +106,7 @@ test('Should add new item with name and highlighted flag to list and clear attri
   );
 });
 
-test.skip('Action saveNewAttribute should set error if name is too short', () => {
+test('Action saveNewAttribute should set error if name is too short', () => {
   const initialState = attributeListState();
 
   const state = attributeListReducer(initialState, {

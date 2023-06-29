@@ -16,27 +16,32 @@ import {
   AttributeListState,
   attributeListItemState,
 } from './attributeListState';
+import { Status } from '../../../core/status/domain/entity/status';
 
 export const attributeListReducer = (
   state: AttributeListState,
   action: AttributeListAction
 ): AttributeListState => {
-  switch (action.type) {
-    case 'toggleHighlighting':
-      return toggleHighlightingAction(state, action);
-    case 'changeHighlightColor':
-      return changeHighlightColor(state, action);
-    case 'deleteItem':
-      return deleteItem(state, action);
-    case 'changeAttributeNameInputValue':
-      return changeAttributeNameInputValue(state, action);
-    case 'saveNewAttribute':
-      return saveNewAttribute(state);
-    case 'changeAttributeNameInputStatus':
-      return changeAttributeNameInputStatus(state, action);
-    default:
-      return state;
-  }
+  const newState = (() => {
+    switch (action.type) {
+      case 'toggleHighlighting':
+        return toggleHighlightingAction(state, action);
+      case 'changeHighlightColor':
+        return changeHighlightColor(state, action);
+      case 'deleteItem':
+        return deleteItem(state, action);
+      case 'changeAttributeNameInputValue':
+        return changeAttributeNameInputValue(state, action);
+      case 'saveNewAttribute':
+        return saveNewAttribute(state);
+      case 'changeAttributeNameInputStatus':
+        return changeAttributeNameInputStatus(state, action);
+      default:
+        return state;
+    }
+  })();
+
+  return newState;
 };
 
 interface StateUpdaterAction {
@@ -111,6 +116,7 @@ function changeAttributeNameInputValue(
   return {
     ...state,
     attributeNameInputValue: name,
+    attributeNameInputStatus: Status.Default,
   };
 }
 
@@ -129,31 +135,31 @@ export const attributeName = (
 };
 
 function saveNewAttribute(state: AttributeListState): AttributeListState {
-  // const attributeNameResult = attributeName({
-  //   name: state.attributeNameInputValue,
-  // });
-
-  // if (attributeNameResult.isErr) {
-  //   return {
-  //     ...state,
-  //     attributeNameInputValue: '',
-  //     attributeNameInputStatus: Status.Error,
-  //   };
-  // } else {
-  const newItem = attributeListItemState({
+  const attributeNameResult = attributeName({
     name: state.attributeNameInputValue,
-    isHighlighted: true,
-    color: getRandomColor({
-      knownColors: state.attributeList.map((attribute) => attribute.color),
-    }),
   });
 
-  return {
-    ...state,
-    attributeNameInputValue: '',
-    attributeList: [newItem, ...state.attributeList],
-  };
-  // }
+  if (attributeNameResult.isErr) {
+    return {
+      ...state,
+      attributeNameInputValue: '',
+      attributeNameInputStatus: Status.Error,
+    };
+  } else {
+    const newItem = attributeListItemState({
+      name: state.attributeNameInputValue,
+      isHighlighted: true,
+      color: getRandomColor({
+        knownColors: state.attributeList.map((attribute) => attribute.color),
+      }),
+    });
+
+    return {
+      ...state,
+      attributeNameInputValue: '',
+      attributeList: [newItem, ...state.attributeList],
+    };
+  }
 }
 
 function changeAttributeNameInputStatus(
@@ -164,4 +170,14 @@ function changeAttributeNameInputStatus(
     ...state,
     attributeNameInputStatus: action.payload.status,
   };
+}
+
+export interface AttributeListEffect {
+  type: 'saveAttributeToChromeStorage';
+  payload: any;
+}
+
+export interface AttributeListResult {
+  state: AttributeListState;
+  effects: AttributeListEffect[];
 }
