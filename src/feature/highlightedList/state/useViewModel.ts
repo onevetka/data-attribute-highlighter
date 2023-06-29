@@ -1,10 +1,22 @@
 import { useReducer } from 'react';
-import { attributeListReducer, stateUpdater } from './attributeListReducer';
+import { attributeListReducer } from './attributeListReducer';
 import {
+  AttributeListState,
   attributeListItemState,
   attributeListState,
 } from './attributeListState';
 import { AttributeListAction } from './attributeListAction';
+
+interface StateUpdaterAction {
+  state: AttributeListState;
+}
+
+export const stateUpdater = (
+  _: AttributeListState,
+  action: StateUpdaterAction
+): AttributeListState => {
+  return action.state;
+};
 
 export const useViewModel = () => {
   const [state, dispatch] = useReducer(
@@ -22,16 +34,6 @@ export const useViewModel = () => {
     const newState = attributeListReducer(state, action);
     dispatch({ state: newState });
   };
-
-  // const highlightAttribute = () => {
-  //   const actions = getActions(state.attributeNameInputValue);
-  //   const effectActions = actions.map(makeEffectAction);
-
-  //   effectActions.forEach((effectAction) => {
-  //     dispatch(effectAction.action);
-  //     console.log(effectAction.effect);
-  //   });
-  // };
 
   return {
     state,

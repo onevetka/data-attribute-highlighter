@@ -17,6 +17,12 @@ import {
   attributeListItemState,
 } from './attributeListState';
 import { Status } from '../../../core/status/domain/entity/status';
+import { AttributeListEffect } from './attributeListEffect';
+
+export interface AttributeListResult {
+  state: AttributeListState;
+  effects: AttributeListEffect[];
+}
 
 export const attributeListReducer = (
   state: AttributeListState,
@@ -25,17 +31,17 @@ export const attributeListReducer = (
   const newState = (() => {
     switch (action.type) {
       case 'toggleHighlighting':
-        return toggleHighlightingAction(state, action);
+        return toggleHighlighting(state, action).state;
       case 'changeHighlightColor':
-        return changeHighlightColor(state, action);
+        return changeHighlightColor(state, action).state;
       case 'deleteItem':
-        return deleteItem(state, action);
+        return deleteItem(state, action).state;
       case 'changeAttributeNameInputValue':
-        return changeAttributeNameInputValue(state, action);
+        return changeAttributeNameInputValue(state, action).state;
       case 'saveNewAttribute':
-        return saveNewAttribute(state);
+        return saveNewAttribute(state).state;
       case 'changeAttributeNameInputStatus':
-        return changeAttributeNameInputStatus(state, action);
+        return changeAttributeNameInputStatus(state, action).state;
       default:
         return state;
     }
@@ -44,24 +50,13 @@ export const attributeListReducer = (
   return newState;
 };
 
-interface StateUpdaterAction {
-  state: AttributeListState;
-}
-
-export const stateUpdater = (
-  state: AttributeListState,
-  action: StateUpdaterAction
-): AttributeListState => {
-  return action.state;
-};
-
-function toggleHighlightingAction(
+function toggleHighlighting(
   state: AttributeListState,
   action: ToggleHighlightingAction
-) {
+): AttributeListResult {
   const id = action.payload.id;
 
-  return {
+  const newState = {
     ...state,
     attributeList: state.attributeList.map((attribute, index) => {
       if (index === id) {
@@ -74,16 +69,18 @@ function toggleHighlightingAction(
       return attribute;
     }),
   };
+
+  return { state: newState, effects: [] };
 }
 
 function changeHighlightColor(
   state: AttributeListState,
   action: ChangeHighlightColorAction
-): AttributeListState {
+): AttributeListResult {
   const id = action.payload.id;
   const color = action.payload.color;
 
-  return {
+  const newState = {
     ...state,
     attributeList: state.attributeList.map((attribute, index) => {
       if (index === id) {
@@ -93,31 +90,37 @@ function changeHighlightColor(
       return attribute;
     }),
   };
+
+  return { state: newState, effects: [] };
 }
 
 function deleteItem(
   state: AttributeListState,
   action: DeleteItemAction
-): AttributeListState {
+): AttributeListResult {
   const id = action.payload.id;
 
-  return {
+  const newState = {
     ...state,
     attributeList: state.attributeList.filter((_, index) => index !== id),
   };
+
+  return { state: newState, effects: [] };
 }
 
 function changeAttributeNameInputValue(
   state: AttributeListState,
   action: ChangeAttributeNameInputValueAction
-): AttributeListState {
+): AttributeListResult {
   const name = action.payload.name;
 
-  return {
+  const newState = {
     ...state,
     attributeNameInputValue: name,
     attributeNameInputStatus: Status.Default,
   };
+
+  return { state: newState, effects: [] };
 }
 
 export interface AttributeName {
@@ -134,50 +137,56 @@ export const attributeName = (
   return Result.ok(data);
 };
 
-function saveNewAttribute(state: AttributeListState): AttributeListState {
+function saveNewAttribute(state: AttributeListState): AttributeListResult {
   const attributeNameResult = attributeName({
     name: state.attributeNameInputValue,
   });
 
+  let effects: AttributeListEffect[] = [];
+  let newState;
+
   if (attributeNameResult.isErr) {
-    return {
+    newState = {
       ...state,
       attributeNameInputValue: '',
       attributeNameInputStatus: Status.Error,
     };
   } else {
-    const newItem = attributeListItemState({
-      name: state.attributeNameInputValue,
-      isHighlighted: true,
-      color: getRandomColor({
-        knownColors: state.attributeList.map((attribute) => attribute.color),
-      }),
-    });
-
-    return {
+    newState = {
       ...state,
       attributeNameInputValue: '',
-      attributeList: [newItem, ...state.attributeList],
+      attributeList: [
+        attributeListItemState({
+          name: state.attributeNameInputValue,
+          isHighlighted: true,
+          color: getRandomColor({
+            knownColors: state.attributeList.map(
+              (attribute) => attribute.color
+            ),
+          }),
+        }),
+        ...state.attributeList,
+      ],
     };
+    effects.push({
+      type: 'saveAttributeToChromeStorage',
+      payload: {
+        text: 'Highlight new attribure',
+      },
+    });
   }
+
+  return { state: newState, effects };
 }
 
 function changeAttributeNameInputStatus(
   state: AttributeListState,
   action: ChangeAttributeNameInputStatusAction
-): AttributeListState {
-  return {
+): AttributeListResult {
+  const newState = {
     ...state,
     attributeNameInputStatus: action.payload.status,
   };
-}
 
-export interface AttributeListEffect {
-  type: 'saveAttributeToChromeStorage';
-  payload: any;
-}
-
-export interface AttributeListResult {
-  state: AttributeListState;
-  effects: AttributeListEffect[];
+  return { state: newState, effects: [] };
 }
