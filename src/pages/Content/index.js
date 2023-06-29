@@ -7,6 +7,14 @@ controller.initHighlighters();
 // TODO: Add payload object like Redux
 
 chrome.runtime.onMessage.addListener(function (request) {
+  switch (request.messageType) {
+    case 'saveAttributeToChromeStorage':
+      controller.addHighlighter(request.payload.attributeName);
+      break;
+    default:
+      break;
+  }
+
   if (request.messageType === 'highlight-data') {
     controller.addHighlighter(request.attributeName);
   }

@@ -151,7 +151,7 @@ function saveNewAttribute(state: AttributeListState): AttributeListResult {
     effects.push({
       type: 'saveAttributeToChromeStorage',
       payload: {
-        text: 'Highlight new attribure',
+        attributeName: attributeNameResult.value.name,
       },
     });
   }

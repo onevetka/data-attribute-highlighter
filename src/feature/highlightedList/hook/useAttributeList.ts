@@ -35,9 +35,7 @@ const handleChangeColor = (id: string, color: string) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-const handleSave = (event: Event) => {
-  event.preventDefault();
-
+const handleSave = () => {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     // TODO: Create constant
     const tabId = tabs[0].id || 0;

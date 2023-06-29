@@ -1,17 +1,12 @@
 import React, { FormEvent } from 'react';
-
-// Components
 import Input from '../../../../../components/Input';
 import Button from '../../../../../components/Button';
 import ListSkeleton from '../../components/ListSkeleton';
 import CurrentAttributeListItem from '../../components/CurrentAttributeListItem';
-
-// State
+import { Color } from '../../../../../core/color/domain/entity/color';
 import { useViewModel } from '../../../state/useViewModel';
 
-// Assets
 import styles from './style.module.scss';
-import { Color } from '../../../../../core/color/domain/entity/color';
 
 export const Attributes: React.FC = () => {
   const { state, handleAction } = useViewModel();
