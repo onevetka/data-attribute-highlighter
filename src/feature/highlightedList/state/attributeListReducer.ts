@@ -16,7 +16,6 @@ import {
   AttributeListState,
   attributeListItemState,
 } from './attributeListState';
-import { Status } from '../../../core/status/domain/entity/status';
 
 export const attributeListReducer = (
   state: AttributeListState,
@@ -115,37 +114,35 @@ export const attributeName = (
     return Result.err(appError({ message: 'Name is too short' }));
   }
 
-  return Result.ok({
-    ...data,
-  });
+  return Result.ok(data);
 };
 
 function saveNewAttribute(state: AttributeListState): AttributeListState {
-  const attributeNameResult = attributeName({
+  // const attributeNameResult = attributeName({
+  //   name: state.attributeNameInputValue,
+  // });
+
+  // if (attributeNameResult.isErr) {
+  //   return {
+  //     ...state,
+  //     attributeNameInputValue: '',
+  //     attributeNameInputStatus: Status.Error,
+  //   };
+  // } else {
+  const newItem = attributeListItemState({
     name: state.attributeNameInputValue,
+    isHighlighted: true,
+    color: getRandomColor({
+      knownColors: state.attributeList.map((attribute) => attribute.color),
+    }),
   });
 
-  if (attributeNameResult.isErr) {
-    return {
-      ...state,
-      attributeNameInputValue: '',
-      attributeNameInputStatus: Status.Error,
-    };
-  } else {
-    const newItem = attributeListItemState({
-      name: attributeNameResult.value.name,
-      isHighlighted: true,
-      color: getRandomColor({
-        knownColors: state.attributeList.map((attribute) => attribute.color),
-      }),
-    });
-
-    return {
-      ...state,
-      attributeNameInputValue: '',
-      attributeList: [newItem, ...state.attributeList],
-    };
-  }
+  return {
+    ...state,
+    attributeNameInputValue: '',
+    attributeList: [newItem, ...state.attributeList],
+  };
+  // }
 }
 
 function changeAttributeNameInputStatus(

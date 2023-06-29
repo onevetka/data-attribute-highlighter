@@ -9,6 +9,25 @@ import { Status } from '../../../core/status/domain/entity/status';
 import { Color } from '../../../core/color/domain/entity/color';
 import { AttributeListAction } from './attributeListAction';
 
+export const getActions = (name: string): AttributeListAction[] => {
+  if (name.length === 0) {
+    return [
+      {
+        type: 'changeAttributeNameInputStatus',
+        payload: { status: Status.Error },
+      },
+    ];
+  }
+
+  return [
+    { type: 'saveNewAttribute' },
+    {
+      type: 'changeAttributeNameInputStatus',
+      payload: { status: Status.Default },
+    },
+  ];
+};
+
 export interface SaveAttributeToChromeStoreEffectAction {
   type: 'saveAttributeToChromeStore';
   // payload: {
@@ -20,7 +39,7 @@ type AttributeListEffectAction = SaveAttributeToChromeStoreEffectAction;
 
 interface EffectAction {
   action: AttributeListAction;
-  effect: AttributeListEffectAction;
+  effect: AttributeListEffectAction | undefined;
 }
 
 const makeEffectAction = (action: AttributeListAction): EffectAction => {
@@ -32,9 +51,12 @@ const makeEffectAction = (action: AttributeListAction): EffectAction => {
           type: 'saveAttributeToChromeStore',
         },
       };
+    default:
+      return {
+        action,
+        effect: undefined,
+      };
   }
-
-  return { action, effect: { type: 'saveAttributeToChromeStore' } };
 };
 
 const initAttributeListState = (state: AttributeListState) => {
@@ -56,13 +78,13 @@ export const useViewModel = () => {
   );
 
   const highlightAttribute = () => {
-    const effectAction = makeEffectAction({
-      type: 'saveNewAttribute',
+    const actions = getActions(state.attributeNameInputValue);
+    const effectActions = actions.map(makeEffectAction);
+
+    effectActions.forEach((effectAction) => {
+      dispatch(effectAction.action);
+      console.log(effectAction.effect);
     });
-
-    dispatch(effectAction.action);
-
-    console.log('effectAction :>> ', effectAction.effect);
   };
 
   const changeAttributeNameInput = (name: string) => {

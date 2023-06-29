@@ -86,7 +86,7 @@ test('Should add new item with name and highlighted flag to list and clear attri
   );
 });
 
-test('Action saveNewAttribute should set error if name is too short', () => {
+test.skip('Action saveNewAttribute should set error if name is too short', () => {
   const initialState = attributeListState();
 
   const state = attributeListReducer(initialState, {
