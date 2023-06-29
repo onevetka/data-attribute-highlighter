@@ -9,7 +9,7 @@ import { useViewModel } from '../../../state/useViewModel';
 import styles from './style.module.scss';
 
 export const Attributes: React.FC = () => {
-  const { state, handleAction } = useViewModel();
+  const { state, sendAction } = useViewModel();
 
   return (
     <div className={styles.wrapper}>
@@ -17,7 +17,7 @@ export const Attributes: React.FC = () => {
         className={styles.form}
         onSubmit={(event: FormEvent) => {
           event.preventDefault();
-          handleAction({
+          sendAction({
             type: 'saveNewAttribute',
           });
         }}
@@ -27,7 +27,7 @@ export const Attributes: React.FC = () => {
           label="Attribute name"
           value={state.attributeNameInputValue}
           onChange={(name: string) =>
-            handleAction({
+            sendAction({
               type: 'changeAttributeNameInputValue',
               payload: { name },
             })
@@ -49,16 +49,16 @@ export const Attributes: React.FC = () => {
               highlightingColor={item.color}
               isHighlighted={item.isHighlighted}
               onClose={() =>
-                handleAction({ type: 'deleteItem', payload: { id: index } })
+                sendAction({ type: 'deleteItem', payload: { id: index } })
               }
               onToggleVisibility={() =>
-                handleAction({
+                sendAction({
                   type: 'toggleHighlighting',
                   payload: { id: index },
                 })
               }
               onChangeColor={(color: Color) =>
-                handleAction({
+                sendAction({
                   type: 'changeHighlightColor',
                   payload: { id: index, color },
                 })
