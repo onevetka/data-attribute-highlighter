@@ -133,7 +133,7 @@ function saveNewAttribute(state: AttributeListState): AttributeListState {
     };
   } else {
     const newItem = attributeListItemState({
-      name: state.attributeNameInputValue,
+      name: attributeNameResult.value.name,
       isHighlighted: true,
       color: getRandomColor({
         knownColors: state.attributeList.map((attribute) => attribute.color),
