@@ -1,10 +1,12 @@
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
 import {
+  AddAttributeToListAction,
   AttributeListAction,
   ChangeAttributeNameInputStatusAction,
   ChangeAttributeNameInputValueAction,
   ChangeHighlightColorAction,
   DeleteItemAction,
+  SetAttributeRandomsAction,
   ToggleHighlightingAction,
 } from './attributeListAction';
 import {
@@ -15,7 +17,6 @@ import { Status } from '../../../core/status/domain/entity/status';
 import { AttributeListEffect } from './attributeListEffect';
 import { AttributeName } from '../domain/entity/attributeName';
 import { attribute } from '../domain/entity/attribute';
-import { v4 as uuid } from 'uuid';
 import { attributeStateAdapter } from './adapter/attributeStateAdapter';
 
 export interface AttributeListResult {
@@ -41,6 +42,10 @@ export const attributeListReducer = (
         return saveNewAttribute(state);
       case 'highlight':
         return highlight(state);
+      case 'addAttributeToList':
+        return addAttributeToList(state, action);
+      case 'setAttributeRandoms':
+        return setAttributeRandoms(state, action);
       case 'changeAttributeNameInputStatus':
         return changeAttributeNameInputStatus(state, action);
     }
@@ -140,14 +145,32 @@ function highlight(state: AttributeListState): AttributeListResult {
       state,
       effects: [
         {
-          type: 'MakeAttribute',
+          type: 'makeAttribute',
           payload: {
             attributeName: attributeNameResult.value,
+            knownColors: state.attributeList.map(
+              (attribute) => attribute.color
+            ),
           },
         },
       ],
     };
   }
+}
+
+function addAttributeToList(
+  state: AttributeListState,
+  action: AddAttributeToListAction
+): AttributeListResult {
+  const newState = {
+    ...state,
+    attributeList: [
+      attributeListItemState(action.payload.attribute),
+      ...state.attributeList,
+    ],
+  };
+
+  return { state: newState, effects: [] };
 }
 
 function saveNewAttribute(state: AttributeListState): AttributeListResult {
@@ -202,4 +225,14 @@ function changeAttributeNameInputStatus(
   };
 
   return { state: newState, effects: [] };
+}
+
+function setAttributeRandoms(
+  state: AttributeListState,
+  action: SetAttributeRandomsAction
+): AttributeListResult {
+  return {
+    state,
+    effects: [],
+  };
 }

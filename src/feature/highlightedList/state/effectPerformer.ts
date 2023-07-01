@@ -1,9 +1,21 @@
-import { attribute } from '../domain/entity/attribute';
+import { v4 as uuid } from 'uuid';
 import { AttributeListEffect } from './attributeListEffect';
+import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
+import { AttributeListAction } from './attributeListAction';
 
-export const effectPerformer = (effect: AttributeListEffect) => {
+export const effectPerformer = (
+  effect: AttributeListEffect
+): AttributeListAction | void => {
   switch (effect.type) {
-    case 'MakeAttribute':
-      const newAttribute = attribute({});
+    case 'makeAttributeRandoms':
+      return {
+        type: 'setAttributeRandoms',
+        payload: {
+          id: uuid(),
+          color: getRandomColor({
+            knownColors: effect.payload.knownColors,
+          }),
+        },
+      };
   }
 };

@@ -1,8 +1,10 @@
+import { Color } from '../../../core/color/domain/entity/color';
 import { AttributeName } from '../domain/entity/attributeName';
 
 export type AttributeListEffect =
   | SaveAttributeToChromeStorageEffect
-  | MakeAttributeEffect;
+  | MakeAttributeEffect
+  | MakeAttributeRandomsEffect;
 
 export interface SaveAttributeToChromeStorageEffect {
   type: 'saveAttributeToChromeStorage';
@@ -10,8 +12,16 @@ export interface SaveAttributeToChromeStorageEffect {
 }
 
 export interface MakeAttributeEffect {
-  type: 'MakeAttribute';
+  type: 'makeAttribute';
   payload: {
     attributeName: AttributeName;
+    knownColors: Color[];
+  };
+}
+
+export interface MakeAttributeRandomsEffect {
+  type: 'makeAttributeRandoms';
+  payload: {
+    knownColors: Color[];
   };
 }

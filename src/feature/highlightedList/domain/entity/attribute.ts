@@ -13,15 +13,3 @@ export const attribute = (data: Attribute): Attribute => {
     ...data,
   };
 };
-
-// export const attribute = (data: Partial<Attribute>): Attribute => {
-//   return {
-//     id: '',
-//     name,
-//     color: '#000000',
-//     isHighlighted: false,
-//     ...data,
-//   };
-// };
-
-// const attributeTemp = attribute({ name: attributeName({ text: 'hello' }) });

@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import {
   attributeListItemState,
   attributeListState,
@@ -155,10 +156,10 @@ test('Action highlight should send effect makeAttribute if name is correct', () 
   );
 
   const makeAttributeEffect = effects.find(
-    (effect) => effect.type === 'MakeAttribute'
+    (effect) => effect.type === 'makeAttribute'
   );
 
-  expect(makeAttributeEffect?.type).toBe('MakeAttribute');
+  expect(makeAttributeEffect?.type).toBe('makeAttribute');
   expect(makeAttributeEffect?.payload.attributeName).toBeInstanceOf(
     AttributeName
   );
@@ -179,4 +180,45 @@ test('Action highlight should set error if name is too short', () => {
       attributeNameInputStatus: Status.Error,
     })
   );
+});
+
+test('Action addAttributeToList sets to list attribute', () => {
+  const initialState = attributeListState();
+
+  const { state } = attributeListReducer(initialState, {
+    type: 'addAttributeToList',
+    payload: {
+      attribute: attributeListItemState({
+        name: 'className',
+        isHighlighted: true,
+        color: getRandomColor({ knownColors: [] }),
+      }),
+    },
+  });
+
+  expect(state.attributeList).toEqual(
+    attributeListState({
+      attributeList: [
+        attributeListItemState({
+          name: 'className',
+          isHighlighted: true,
+          color: getRandomColor({ knownColors: [] }),
+        }),
+      ],
+    }).attributeList
+  );
+});
+
+test('Action setAttributeRandoms sets random fields to attribute', () => {
+  const initialState = attributeListState();
+
+  const { state } = attributeListReducer(initialState, {
+    type: 'setAttributeRandoms',
+    payload: {
+      id: uuid(),
+      color: getRandomColor({ knownColors: [] }),
+    },
+  });
+
+  expect(state.attributeList).toEqual(attributeListState().attributeList);
 });

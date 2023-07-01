@@ -1,5 +1,6 @@
 import { Color } from '../../../core/color/domain/entity/color';
 import { Status } from '../../../core/status/domain/entity/status';
+import { AttributeListItemState } from './attributeListState';
 
 export type AttributeListAction =
   | ToggleHighlightingAction
@@ -8,7 +9,9 @@ export type AttributeListAction =
   | ChangeAttributeNameInputValueAction
   | SaveNewAttributeAction
   | ChangeAttributeNameInputStatusAction
-  | HighlightAction;
+  | HighlightAction
+  | AddAttributeToListAction
+  | SetAttributeRandomsAction;
 
 export interface ToggleHighlightingAction {
   type: 'toggleHighlighting';
@@ -52,4 +55,19 @@ export interface ChangeAttributeNameInputStatusAction {
 
 export interface HighlightAction {
   type: 'highlight';
+}
+
+export interface AddAttributeToListAction {
+  type: 'addAttributeToList';
+  payload: {
+    attribute: AttributeListItemState;
+  };
+}
+
+export interface SetAttributeRandomsAction {
+  type: 'setAttributeRandoms';
+  payload: {
+    id: string;
+    color: Color;
+  };
 }
