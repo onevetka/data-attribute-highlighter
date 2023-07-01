@@ -11,7 +11,7 @@ export type AttributeListAction =
   | ChangeAttributeNameInputStatusAction
   | HighlightAction
   | AddAttributeToListAction
-  | SetAttributeRandomsAction;
+  | SetRandomsToAttributeAction;
 
 export interface ToggleHighlightingAction {
   type: 'toggleHighlighting';
@@ -64,8 +64,8 @@ export interface AddAttributeToListAction {
   };
 }
 
-export interface SetAttributeRandomsAction {
-  type: 'setAttributeRandoms';
+export interface SetRandomsToAttributeAction {
+  type: 'setRandomsToAttribute';
   payload: {
     id: string;
     color: Color;

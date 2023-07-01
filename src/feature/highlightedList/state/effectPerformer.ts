@@ -7,9 +7,9 @@ export const effectPerformer = (
   effect: AttributeListEffect
 ): AttributeListAction | void => {
   switch (effect.type) {
-    case 'makeAttributeRandoms':
+    case 'makeAttributeRandoms': {
       return {
-        type: 'setAttributeRandoms',
+        type: 'setRandomsToAttribute',
         payload: {
           id: uuid(),
           color: getRandomColor({
@@ -17,5 +17,6 @@ export const effectPerformer = (
           }),
         },
       };
+    }
   }
 };

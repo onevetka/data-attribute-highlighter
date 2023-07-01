@@ -18,7 +18,7 @@ export const Attributes: React.FC = () => {
         onSubmit={(event: FormEvent) => {
           event.preventDefault();
           sendAction({
-            type: 'saveNewAttribute',
+            type: 'highlight',
           });
         }}
       >

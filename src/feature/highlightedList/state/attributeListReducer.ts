@@ -6,7 +6,7 @@ import {
   ChangeAttributeNameInputValueAction,
   ChangeHighlightColorAction,
   DeleteItemAction,
-  SetAttributeRandomsAction,
+  SetRandomsToAttributeAction,
   ToggleHighlightingAction,
 } from './attributeListAction';
 import {
@@ -44,8 +44,8 @@ export const attributeListReducer = (
         return highlight(state);
       case 'addAttributeToList':
         return addAttributeToList(state, action);
-      case 'setAttributeRandoms':
-        return setAttributeRandoms(state, action);
+      case 'setRandomsToAttribute':
+        return setRandomsToAttribute(state, action);
       case 'changeAttributeNameInputStatus':
         return changeAttributeNameInputStatus(state, action);
     }
@@ -141,14 +141,23 @@ function highlight(state: AttributeListState): AttributeListResult {
       effects: [],
     };
   } else {
+    const newState = {
+      ...state,
+      attributeList: [
+        attributeListItemState({
+          name: attributeNameResult.value.string,
+          isHighlighted: true,
+        }),
+        ...state.attributeList,
+      ],
+    };
     return {
-      state,
+      state: newState,
       effects: [
         {
-          type: 'makeAttribute',
+          type: 'makeAttributeRandoms',
           payload: {
-            attributeName: attributeNameResult.value,
-            knownColors: state.attributeList.map(
+            knownColors: newState.attributeList.map(
               (attribute) => attribute.color
             ),
           },
@@ -227,12 +236,31 @@ function changeAttributeNameInputStatus(
   return { state: newState, effects: [] };
 }
 
-function setAttributeRandoms(
+function setRandomsToAttribute(
   state: AttributeListState,
-  action: SetAttributeRandomsAction
-): AttributeListResult {
-  return {
-    state,
-    effects: [],
+  action: SetRandomsToAttributeAction
+) {
+  console.log('newList old:>> ', state.attributeList);
+  const { id, color } = action.payload;
+
+  const list = state.attributeList;
+  const trashValue = { ...list[0] };
+  const value = attributeListItemState({
+    ...trashValue,
+    id,
+    color,
+  });
+
+  const newList = list.map((attribute, index) =>
+    index === 0 ? value : attribute
+  );
+
+  const newState = {
+    ...state,
+    attributeList: newList,
   };
+
+  console.log('newList :>> ', newList);
+
+  return { state: newState, effects: [] };
 }

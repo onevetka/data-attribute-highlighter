@@ -1,22 +1,30 @@
 import { useState } from 'react';
 import { attributeListReducer } from './attributeListReducer';
-import { attributeListState } from './attributeListState';
+import { AttributeListState, attributeListState } from './attributeListState';
 import { AttributeListAction } from './attributeListAction';
-// import { HIGHLIGHTERS_FIELD } from '../../../constants/store';
 import { effectPerformer } from './effectPerformer';
 
 export const useViewModel = () => {
-  const [state, setState] = useState(attributeListState());
+  const [viewModelState, setViewModelState] = useState(attributeListState());
 
-  const sendAction = (action: AttributeListAction) => {
-    const { state: newState, effects } = attributeListReducer(state, action);
+  const sendAction = (state: AttributeListState) => {
+    return (action: AttributeListAction) => {
+      const { state: newState, effects } = attributeListReducer(state, action);
 
-    setState(newState);
+      setViewModelState(newState);
 
-    for (let effect of effects) {
-      const action = effectPerformer(effect);
-      action && attributeListReducer(newState, action);
-    }
+      for (let effect of effects) {
+        const nextAction = effectPerformer(effect);
+
+        if (nextAction) {
+          const { state: nextState } = attributeListReducer(
+            newState,
+            nextAction
+          );
+          setViewModelState(nextState);
+        }
+      }
+    };
   };
 
   // useEffect(() => {
@@ -42,7 +50,7 @@ export const useViewModel = () => {
   // }, []);
 
   return {
-    state,
-    sendAction,
+    state: viewModelState,
+    sendAction: sendAction(viewModelState),
   };
 };
