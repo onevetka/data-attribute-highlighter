@@ -7,7 +7,7 @@ export const effectPerformer = (
   effect: AttributeListEffect
 ): AttributeListAction | void => {
   switch (effect.type) {
-    case 'makeAttributeRandoms': {
+    case 'makeAttributeRandoms':
       return {
         type: 'setRandomsToAttribute',
         payload: {
@@ -17,6 +17,7 @@ export const effectPerformer = (
           }),
         },
       };
-    }
+    case 'saveAttributeToChromeStorage':
+      console.log('effect performer >>>', effect.payload);
   }
 };

@@ -85,48 +85,6 @@ test('Action changeAttributeNameInputValue should clear input status', () => {
   );
 });
 
-test('Action saveNewAttribute should add new item with name and highlighted flag to list and clear attributeNameInputValue if correct name', () => {
-  const initialState = attributeListState();
-
-  const state = attributeListReducer(initialState, {
-    type: 'changeAttributeNameInputValue',
-    payload: { name: 'className' },
-  }).state;
-
-  expect(
-    attributeListReducer(state, { type: 'saveNewAttribute' }).state
-  ).toEqual(
-    attributeListState({
-      attributeNameInputValue: '',
-      attributeList: [
-        attributeListItemState({
-          name: 'className',
-          isHighlighted: true,
-          color: getRandomColor({ knownColors: [] }),
-        }),
-      ],
-    })
-  );
-});
-
-test('Action saveNewAttribute should set error if name is too short', () => {
-  const initialState = attributeListState();
-
-  const state = attributeListReducer(initialState, {
-    type: 'changeAttributeNameInputValue',
-    payload: { name: '' },
-  }).state;
-
-  expect(
-    attributeListReducer(state, { type: 'saveNewAttribute' }).state
-  ).toEqual(
-    attributeListState({
-      attributeNameInputValue: '',
-      attributeNameInputStatus: Status.Error,
-    })
-  );
-});
-
 test('Should set status to attributeNameInputStatus, when calling changeAttributeNameInputStatus action', () => {
   const initialState = attributeListState();
 
@@ -243,4 +201,41 @@ test('Action setRandomsToAttribute sets payload to first attribute in list', () 
 
   expect(state.attributeList[0].id).toBe(id);
   expect(state.attributeList[0].color).toBe(color);
+});
+
+test('Action setRandomsToAttribute send effect saveAttributeToChromeStorage', () => {
+  const initialState = attributeListState();
+
+  const { state: nextState } = attributeListReducer(initialState, {
+    type: 'addAttributeToList',
+    payload: {
+      attribute: attributeListItemState({
+        name: 'className',
+        isHighlighted: true,
+        color: getRandomColor({ knownColors: [] }),
+      }),
+    },
+  });
+
+  const id = uuid();
+  const color = getRandomColor({ knownColors: [] });
+
+  const { state, effects } = attributeListReducer(nextState, {
+    type: 'setRandomsToAttribute',
+    payload: {
+      id,
+      color,
+    },
+  });
+
+  const saveAttributeToChromeStorageEffect = effects.find(
+    (effect) => effect.type === 'saveAttributeToChromeStorage'
+  );
+
+  expect(saveAttributeToChromeStorageEffect).toEqual({
+    type: 'saveAttributeToChromeStorage',
+    payload: {
+      attribute: state.attributeList[0],
+    },
+  });
 });

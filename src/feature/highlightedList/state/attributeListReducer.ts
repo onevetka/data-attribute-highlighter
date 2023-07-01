@@ -1,4 +1,3 @@
-import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
 import {
   AddAttributeToListAction,
   AttributeListAction,
@@ -16,8 +15,6 @@ import {
 import { Status } from '../../../core/status/domain/entity/status';
 import { AttributeListEffect } from './attributeListEffect';
 import { AttributeName } from '../domain/entity/attributeName';
-import { attribute } from '../domain/entity/attribute';
-import { attributeStateAdapter } from './adapter/attributeStateAdapter';
 
 export interface AttributeListResult {
   state: AttributeListState;
@@ -38,8 +35,6 @@ export const attributeListReducer = (
         return deleteItem(state, action);
       case 'changeAttributeNameInputValue':
         return changeAttributeNameInputValue(state, action);
-      case 'saveNewAttribute':
-        return saveNewAttribute(state);
       case 'highlight':
         return highlight(state);
       case 'addAttributeToList':
@@ -179,49 +174,10 @@ function addAttributeToList(
     ],
   };
 
-  return { state: newState, effects: [] };
-}
-
-function saveNewAttribute(state: AttributeListState): AttributeListResult {
-  const attributeNameResult = AttributeName.parse(
-    state.attributeNameInputValue
-  );
-
-  let effects: AttributeListEffect[] = [];
-  let newState;
-
-  if (attributeNameResult.isErr) {
-    newState = {
-      ...state,
-      attributeNameInputStatus: Status.Error,
-    };
-  } else {
-    const newAttribute = attribute({
-      id: '',
-      name: attributeNameResult.value,
-      isHighlighted: true,
-      color: getRandomColor({
-        knownColors: state.attributeList.map((attribute) => attribute.color),
-      }),
-    });
-
-    newState = {
-      ...state,
-      attributeNameInputValue: '',
-      attributeList: [
-        attributeListItemState(attributeStateAdapter(newAttribute)),
-        ...state.attributeList,
-      ],
-    };
-    effects.push({
-      type: 'saveAttributeToChromeStorage',
-      payload: {
-        attribute: newAttribute,
-      },
-    });
-  }
-
-  return { state: newState, effects };
+  return {
+    state: newState,
+    effects: [],
+  };
 }
 
 function changeAttributeNameInputStatus(
@@ -239,8 +195,7 @@ function changeAttributeNameInputStatus(
 function setRandomsToAttribute(
   state: AttributeListState,
   action: SetRandomsToAttributeAction
-) {
-  console.log('newList old:>> ', state.attributeList);
+): AttributeListResult {
   const { id, color } = action.payload;
 
   const list = state.attributeList;
@@ -260,7 +215,15 @@ function setRandomsToAttribute(
     attributeList: newList,
   };
 
-  console.log('newList :>> ', newList);
-
-  return { state: newState, effects: [] };
+  return {
+    state: newState,
+    effects: [
+      {
+        type: 'saveAttributeToChromeStorage',
+        payload: {
+          attribute: value,
+        },
+      },
+    ],
+  };
 }

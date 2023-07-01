@@ -7,7 +7,6 @@ export type AttributeListAction =
   | ChangeHighlightColorAction
   | DeleteItemAction
   | ChangeAttributeNameInputValueAction
-  | SaveNewAttributeAction
   | ChangeAttributeNameInputStatusAction
   | HighlightAction
   | AddAttributeToListAction
@@ -40,10 +39,6 @@ export interface ChangeAttributeNameInputValueAction {
   payload: {
     name: string;
   };
-}
-
-export interface SaveNewAttributeAction {
-  type: 'saveNewAttribute';
 }
 
 export interface ChangeAttributeNameInputStatusAction {

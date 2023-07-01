@@ -3,27 +3,44 @@ import { attributeListReducer } from './attributeListReducer';
 import { AttributeListState, attributeListState } from './attributeListState';
 import { AttributeListAction } from './attributeListAction';
 import { effectPerformer } from './effectPerformer';
+import { AttributeListEffect } from './attributeListEffect';
+
+export const recursion = (
+  state: AttributeListState,
+  effects: AttributeListEffect[]
+): AttributeListState => {
+  let stateToExit = state;
+
+  for (let effect of effects) {
+    const action = effectPerformer(effect);
+
+    if (action) {
+      const { state: nextState, effects } = attributeListReducer(state, action);
+
+      stateToExit = nextState;
+
+      recursion(nextState, effects);
+    }
+  }
+
+  return stateToExit;
+};
+
+export const sendActionDelta = (
+  state: AttributeListState,
+  action: AttributeListAction
+): AttributeListState => {
+  const { state: nextState, effects } = attributeListReducer(state, action);
+
+  return recursion(nextState, effects);
+};
 
 export const useViewModel = () => {
   const [viewModelState, setViewModelState] = useState(attributeListState());
 
   const sendAction = (state: AttributeListState) => {
     return (action: AttributeListAction) => {
-      const { state: newState, effects } = attributeListReducer(state, action);
-
-      setViewModelState(newState);
-
-      for (let effect of effects) {
-        const nextAction = effectPerformer(effect);
-
-        if (nextAction) {
-          const { state: nextState } = attributeListReducer(
-            newState,
-            nextAction
-          );
-          setViewModelState(nextState);
-        }
-      }
+      setViewModelState(sendActionDelta(state, action));
     };
   };
 
