@@ -13,7 +13,10 @@ import {
 } from './attributeListState';
 import { Status } from '../../../core/status/domain/entity/status';
 import { AttributeListEffect } from './attributeListEffect';
-import { attributeName } from '../domain/entity/attributeName';
+import { AttributeName } from '../domain/entity/attributeName';
+import { attribute } from '../domain/entity/attribute';
+import { v4 as uuid } from 'uuid';
+import { attributeStateAdapter } from './adapter/attributeStateAdapter';
 
 export interface AttributeListResult {
   state: AttributeListState;
@@ -36,6 +39,8 @@ export const attributeListReducer = (
         return changeAttributeNameInputValue(state, action);
       case 'saveNewAttribute':
         return saveNewAttribute(state);
+      case 'highlight':
+        return highlight(state);
       case 'changeAttributeNameInputStatus':
         return changeAttributeNameInputStatus(state, action);
     }
@@ -117,10 +122,38 @@ function changeAttributeNameInputValue(
   return { state: newState, effects: [] };
 }
 
+function highlight(state: AttributeListState): AttributeListResult {
+  const attributeNameResult = AttributeName.parse(
+    state.attributeNameInputValue
+  );
+
+  if (attributeNameResult.isErr) {
+    return {
+      state: {
+        ...state,
+        attributeNameInputStatus: Status.Error,
+      },
+      effects: [],
+    };
+  } else {
+    return {
+      state,
+      effects: [
+        {
+          type: 'MakeAttribute',
+          payload: {
+            attributeName: attributeNameResult.value,
+          },
+        },
+      ],
+    };
+  }
+}
+
 function saveNewAttribute(state: AttributeListState): AttributeListResult {
-  const attributeNameResult = attributeName({
-    name: state.attributeNameInputValue,
-  });
+  const attributeNameResult = AttributeName.parse(
+    state.attributeNameInputValue
+  );
 
   let effects: AttributeListEffect[] = [];
   let newState;
@@ -128,30 +161,30 @@ function saveNewAttribute(state: AttributeListState): AttributeListResult {
   if (attributeNameResult.isErr) {
     newState = {
       ...state,
-      attributeNameInputValue: '',
       attributeNameInputStatus: Status.Error,
     };
   } else {
+    const newAttribute = attribute({
+      id: '',
+      name: attributeNameResult.value,
+      isHighlighted: true,
+      color: getRandomColor({
+        knownColors: state.attributeList.map((attribute) => attribute.color),
+      }),
+    });
+
     newState = {
       ...state,
       attributeNameInputValue: '',
       attributeList: [
-        attributeListItemState({
-          name: state.attributeNameInputValue,
-          isHighlighted: true,
-          color: getRandomColor({
-            knownColors: state.attributeList.map(
-              (attribute) => attribute.color
-            ),
-          }),
-        }),
+        attributeListItemState(attributeStateAdapter(newAttribute)),
         ...state.attributeList,
       ],
     };
     effects.push({
       type: 'saveAttributeToChromeStorage',
       payload: {
-        attributeName: attributeNameResult.value.name,
+        attribute: newAttribute,
       },
     });
   }

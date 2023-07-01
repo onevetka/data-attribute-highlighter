@@ -1,6 +1,15 @@
 import { Color } from '../../../core/color/domain/entity/color';
 import { Status } from '../../../core/status/domain/entity/status';
 
+export type AttributeListAction =
+  | ToggleHighlightingAction
+  | ChangeHighlightColorAction
+  | DeleteItemAction
+  | ChangeAttributeNameInputValueAction
+  | SaveNewAttributeAction
+  | ChangeAttributeNameInputStatusAction
+  | HighlightAction;
+
 export interface ToggleHighlightingAction {
   type: 'toggleHighlighting';
   payload: {
@@ -41,10 +50,6 @@ export interface ChangeAttributeNameInputStatusAction {
   };
 }
 
-export type AttributeListAction =
-  | ToggleHighlightingAction
-  | ChangeHighlightColorAction
-  | DeleteItemAction
-  | ChangeAttributeNameInputValueAction
-  | SaveNewAttributeAction
-  | ChangeAttributeNameInputStatusAction;
+export interface HighlightAction {
+  type: 'highlight';
+}

@@ -5,6 +5,7 @@ import {
 import { attributeListReducer } from './attributeListReducer';
 import { Status } from '../../../core/status/domain/entity/status';
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
+import { AttributeName } from '../domain/entity/attributeName';
 
 test('Should invert the highlight flag when calling the toggleHighlighting action', () => {
   const initialState = attributeListState({
@@ -84,7 +85,7 @@ test('Action changeAttributeNameInputValue should clear input status', () => {
   );
 });
 
-test('Should add new item with name and highlighted flag to list and clear attributeNameInputValue, when calling saveNewAttribute action with correct name', () => {
+test('Action saveNewAttribute should add new item with name and highlighted flag to list and clear attributeNameInputValue if correct name', () => {
   const initialState = attributeListState();
 
   const state = attributeListReducer(initialState, {
@@ -135,4 +136,47 @@ test('Should set status to attributeNameInputStatus, when calling changeAttribut
       payload: { status: Status.Error },
     }).state
   ).toEqual(attributeListState({ attributeNameInputStatus: Status.Error }));
+});
+
+test('Action highlight should send effect makeAttribute if name is correct', () => {
+  const { state: initialState } = attributeListReducer(attributeListState(), {
+    type: 'changeAttributeNameInputValue',
+    payload: { name: 'className' },
+  });
+
+  const { state, effects } = attributeListReducer(initialState, {
+    type: 'highlight',
+  });
+
+  expect(state).toEqual(
+    attributeListState({
+      attributeNameInputValue: 'className',
+    })
+  );
+
+  const makeAttributeEffect = effects.find(
+    (effect) => effect.type === 'MakeAttribute'
+  );
+
+  expect(makeAttributeEffect?.type).toBe('MakeAttribute');
+  expect(makeAttributeEffect?.payload.attributeName).toBeInstanceOf(
+    AttributeName
+  );
+  expect(makeAttributeEffect?.payload.attributeName.string).toBe('className');
+});
+
+test('Action highlight should set error if name is too short', () => {
+  const initialState = attributeListState();
+
+  const state = attributeListReducer(initialState, {
+    type: 'changeAttributeNameInputValue',
+    payload: { name: '' },
+  }).state;
+
+  expect(attributeListReducer(state, { type: 'highlight' }).state).toEqual(
+    attributeListState({
+      attributeNameInputValue: '',
+      attributeNameInputStatus: Status.Error,
+    })
+  );
 });
