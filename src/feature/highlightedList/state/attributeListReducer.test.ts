@@ -6,6 +6,7 @@ import {
 import { attributeListReducer } from './attributeListReducer';
 import { Status } from '../../../core/status/domain/entity/status';
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
+import { MakeAttributeRandomsEffect } from './attributeListEffect';
 
 test('Should invert the highlight flag when calling the toggleHighlighting action', () => {
   const initialState = attributeListState({
@@ -121,14 +122,10 @@ test('Action highlight should send effect makeAttributeRandoms if name is correc
     type: 'highlight',
   });
 
-  const makeAttributeEffect = effects.find(
-    (effect) => effect.type === 'makeAttributeRandoms'
-  );
-
-  expect(makeAttributeEffect?.type).toBe('makeAttributeRandoms');
-  expect(makeAttributeEffect?.payload.knownColors).toEqual(
-    state.attributeList.map((attribute) => attribute.color)
-  );
+  expect(effects[0].type).toBe('makeAttributeRandoms');
+  expect(
+    (effects[0] as MakeAttributeRandomsEffect).payload.knownColors
+  ).toEqual(state.attributeList.map((attribute) => attribute.color));
 });
 
 test('Action highlight should set error if name is too short', () => {

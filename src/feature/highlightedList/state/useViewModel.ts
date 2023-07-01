@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { attributeListReducer } from './attributeListReducer';
 import { AttributeListState, attributeListState } from './attributeListState';
 import { AttributeListAction } from './attributeListAction';
 import { effectPerformer } from './effectPerformer';
 import { AttributeListEffect } from './attributeListEffect';
+import { HIGHLIGHTERS_FIELD } from '../../../constants/store';
 
 export const recursion = (
   state: AttributeListState,
@@ -44,27 +45,28 @@ export const useViewModel = () => {
     };
   };
 
-  // useEffect(() => {
-  //   chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-  //     const highlightedAttributes = data[HIGHLIGHTERS_FIELD] || [];
+  useEffect(() => {
+    chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
+      const highlightedAttributes = data[HIGHLIGHTERS_FIELD] || [];
 
-  //     const list = Object.keys(highlightedAttributes).map((id) => {
-  //       const { attributeName, color, isVisible } = highlightedAttributes[id];
+      const list = Object.keys(highlightedAttributes).map((id) => {
+        const { attributeName, color, isVisible } = highlightedAttributes[id];
 
-  //       return {
-  //         color,
-  //         name: attributeName,
-  //         isHighlighted: isVisible,
-  //       };
-  //     });
+        return {
+          id,
+          color,
+          name: attributeName,
+          isHighlighted: isVisible,
+        };
+      });
 
-  //     setState(
-  //       attributeListState({
-  //         attributeList: list,
-  //       })
-  //     );
-  //   });
-  // }, []);
+      setViewModelState(
+        attributeListState({
+          attributeList: list,
+        })
+      );
+    });
+  }, []);
 
   return {
     state: viewModelState,

@@ -18,6 +18,13 @@ export const effectPerformer = (
         },
       };
     case 'saveAttributeToChromeStorage':
-      console.log('effect performer >>>', effect.payload);
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        const tabId = tabs[0].id || 0;
+
+        chrome.tabs.sendMessage(tabId, {
+          messageType: 'highlight-data',
+          attributeName: effect.payload.attribute.name,
+        });
+      });
   }
 };
