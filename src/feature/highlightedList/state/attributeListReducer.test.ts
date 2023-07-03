@@ -25,21 +25,53 @@ test('Should invert the highlight flag when calling the toggleHighlighting actio
   );
 });
 
-test('Should change color, when calling changeHighlightColor action', () => {
+test('Action changeHighlightColor should change color', () => {
+  const id = uuid();
+
   const initialState = attributeListState({
-    attributeList: [attributeListItemState()],
+    attributeList: [
+      attributeListItemState({
+        id,
+      }),
+    ],
+  });
+
+  const { state } = attributeListReducer(initialState, {
+    type: 'changeHighlightColor',
+    payload: { color: '#EDEDED', id },
   });
 
   expect(
-    attributeListReducer(initialState, {
-      type: 'changeHighlightColor',
-      payload: { color: '#EDEDED', id: 0 },
-    }).state
-  ).toEqual(
-    attributeListState({
-      attributeList: [attributeListItemState({ color: '#EDEDED' })],
-    })
-  );
+    state.attributeList.find((attribute) => attribute.id === id)?.color
+  ).toBe('#EDEDED');
+});
+
+test('Action changeHighlightColor should send changeHighlightColorInChromeStorage effect', () => {
+  const id = uuid();
+  const color = '#EDEDED';
+
+  const initialState = attributeListState({
+    attributeList: [
+      attributeListItemState({
+        id,
+      }),
+    ],
+  });
+
+  const { effects } = attributeListReducer(initialState, {
+    type: 'changeHighlightColor',
+    payload: { color, id },
+  });
+
+  expect(effects).toEqual([
+    {
+      type: 'changeHighlightColorInChromeStorage',
+      payload: {
+        color,
+        id,
+      },
+    },
+  ]);
 });
 
 test('Should delete item from list, when calling deleteItem action', () => {

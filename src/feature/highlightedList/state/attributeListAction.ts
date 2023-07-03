@@ -22,7 +22,7 @@ export interface ToggleHighlightingAction {
 export interface ChangeHighlightColorAction {
   type: 'changeHighlightColor';
   payload: {
-    id: number;
+    id: string;
     color: Color;
   };
 }

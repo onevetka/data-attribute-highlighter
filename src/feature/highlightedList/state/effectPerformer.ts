@@ -26,5 +26,16 @@ export const effectPerformer = (
           attributeName: effect.payload.attribute.name,
         });
       });
+      break;
+    case 'changeHighlightColorInChromeStorage':
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        const tabId = tabs[0].id || 0;
+
+        chrome.tabs.sendMessage(tabId, {
+          messageType: 'change-highlighter-color',
+          id: effect.payload.id,
+          color: effect.payload.color,
+        });
+      });
   }
 };

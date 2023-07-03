@@ -3,7 +3,8 @@ import { AttributeListItemState } from './attributeListState';
 
 export type AttributeListEffect =
   | SaveAttributeToChromeStorageEffect
-  | MakeAttributeRandomsEffect;
+  | MakeAttributeRandomsEffect
+  | ChangeHighlightColorInChromeStorageEffect;
 
 export interface SaveAttributeToChromeStorageEffect {
   type: 'saveAttributeToChromeStorage';
@@ -16,5 +17,13 @@ export interface MakeAttributeRandomsEffect {
   type: 'makeAttributeRandoms';
   payload: {
     knownColors: Color[];
+  };
+}
+
+export interface ChangeHighlightColorInChromeStorageEffect {
+  type: 'changeHighlightColorInChromeStorage';
+  payload: {
+    color: Color;
+    id: string;
   };
 }

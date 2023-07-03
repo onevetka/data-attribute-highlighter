@@ -81,8 +81,8 @@ function changeHighlightColor(
 
   const newState = {
     ...state,
-    attributeList: state.attributeList.map((attribute, index) => {
-      if (index === id) {
+    attributeList: state.attributeList.map((attribute) => {
+      if (id === attribute.id) {
         return attributeListItemState({ ...attribute, color });
       }
 
@@ -90,7 +90,17 @@ function changeHighlightColor(
     }),
   };
 
-  return { state: newState, effects: [] };
+  const effects: AttributeListEffect[] = [
+    {
+      type: 'changeHighlightColorInChromeStorage',
+      payload: {
+        id,
+        color,
+      },
+    },
+  ];
+
+  return { state: newState, effects };
 }
 
 function deleteItem(

@@ -60,7 +60,7 @@ export const Attributes: React.FC = () => {
               onChangeColor={(color: Color) =>
                 sendAction({
                   type: 'changeHighlightColor',
-                  payload: { id: index, color },
+                  payload: { id: item.id, color },
                 })
               }
               key={index} // FIXME
