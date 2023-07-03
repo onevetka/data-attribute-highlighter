@@ -18,45 +18,24 @@ export const effectPerformer = (
         },
       };
     case 'saveAttributeToChromeStorage':
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        const tabId = tabs[0].id || 0;
-
-        chrome.tabs.sendMessage(tabId, {
-          messageType: 'highlight-data',
-          attributeName: effect.payload.attribute.name,
-        });
-      });
+      sendChromeEffect(effect);
       break;
     case 'changeHighlightColorInChromeStorage':
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        const tabId = tabs[0].id || 0;
-
-        chrome.tabs.sendMessage(tabId, {
-          messageType: 'change-highlighter-color',
-          id: effect.payload.id,
-          color: effect.payload.color,
-        });
-      });
+      sendChromeEffect(effect);
       break;
     case 'deleteAttributeFromChromeStorage':
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        const tabId = tabs[0].id || 0;
-
-        chrome.tabs.sendMessage(tabId, {
-          messageType: 'remove-highlighter',
-          id: effect.payload.id,
-        });
-      });
+      sendChromeEffect(effect);
       break;
     case 'toggleAttributeInChromeStorage':
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        const tabId = tabs[0].id || 0;
-
-        chrome.tabs.sendMessage(tabId, {
-          messageType: 'toggle-highlighter-visibility',
-          id: effect.payload.id,
-        });
-      });
+      sendChromeEffect(effect);
       break;
   }
+};
+
+export const sendChromeEffect = (effect: AttributeListEffect) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    const tabId = tabs[0].id || 0;
+
+    chrome.tabs.sendMessage(tabId, effect);
+  });
 };

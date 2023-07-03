@@ -166,8 +166,9 @@ function highlight(state: AttributeListState): AttributeListResult {
       effects: [],
     };
   } else {
-    const newState = {
+    const newState: AttributeListState = {
       ...state,
+      attributeNameInputValue: '',
       attributeList: [
         attributeListItemState({
           name: attributeNameResult.value.string,

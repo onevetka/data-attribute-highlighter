@@ -117,4 +117,6 @@ class AttributeManager {
   }
 }
 
-export default new AttributeManager();
+const attributeManager = new AttributeManager();
+
+export { attributeManager };

@@ -185,7 +185,7 @@ test('Should set status to attributeNameInputStatus, when calling changeAttribut
   ).toEqual(attributeListState({ attributeNameInputStatus: Status.Error }));
 });
 
-test('Action highlight add item to list if name is correct and make isHighlighted flag is true', () => {
+test('Action highlight add item to list and clear input if name is correct and make isHighlighted flag is true', () => {
   const { state: initialState } = attributeListReducer(attributeListState(), {
     type: 'changeAttributeNameInputValue',
     payload: { name: 'className' },
@@ -198,6 +198,7 @@ test('Action highlight add item to list if name is correct and make isHighlighte
   expect(state.attributeList.length).toBe(1);
   expect(state.attributeList[0].name).toBe('className');
   expect(state.attributeList[0].isHighlighted).toBe(true);
+  expect(state.attributeNameInputValue).toEqual('');
 });
 
 test('Action highlight should send effect makeAttributeRandoms if name is correct', () => {
