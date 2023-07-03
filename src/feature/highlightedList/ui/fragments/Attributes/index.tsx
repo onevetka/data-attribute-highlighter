@@ -41,26 +41,29 @@ export const Attributes: React.FC = () => {
       </form>
       <div className={styles.list}>
         {state.attributeList.length > 0 ? (
-          state.attributeList.map((item, index) => (
+          state.attributeList.map((attribute, index) => (
             <CurrentAttributeListItem
               // FIXME: state={} Даня предлагает сразу кидать стейт, и определить его интерфейс. Посмотреть как я сделал в Озоне
               className={styles.listItem}
-              label={item.name}
-              highlightingColor={item.color}
-              isHighlighted={item.isHighlighted}
+              label={attribute.name}
+              highlightingColor={attribute.color}
+              isHighlighted={attribute.isHighlighted}
               onClose={() =>
-                sendAction({ type: 'deleteItem', payload: { id: index } })
+                sendAction({
+                  type: 'deleteItem',
+                  payload: { id: attribute.id },
+                })
               }
               onToggleVisibility={() =>
                 sendAction({
                   type: 'toggleHighlighting',
-                  payload: { id: index },
+                  payload: { id: attribute.id },
                 })
               }
               onChangeColor={(color: Color) =>
                 sendAction({
                   type: 'changeHighlightColor',
-                  payload: { id: item.id, color },
+                  payload: { id: attribute.id, color },
                 })
               }
               key={index} // FIXME

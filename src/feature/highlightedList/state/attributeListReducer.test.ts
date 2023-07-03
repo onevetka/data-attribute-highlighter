@@ -8,21 +8,49 @@ import { Status } from '../../../core/status/domain/entity/status';
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
 import { MakeAttributeRandomsEffect } from './attributeListEffect';
 
-test('Should invert the highlight flag when calling the toggleHighlighting action', () => {
+test('Action toggleHighlighting should invert the highlight flag', () => {
+  const id = uuid();
+
   const initialState = attributeListState({
-    attributeList: [attributeListItemState()],
+    attributeList: [
+      attributeListItemState({
+        id,
+      }),
+    ],
+  });
+
+  const { state } = attributeListReducer(initialState, {
+    type: 'toggleHighlighting',
+    payload: { id },
   });
 
   expect(
-    attributeListReducer(initialState, {
-      type: 'toggleHighlighting',
-      payload: { id: 0 },
-    }).state
-  ).toEqual(
-    attributeListState({
-      attributeList: [attributeListItemState({ isHighlighted: true })],
-    })
-  );
+    state.attributeList.find((attribute) => attribute.id === id)?.isHighlighted
+  ).toBe(true);
+});
+
+test('Action toggleHighlighting should invert the highlight flag', () => {
+  const id = uuid();
+
+  const initialState = attributeListState({
+    attributeList: [
+      attributeListItemState({
+        id,
+      }),
+    ],
+  });
+
+  const { effects } = attributeListReducer(initialState, {
+    type: 'toggleHighlighting',
+    payload: { id },
+  });
+
+  expect(effects).toEqual([
+    {
+      type: 'toggleAttributeInChromeStorage',
+      payload: { id },
+    },
+  ]);
 });
 
 test('Action changeHighlightColor should change color', () => {
@@ -74,17 +102,45 @@ test('Action changeHighlightColor should send changeHighlightColorInChromeStorag
   ]);
 });
 
-test('Should delete item from list, when calling deleteItem action', () => {
+test('Actino deleteItem should delete item from list', () => {
+  const id = uuid();
   const initialState = attributeListState({
-    attributeList: [attributeListItemState()],
+    attributeList: [
+      attributeListItemState({
+        id,
+      }),
+    ],
   });
 
-  expect(
-    attributeListReducer(initialState, {
-      type: 'deleteItem',
-      payload: { id: 0 },
-    }).state
-  ).toEqual(attributeListState());
+  const { state } = attributeListReducer(initialState, {
+    type: 'deleteItem',
+    payload: { id },
+  });
+
+  expect(state).toEqual(attributeListState());
+});
+
+test('Actino deleteItem should send deleteAttributeFromChromeStorage effect', () => {
+  const id = uuid();
+  const initialState = attributeListState({
+    attributeList: [
+      attributeListItemState({
+        id,
+      }),
+    ],
+  });
+
+  const { effects } = attributeListReducer(initialState, {
+    type: 'deleteItem',
+    payload: { id },
+  });
+
+  expect(effects).toEqual([
+    {
+      type: 'deleteAttributeFromChromeStorage',
+      payload: { id },
+    },
+  ]);
 });
 
 test('Action changeAttributeNameInputValue should change attribute name input value', () => {

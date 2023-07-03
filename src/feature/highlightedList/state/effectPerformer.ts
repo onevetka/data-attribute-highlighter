@@ -37,5 +37,26 @@ export const effectPerformer = (
           color: effect.payload.color,
         });
       });
+      break;
+    case 'deleteAttributeFromChromeStorage':
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        const tabId = tabs[0].id || 0;
+
+        chrome.tabs.sendMessage(tabId, {
+          messageType: 'remove-highlighter',
+          id: effect.payload.id,
+        });
+      });
+      break;
+    case 'toggleAttributeInChromeStorage':
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        const tabId = tabs[0].id || 0;
+
+        chrome.tabs.sendMessage(tabId, {
+          messageType: 'toggle-highlighter-visibility',
+          id: effect.payload.id,
+        });
+      });
+      break;
   }
 };

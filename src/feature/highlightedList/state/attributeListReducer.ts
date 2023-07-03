@@ -57,8 +57,8 @@ function toggleHighlighting(
 
   const newState = {
     ...state,
-    attributeList: state.attributeList.map((attribute, index) => {
-      if (index === id) {
+    attributeList: state.attributeList.map((attribute) => {
+      if (attribute.id === id) {
         return attributeListItemState({
           ...attribute,
           isHighlighted: !attribute.isHighlighted,
@@ -69,7 +69,16 @@ function toggleHighlighting(
     }),
   };
 
-  return { state: newState, effects: [] };
+  const effects: AttributeListEffect[] = [
+    {
+      type: 'toggleAttributeInChromeStorage',
+      payload: {
+        id,
+      },
+    },
+  ];
+
+  return { state: newState, effects };
 }
 
 function changeHighlightColor(
@@ -111,10 +120,21 @@ function deleteItem(
 
   const newState = {
     ...state,
-    attributeList: state.attributeList.filter((_, index) => index !== id),
+    attributeList: state.attributeList.filter(
+      (attribute) => attribute.id !== id
+    ),
   };
 
-  return { state: newState, effects: [] };
+  const effects: AttributeListEffect[] = [
+    {
+      type: 'deleteAttributeFromChromeStorage',
+      payload: {
+        id,
+      },
+    },
+  ];
+
+  return { state: newState, effects };
 }
 
 function changeAttributeNameInputValue(

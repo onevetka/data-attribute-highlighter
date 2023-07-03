@@ -15,7 +15,7 @@ export type AttributeListAction =
 export interface ToggleHighlightingAction {
   type: 'toggleHighlighting';
   payload: {
-    id: number;
+    id: string;
   };
 }
 
@@ -30,7 +30,7 @@ export interface ChangeHighlightColorAction {
 export interface DeleteItemAction {
   type: 'deleteItem';
   payload: {
-    id: number;
+    id: string;
   };
 }
 
