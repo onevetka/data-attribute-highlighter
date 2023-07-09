@@ -3,10 +3,10 @@ import {
   attributeListItemState,
   attributeListState,
 } from './attributeListState';
-import { attributeListReducer } from './attributeListReducer';
+import { reducer } from './reducer';
 import { Status } from '../../../core/status/domain/entity/status';
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
-import { MakeAttributeRandomsEffect } from './attributeListEffect';
+import { MakeAttributeRandomsEffect } from './effect';
 
 test('Action toggleHighlighting should invert the highlight flag', () => {
   const id = uuid();
@@ -19,7 +19,7 @@ test('Action toggleHighlighting should invert the highlight flag', () => {
     ],
   });
 
-  const { state } = attributeListReducer(initialState, {
+  const { state } = reducer(initialState, {
     type: 'toggleHighlighting',
     payload: { id },
   });
@@ -40,7 +40,7 @@ test('Action toggleHighlighting should invert the highlight flag', () => {
     ],
   });
 
-  const { effects } = attributeListReducer(initialState, {
+  const { effects } = reducer(initialState, {
     type: 'toggleHighlighting',
     payload: { id },
   });
@@ -64,7 +64,7 @@ test('Action changeHighlightColor should change color', () => {
     ],
   });
 
-  const { state } = attributeListReducer(initialState, {
+  const { state } = reducer(initialState, {
     type: 'changeHighlightColor',
     payload: { color: '#EDEDED', id },
   });
@@ -86,7 +86,7 @@ test('Action changeHighlightColor should send changeHighlightColorInChromeStorag
     ],
   });
 
-  const { effects } = attributeListReducer(initialState, {
+  const { effects } = reducer(initialState, {
     type: 'changeHighlightColor',
     payload: { color, id },
   });
@@ -112,7 +112,7 @@ test('Actino deleteItem should delete item from list', () => {
     ],
   });
 
-  const { state } = attributeListReducer(initialState, {
+  const { state } = reducer(initialState, {
     type: 'deleteItem',
     payload: { id },
   });
@@ -130,7 +130,7 @@ test('Actino deleteItem should send deleteAttributeFromChromeStorage effect', ()
     ],
   });
 
-  const { effects } = attributeListReducer(initialState, {
+  const { effects } = reducer(initialState, {
     type: 'deleteItem',
     payload: { id },
   });
@@ -147,7 +147,7 @@ test('Action changeAttributeNameInputValue should change attribute name input va
   const state = attributeListState();
 
   expect(
-    attributeListReducer(state, {
+    reducer(state, {
       type: 'changeAttributeNameInputValue',
       payload: { name: 'className' },
     }).state
@@ -156,13 +156,13 @@ test('Action changeAttributeNameInputValue should change attribute name input va
 
 test('Action changeAttributeNameInputValue should clear input status', () => {
   const state = attributeListState();
-  const stateWithError = attributeListReducer(state, {
+  const stateWithError = reducer(state, {
     type: 'changeAttributeNameInputStatus',
     payload: { status: Status.Error },
   }).state;
 
   expect(
-    attributeListReducer(stateWithError, {
+    reducer(stateWithError, {
       type: 'changeAttributeNameInputValue',
       payload: { name: 'className' },
     }).state
@@ -178,7 +178,7 @@ test('Should set status to attributeNameInputStatus, when calling changeAttribut
   const initialState = attributeListState();
 
   expect(
-    attributeListReducer(initialState, {
+    reducer(initialState, {
       type: 'changeAttributeNameInputStatus',
       payload: { status: Status.Error },
     }).state
@@ -186,12 +186,12 @@ test('Should set status to attributeNameInputStatus, when calling changeAttribut
 });
 
 test('Action highlight add item to list and clear input if name is correct and make isHighlighted flag is true', () => {
-  const { state: initialState } = attributeListReducer(attributeListState(), {
+  const { state: initialState } = reducer(attributeListState(), {
     type: 'changeAttributeNameInputValue',
     payload: { name: 'className' },
   });
 
-  const { state } = attributeListReducer(initialState, {
+  const { state } = reducer(initialState, {
     type: 'highlight',
   });
 
@@ -202,12 +202,12 @@ test('Action highlight add item to list and clear input if name is correct and m
 });
 
 test('Action highlight should send effect makeAttributeRandoms if name is correct', () => {
-  const { state: initialState } = attributeListReducer(attributeListState(), {
+  const { state: initialState } = reducer(attributeListState(), {
     type: 'changeAttributeNameInputValue',
     payload: { name: 'className' },
   });
 
-  const { state, effects } = attributeListReducer(initialState, {
+  const { state, effects } = reducer(initialState, {
     type: 'highlight',
   });
 
@@ -220,12 +220,12 @@ test('Action highlight should send effect makeAttributeRandoms if name is correc
 test('Action highlight should set error if name is too short', () => {
   const initialState = attributeListState();
   // FIXME: {}
-  const state = attributeListReducer(initialState, {
+  const state = reducer(initialState, {
     type: 'changeAttributeNameInputValue',
     payload: { name: '' },
   }).state;
 
-  expect(attributeListReducer(state, { type: 'highlight' }).state).toEqual(
+  expect(reducer(state, { type: 'highlight' }).state).toEqual(
     attributeListState({
       attributeNameInputValue: '',
       attributeNameInputStatus: Status.Error,
@@ -236,7 +236,7 @@ test('Action highlight should set error if name is too short', () => {
 test('Action addAttributeToList sets to list attribute', () => {
   const initialState = attributeListState();
 
-  const { state } = attributeListReducer(initialState, {
+  const { state } = reducer(initialState, {
     type: 'addAttributeToList',
     payload: {
       attribute: attributeListItemState({
@@ -263,7 +263,7 @@ test('Action addAttributeToList sets to list attribute', () => {
 test('Action setRandomsToAttribute sets payload to first attribute in list', () => {
   const initialState = attributeListState();
 
-  const { state: nextState } = attributeListReducer(initialState, {
+  const { state: nextState } = reducer(initialState, {
     type: 'addAttributeToList',
     payload: {
       attribute: attributeListItemState({
@@ -277,7 +277,7 @@ test('Action setRandomsToAttribute sets payload to first attribute in list', () 
   const id = uuid();
   const color = getRandomColor({ knownColors: [] });
 
-  const { state } = attributeListReducer(nextState, {
+  const { state } = reducer(nextState, {
     type: 'setRandomsToAttribute',
     payload: {
       id,
@@ -292,7 +292,7 @@ test('Action setRandomsToAttribute sets payload to first attribute in list', () 
 test('Action setRandomsToAttribute send effect saveAttributeToChromeStorage', () => {
   const initialState = attributeListState();
 
-  const { state: nextState } = attributeListReducer(initialState, {
+  const { state: nextState } = reducer(initialState, {
     type: 'addAttributeToList',
     payload: {
       attribute: attributeListItemState({
@@ -306,7 +306,7 @@ test('Action setRandomsToAttribute send effect saveAttributeToChromeStorage', ()
   const id = uuid();
   const color = getRandomColor({ knownColors: [] });
 
-  const { state, effects } = attributeListReducer(nextState, {
+  const { state, effects } = reducer(nextState, {
     type: 'setRandomsToAttribute',
     payload: {
       id,

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { attributeListReducer } from './attributeListReducer';
+import { reducer } from './reducer';
 import { AttributeListState, attributeListState } from './attributeListState';
-import { AttributeListAction } from './attributeListAction';
-import { effectPerformer } from './effectPerformer';
-import { AttributeListEffect } from './attributeListEffect';
+import { AttributeListAction } from './action';
+import { effector } from './effector';
+import { AttributeListEffect } from './effect';
 import { HIGHLIGHTERS_FIELD } from '../../../constants/store';
 
 export const recursion = (
@@ -13,10 +13,10 @@ export const recursion = (
   let stateToExit = state;
 
   for (let effect of effects) {
-    const action = effectPerformer(effect);
+    const action = effector(effect);
 
     if (action) {
-      const { state: nextState, effects } = attributeListReducer(state, action);
+      const { state: nextState, effects } = reducer(state, action);
 
       stateToExit = nextState;
 
@@ -31,7 +31,7 @@ export const sendActionDelta = (
   state: AttributeListState,
   action: AttributeListAction
 ): AttributeListState => {
-  const { state: nextState, effects } = attributeListReducer(state, action);
+  const { state: nextState, effects } = reducer(state, action);
 
   return recursion(nextState, effects);
 };

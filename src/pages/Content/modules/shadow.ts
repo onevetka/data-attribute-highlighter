@@ -1,3 +1,4 @@
+// FIXME: Сделать простую фабрику с методом геттером
 class Shadow {
   /**
    * Class providing api for working with box-shadow

@@ -1,9 +1,10 @@
 import { v4 as uuid } from 'uuid';
-import { AttributeListEffect } from './attributeListEffect';
+import { AttributeListEffect } from './effect';
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
-import { AttributeListAction } from './attributeListAction';
+import { AttributeListAction } from './action';
+import { sendChromeEffect } from '../../../chrome/lib/sendChromeEffect';
 
-export const effectPerformer = (
+export const effector = (
   effect: AttributeListEffect
 ): AttributeListAction | void => {
   switch (effect.type) {
@@ -18,24 +19,16 @@ export const effectPerformer = (
         },
       };
     case 'saveAttributeToChromeStorage':
-      sendChromeEffect(effect);
+      sendChromeEffect<AttributeListEffect>(effect);
       break;
     case 'changeHighlightColorInChromeStorage':
-      sendChromeEffect(effect);
+      sendChromeEffect<AttributeListEffect>(effect);
       break;
     case 'deleteAttributeFromChromeStorage':
-      sendChromeEffect(effect);
+      sendChromeEffect<AttributeListEffect>(effect);
       break;
     case 'toggleAttributeInChromeStorage':
-      sendChromeEffect(effect);
+      sendChromeEffect<AttributeListEffect>(effect);
       break;
   }
-};
-
-export const sendChromeEffect = (effect: AttributeListEffect) => {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    const tabId = tabs[0].id || 0;
-
-    chrome.tabs.sendMessage(tabId, effect);
-  });
 };

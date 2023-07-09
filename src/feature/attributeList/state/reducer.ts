@@ -7,13 +7,13 @@ import {
   DeleteItemAction,
   SetRandomsToAttributeAction,
   ToggleHighlightingAction,
-} from './attributeListAction';
+} from './action';
 import {
   AttributeListState,
   attributeListItemState,
 } from './attributeListState';
 import { Status } from '../../../core/status/domain/entity/status';
-import { AttributeListEffect } from './attributeListEffect';
+import { AttributeListEffect } from './effect';
 import { AttributeName } from '../domain/entity/attributeName';
 
 export interface AttributeListResult {
@@ -21,7 +21,7 @@ export interface AttributeListResult {
   effects: AttributeListEffect[];
 }
 
-export const attributeListReducer = (
+export const reducer = (
   state: AttributeListState,
   action: AttributeListAction
 ): AttributeListResult => {
