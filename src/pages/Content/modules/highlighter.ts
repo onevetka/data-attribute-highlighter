@@ -14,6 +14,7 @@ const getHash = (name: string) => {
 type Selector = {
   shadows: Record<string, Shadow>;
   tooltip: Tooltip;
+  // FIXME: ТУТ!
   attributes: Record<string, Attribute>;
 };
 
@@ -33,6 +34,7 @@ class Highlighter {
     const hasSelector = Boolean(element.dataset.highlightedElemId);
     const elementId =
       element.dataset.highlightedElemId || getHash(attributeValue);
+    // FIXME: И ТУТ!
 
     const originalShadow = this.selectorsMap[elementId]?.shadows;
     const originalAttributes = this.selectorsMap[elementId]?.attributes;

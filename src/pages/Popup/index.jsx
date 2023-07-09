@@ -1,9 +1,14 @@
 import React from 'react';
 import { render } from 'react-dom';
-
-import Popup from './Popup';
+import styles from './style.module.scss';
 import './index.css';
+import Attributes from '../../feature/attributeList/ui/fragments/Attributes';
 
-render(<Popup />, window.document.querySelector('#app-container'));
+render(
+  <div className={styles.app}>
+    <Attributes />
+  </div>,
+  window.document.querySelector('#app-container')
+);
 
 if (module.hot) module.hot.accept();

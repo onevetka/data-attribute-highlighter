@@ -66,7 +66,7 @@ export const Attributes: React.FC = () => {
                   payload: { id: attribute.id, color },
                 })
               }
-              key={index} // FIXME
+              key={attribute.id}
             />
           ))
         ) : (

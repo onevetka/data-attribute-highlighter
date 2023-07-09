@@ -1,4 +1,4 @@
-import { validateColor } from '../../../../../pages/Content/modules/validateColor';
+import { validateColor } from './validateColor';
 
 class FormValidator {
   static isValidColor(value: string) {

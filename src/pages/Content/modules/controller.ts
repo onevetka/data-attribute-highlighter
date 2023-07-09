@@ -1,5 +1,5 @@
 import { HIGHLIGHTERS_FIELD } from '../../../constants/store';
-import { AttributeListItemState } from '../../../feature/highlightedList/state/attributeListState';
+import { AttributeListItemState } from '../../../feature/attributeList/state/attributeListState';
 import { attributeManager } from './attributeManager';
 
 export type HighlighterData = {
