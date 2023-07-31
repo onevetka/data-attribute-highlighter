@@ -1,75 +1,77 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
+import { v4 as uuid } from 'uuid';
 import { reducer } from './reducer';
-import { AttributeListState, attributeListState } from './attributeListState';
-import { AttributeListAction } from './action';
-import { effector } from './effector';
-import { AttributeListEffect } from './effect';
-import { HIGHLIGHTERS_FIELD } from '../../../constants/store';
-
-export const recursion = (
-  state: AttributeListState,
-  effects: AttributeListEffect[]
-): AttributeListState => {
-  let stateToExit = state;
-
-  for (let effect of effects) {
-    const action = effector(effect);
-
-    if (action) {
-      const { state: nextState, effects } = reducer(state, action);
-
-      stateToExit = nextState;
-
-      recursion(nextState, effects);
-    }
-  }
-
-  return stateToExit;
-};
-
-export const sendActionDelta = (
-  state: AttributeListState,
-  action: AttributeListAction
-): AttributeListState => {
-  const { state: nextState, effects } = reducer(state, action);
-
-  return recursion(nextState, effects);
-};
+import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
+import { sendChromeEffect } from '../../../chrome/lib/sendChromeEffect';
+import {
+  ChangeHighlightColorInChromeStorageEffect,
+  DeleteAttributeFromChromeStorageEffect,
+  SaveAttributeToChromeStorageEffect,
+  ToggleAttributeInChromeStorageEffect,
+} from './effect';
+import { attributeListState } from './attributeListState';
 
 export const useViewModel = () => {
-  const [viewModelState, setViewModelState] = useState(attributeListState());
-
-  const sendAction = (state: AttributeListState) => {
-    return (action: AttributeListAction) => {
-      setViewModelState(sendActionDelta(state, action));
-    };
-  };
+  const [state, dispatch] = useReducer(reducer, attributeListState());
+  const { effects } = state;
 
   useEffect(() => {
-    chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-      const highlightedAttributes = data[HIGHLIGHTERS_FIELD] || [];
-
-      const list = Object.keys(highlightedAttributes).map((id) => {
-        const { attributeName, color, isVisible } = highlightedAttributes[id];
-
-        return {
-          id,
-          color,
-          name: attributeName,
-          isHighlighted: isVisible,
-        };
-      });
-
-      setViewModelState(
-        attributeListState({
-          attributeList: list,
-        })
-      );
+    effects.forEach((effect) => {
+      switch (effect.type) {
+        case 'makeAttributeRandoms':
+          setTimeout(() => {
+            dispatch({
+              type: 'setRandomsToAttribute',
+              payload: {
+                id: uuid(),
+                color: getRandomColor({
+                  knownColors: effect.payload.knownColors,
+                }),
+              },
+            });
+          }, 5000);
+          break;
+        case 'saveAttributeToChromeStorage':
+          sendChromeEffect<SaveAttributeToChromeStorageEffect>(effect);
+          break;
+        case 'changeHighlightColorInChromeStorage':
+          sendChromeEffect<ChangeHighlightColorInChromeStorageEffect>(effect);
+          break;
+        case 'deleteAttributeFromChromeStorage':
+          sendChromeEffect<DeleteAttributeFromChromeStorageEffect>(effect);
+          break;
+        case 'toggleAttributeInChromeStorage':
+          sendChromeEffect<ToggleAttributeInChromeStorageEffect>(effect);
+          break;
+      }
     });
-  }, []);
+  }, [effects]);
+
+  // useEffect(() => {
+  //   chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
+  //     const highlightedAttributes = data[HIGHLIGHTERS_FIELD] || [];
+
+  //     const list = Object.keys(highlightedAttributes).map((id) => {
+  //       const { attributeName, color, isVisible } = highlightedAttributes[id];
+
+  //       return {
+  //         id,
+  //         color,
+  //         name: attributeName,
+  //         isHighlighted: isVisible,
+  //       };
+  //     });
+
+  //     setViewModelState(
+  //       attributeListState({
+  //         attributeList: list,
+  //       })
+  //     );
+  //   });
+  // }, []);
 
   return {
-    state: viewModelState,
-    sendAction: sendAction(viewModelState),
+    state,
+    dispatch,
   };
 };

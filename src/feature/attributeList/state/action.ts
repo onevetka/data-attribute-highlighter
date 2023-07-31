@@ -2,6 +2,8 @@ import { Color } from '../../../core/color/domain/entity/color';
 import { Status } from '../../../core/status/domain/entity/status';
 import { AttributeListItemState } from './attributeListState';
 
+// TODO: Actions to classes
+
 export type AttributeListAction =
   | ToggleHighlightingAction
   | ChangeHighlightColorAction

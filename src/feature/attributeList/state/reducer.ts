@@ -13,18 +13,19 @@ import {
   attributeListItemState,
 } from './attributeListState';
 import { Status } from '../../../core/status/domain/entity/status';
-import { AttributeListEffect } from './effect';
+import {
+  ChangeHighlightColorInChromeStorageEffect,
+  DeleteAttributeFromChromeStorageEffect,
+  MakeAttributeRandomsEffect,
+  SaveAttributeToChromeStorageEffect,
+  ToggleAttributeInChromeStorageEffect,
+} from './effect';
 import { AttributeName } from '../domain/entity/attributeName';
-
-export interface AttributeListResult {
-  state: AttributeListState;
-  effects: AttributeListEffect[];
-}
 
 export const reducer = (
   state: AttributeListState,
   action: AttributeListAction
-): AttributeListResult => {
+): AttributeListState => {
   const result = (() => {
     switch (action.type) {
       case 'toggleHighlighting':
@@ -52,7 +53,7 @@ export const reducer = (
 function toggleHighlighting(
   state: AttributeListState,
   action: ToggleHighlightingAction
-): AttributeListResult {
+): AttributeListState {
   const id = action.payload.id;
 
   const newState = {
@@ -67,24 +68,24 @@ function toggleHighlighting(
 
       return attribute;
     }),
+    effects: [
+      ...state.effects,
+      {
+        type: 'toggleAttributeInChromeStorage',
+        payload: {
+          id,
+        },
+      } as ToggleAttributeInChromeStorageEffect,
+    ],
   };
 
-  const effects: AttributeListEffect[] = [
-    {
-      type: 'toggleAttributeInChromeStorage',
-      payload: {
-        id,
-      },
-    },
-  ];
-
-  return { state: newState, effects };
+  return newState;
 }
 
 function changeHighlightColor(
   state: AttributeListState,
   action: ChangeHighlightColorAction
-): AttributeListResult {
+): AttributeListState {
   const id = action.payload.id;
   const color = action.payload.color;
 
@@ -97,25 +98,25 @@ function changeHighlightColor(
 
       return attribute;
     }),
+    effects: [
+      ...state.effects,
+      {
+        type: 'changeHighlightColorInChromeStorage',
+        payload: {
+          id,
+          color,
+        },
+      } as ChangeHighlightColorInChromeStorageEffect,
+    ],
   };
 
-  const effects: AttributeListEffect[] = [
-    {
-      type: 'changeHighlightColorInChromeStorage',
-      payload: {
-        id,
-        color,
-      },
-    },
-  ];
-
-  return { state: newState, effects };
+  return newState;
 }
 
 function deleteItem(
   state: AttributeListState,
   action: DeleteItemAction
-): AttributeListResult {
+): AttributeListState {
   const id = action.payload.id;
 
   const newState = {
@@ -123,24 +124,24 @@ function deleteItem(
     attributeList: state.attributeList.filter(
       (attribute) => attribute.id !== id
     ),
+    effects: [
+      ...state.effects,
+      {
+        type: 'deleteAttributeFromChromeStorage',
+        payload: {
+          id,
+        },
+      } as DeleteAttributeFromChromeStorageEffect,
+    ],
   };
 
-  const effects: AttributeListEffect[] = [
-    {
-      type: 'deleteAttributeFromChromeStorage',
-      payload: {
-        id,
-      },
-    },
-  ];
-
-  return { state: newState, effects };
+  return newState;
 }
 
 function changeAttributeNameInputValue(
   state: AttributeListState,
   action: ChangeAttributeNameInputValueAction
-): AttributeListResult {
+): AttributeListState {
   const name = action.payload.name;
 
   const newState = {
@@ -149,21 +150,18 @@ function changeAttributeNameInputValue(
     attributeNameInputStatus: Status.Default,
   };
 
-  return { state: newState, effects: [] };
+  return newState;
 }
 
-function highlight(state: AttributeListState): AttributeListResult {
+function highlight(state: AttributeListState): AttributeListState {
   const attributeNameResult = AttributeName.parse(
     state.attributeNameInputValue
   );
 
   if (attributeNameResult.isErr) {
     return {
-      state: {
-        ...state,
-        attributeNameInputStatus: Status.Error,
-      },
-      effects: [],
+      ...state,
+      attributeNameInputStatus: Status.Error,
     };
   } else {
     const newState: AttributeListState = {
@@ -177,18 +175,22 @@ function highlight(state: AttributeListState): AttributeListResult {
         ...state.attributeList,
       ],
     };
-    return {
-      state: newState,
-      effects: [
-        {
-          type: 'makeAttributeRandoms',
-          payload: {
-            knownColors: newState.attributeList.map(
-              (attribute) => attribute.color
-            ),
-          },
+
+    const effects = [
+      ...newState.effects,
+      {
+        type: 'makeAttributeRandoms',
+        payload: {
+          knownColors: newState.attributeList.map(
+            (attribute) => attribute.color
+          ),
         },
-      ],
+      } as MakeAttributeRandomsEffect,
+    ];
+
+    return {
+      ...newState,
+      effects,
     };
   }
 }
@@ -196,7 +198,7 @@ function highlight(state: AttributeListState): AttributeListResult {
 function addAttributeToList(
   state: AttributeListState,
   action: AddAttributeToListAction
-): AttributeListResult {
+): AttributeListState {
   const newState = {
     ...state,
     attributeList: [
@@ -205,28 +207,25 @@ function addAttributeToList(
     ],
   };
 
-  return {
-    state: newState,
-    effects: [],
-  };
+  return newState;
 }
 
 function changeAttributeNameInputStatus(
   state: AttributeListState,
   action: ChangeAttributeNameInputStatusAction
-): AttributeListResult {
+): AttributeListState {
   const newState = {
     ...state,
     attributeNameInputStatus: action.payload.status,
   };
 
-  return { state: newState, effects: [] };
+  return newState;
 }
 
 function setRandomsToAttribute(
   state: AttributeListState,
   action: SetRandomsToAttributeAction
-): AttributeListResult {
+): AttributeListState {
   const { id, color } = action.payload;
 
   const list = state.attributeList;
@@ -244,17 +243,16 @@ function setRandomsToAttribute(
   const newState = {
     ...state,
     attributeList: newList,
-  };
-
-  return {
-    state: newState,
     effects: [
+      ...state.effects,
       {
         type: 'saveAttributeToChromeStorage',
         payload: {
           attribute: value,
         },
-      },
+      } as SaveAttributeToChromeStorageEffect,
     ],
   };
+
+  return newState;
 }

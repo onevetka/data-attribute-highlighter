@@ -1,5 +1,6 @@
 import { Color } from '../../../core/color/domain/entity/color';
 import { Status } from '../../../core/status/domain/entity/status';
+import { AttributeListEffect } from './effect';
 
 export interface AttributeListItemState {
   id: string;
@@ -24,6 +25,7 @@ export interface AttributeListState {
   attributeNameInputValue: string;
   attributeList: AttributeListItemState[];
   attributeNameInputStatus: Status;
+  effects: AttributeListEffect[];
 }
 
 export const attributeListState = (
@@ -33,6 +35,7 @@ export const attributeListState = (
     attributeNameInputValue: '',
     attributeNameInputStatus: Status.Default,
     attributeList: data.attributeList?.map(attributeListItemState) || [],
+    effects: [],
     ...data,
   };
 };
