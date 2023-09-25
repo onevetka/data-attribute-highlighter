@@ -1,0 +1,1 @@
+export type Dispatch<Event> = (event: Event) => void;

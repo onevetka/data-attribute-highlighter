@@ -1,51 +1,15 @@
-import { useEffect, useReducer } from 'react';
-import { v4 as uuid } from 'uuid';
 import { reducer } from './reducer';
-import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
-import { sendChromeEffect } from '../../../chrome/lib/sendChromeEffect';
-import {
-  ChangeHighlightColorInChromeStorageEffect,
-  DeleteAttributeFromChromeStorageEffect,
-  SaveAttributeToChromeStorageEffect,
-  ToggleAttributeInChromeStorageEffect,
-} from './effect';
 import { attributeListState } from './attributeListState';
+import { useReducerEffector } from '../../../core/imperativeShell/hook/useReducerEffector';
+import { effector } from './effector';
+import { Color } from '../../../core/color/domain/entity/color';
 
 export const useViewModel = () => {
-  const [state, dispatch] = useReducer(reducer, attributeListState());
-  const { effects } = state;
-
-  useEffect(() => {
-    effects.forEach((effect) => {
-      switch (effect.type) {
-        case 'makeAttributeRandoms':
-          setTimeout(() => {
-            dispatch({
-              type: 'setRandomsToAttribute',
-              payload: {
-                id: uuid(),
-                color: getRandomColor({
-                  knownColors: effect.payload.knownColors,
-                }),
-              },
-            });
-          }, 5000);
-          break;
-        case 'saveAttributeToChromeStorage':
-          sendChromeEffect<SaveAttributeToChromeStorageEffect>(effect);
-          break;
-        case 'changeHighlightColorInChromeStorage':
-          sendChromeEffect<ChangeHighlightColorInChromeStorageEffect>(effect);
-          break;
-        case 'deleteAttributeFromChromeStorage':
-          sendChromeEffect<DeleteAttributeFromChromeStorageEffect>(effect);
-          break;
-        case 'toggleAttributeInChromeStorage':
-          sendChromeEffect<ToggleAttributeInChromeStorageEffect>(effect);
-          break;
-      }
-    });
-  }, [effects]);
+  const { state, dispatch } = useReducerEffector(
+    reducer,
+    effector,
+    attributeListState()
+  );
 
   // useEffect(() => {
   //   chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
@@ -70,8 +34,41 @@ export const useViewModel = () => {
   //   });
   // }, []);
 
+  const handleChangeAttributeNameInputValue = (name: string) =>
+    dispatch({
+      type: 'changeAttributeNameInputValue',
+      payload: { name },
+    });
+
+  const handleHighlight = () =>
+    dispatch({
+      type: 'highlight',
+    });
+
+  const handleToggleHighlighting = (id: string) =>
+    dispatch({
+      type: 'toggleHighlighting',
+      payload: { id },
+    });
+
+  const handlechangeHighlightColor = (id: string, color: Color) =>
+    dispatch({
+      type: 'changeHighlightColor',
+      payload: { id, color },
+    });
+
+  const handleDeleteItem = (id: string) =>
+    dispatch({
+      type: 'deleteItem',
+      payload: { id },
+    });
+
   return {
-    state,
-    dispatch,
+    viewState: state,
+    handleChangeAttributeNameInputValue,
+    handleHighlight,
+    handleToggleHighlighting,
+    handlechangeHighlightColor,
+    handleDeleteItem,
   };
 };

@@ -1,0 +1,1 @@
+export type Reducer<State, Event, Effect> = (state: State, event: Event) => { state: State, effects: Effect[] }

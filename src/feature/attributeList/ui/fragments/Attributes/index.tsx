@@ -9,7 +9,14 @@ import { useViewModel } from '../../../state/useViewModel';
 import styles from './style.module.scss';
 
 export const Attributes: React.FC = () => {
-  const { state, dispatch } = useViewModel();
+  const {
+    viewState,
+    handleChangeAttributeNameInputValue,
+    handleHighlight,
+    handleToggleHighlighting,
+    handlechangeHighlightColor,
+    handleDeleteItem,
+  } = useViewModel();
 
   return (
     <div className={styles.wrapper}>
@@ -17,54 +24,33 @@ export const Attributes: React.FC = () => {
         className={styles.form}
         onSubmit={(event: FormEvent) => {
           event.preventDefault();
-          dispatch({
-            type: 'highlight',
-          });
+          handleHighlight();
         }}
       >
         <Input
           className={styles.attributeNameInput}
           label="Attribute name"
-          value={state.attributeNameInputValue}
-          onChange={(name: string) =>
-            dispatch({
-              type: 'changeAttributeNameInputValue',
-              payload: { name },
-            })
-          }
+          value={viewState.attributeNameInputValue}
+          onChange={handleChangeAttributeNameInputValue}
           placeholder="data-test"
-          status={state.attributeNameInputStatus}
+          status={viewState.attributeNameInputStatus}
         />
         <Button className={styles.highlightButton} type="submit">
           Highlight
         </Button>
       </form>
       <div className={styles.list}>
-        {state.attributeList.length > 0 ? (
-          state.attributeList.map((attribute, index) => (
+        {viewState.attributeList.length > 0 ? (
+          viewState.attributeList.map((attribute, index) => (
             <CurrentAttributeListItem
-              // FIXME: state={} Даня предлагает сразу кидать стейт, и определить его интерфейс. Посмотреть как я сделал в Озоне
               className={styles.listItem}
               label={attribute.name}
               highlightingColor={attribute.color}
               isHighlighted={attribute.isHighlighted}
-              onClose={() =>
-                dispatch({
-                  type: 'deleteItem',
-                  payload: { id: attribute.id },
-                })
-              }
-              onToggleVisibility={() =>
-                dispatch({
-                  type: 'toggleHighlighting',
-                  payload: { id: attribute.id },
-                })
-              }
+              onClose={() => handleDeleteItem(attribute.id)}
+              onToggleVisibility={() => handleToggleHighlighting(attribute.id)}
               onChangeColor={(color: Color) =>
-                dispatch({
-                  type: 'changeHighlightColor',
-                  payload: { id: attribute.id, color },
-                })
+                handlechangeHighlightColor(attribute.id, color)
               }
               key={attribute.id}
             />
