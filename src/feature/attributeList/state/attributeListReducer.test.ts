@@ -31,7 +31,7 @@ describe('ChangeAttributeNameInputValueEvent', () => {
 
 describe('HighlightEvent (Click Highlight button)', () => {
   describe('If data is correct', () => {
-    const { state, effects } = attributeListReducer(
+    const { effects } = attributeListReducer(
       attributeListState({
         attributeNameInputValue: 'data-tnav',
       }),
@@ -56,10 +56,6 @@ describe('HighlightEvent (Click Highlight button)', () => {
 
       expect(effect.payload.knownColors).toEqual([]);
     });
-
-    test('Should clear input', () => {
-      expect(state.attributeNameInputValue).toBe('');
-    });
   });
 
   describe('If data is incorrect', () => {
@@ -79,20 +75,29 @@ describe('HighlightEvent (Click Highlight button)', () => {
 });
 
 describe('ReceiveRandomEnrichmentEven', () => {
-  const { state } = attributeListReducer(attributeListState(), {
-    type: 'ReceiveRandomEnrichmentEvent',
-    payload: {
-      id: uuid(),
-      name: attributeName('data-tnav'),
-      color: '#ededed',
-    },
-  });
+  const { state } = attributeListReducer(
+    attributeListState({
+      attributeNameInputValue: 'data-tnav',
+    }),
+    {
+      type: 'ReceiveRandomEnrichmentEvent',
+      payload: {
+        id: uuid(),
+        name: attributeName('data-tnav'),
+        color: '#ededed',
+      },
+    }
+  );
   test('Should put Attribute type in first place of list', () => {
     expect(state.attributeList[0]).toBeInstanceOf(Attribute);
   });
 
   test('Should highlight new attribute', () => {
     expect(state.attributeList[0].isHighlighted).toBe(true);
+  });
+
+  test('Should clear input', () => {
+    expect(state.attributeNameInputValue).toBe('');
   });
 
   test.skip('Should send effect to core', () => {});

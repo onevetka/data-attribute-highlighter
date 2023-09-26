@@ -165,6 +165,7 @@ function receiveRandomEnrichment(
   return {
     state: {
       ...state,
+      attributeNameInputValue: '',
       attributeList: [
         new Attribute({
           id,

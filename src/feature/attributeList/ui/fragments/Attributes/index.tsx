@@ -44,7 +44,7 @@ export const Attributes: React.FC = () => {
           viewState.attributeList.map((attribute, index) => (
             <CurrentAttributeListItem
               className={styles.listItem}
-              label={attribute.name}
+              label={attribute.name.string}
               highlightingColor={attribute.color}
               isHighlighted={attribute.isHighlighted}
               onClose={() => handleDeleteItem(attribute.id)}
