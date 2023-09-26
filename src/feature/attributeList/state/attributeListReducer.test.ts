@@ -1,13 +1,33 @@
 import { v4 as uuid } from 'uuid';
-import 'jest-chain';
 import { attributeListState } from './attributeListState';
-import { attributeListReducer } from './attributeListReducer';
+import {
+  AttributeListReducerResult,
+  attributeListReducer,
+} from './attributeListReducer';
 import { Status } from '../../../core/status/domain/entity/status';
 import { RandomEnrichmentEffect } from './attributeListEffect';
 import { AttributeName, attributeName } from '../domain/entity/attributeName';
-import { Ok } from 'true-myth/dist/public/result';
-import { AppError } from '../../../core/appError/domain/entity/appError';
 import { Attribute } from '../domain/entity/attribute';
+
+describe('ChangeAttributeNameInputValueEvent', () => {
+  const { state } = attributeListReducer(
+    attributeListState({
+      attributeNameInputStatus: Status.Error,
+    }),
+    {
+      type: 'ChangeAttributeNameInputValueEvent',
+      payload: { name: 'className' },
+    }
+  );
+
+  test('Should change attribute name input value', () => {
+    expect(state.attributeNameInputValue).toBe('className');
+  });
+
+  test('Should clear input status', () => {
+    expect(state.attributeNameInputStatus).toBe(Status.Default);
+  });
+});
 
 describe('HighlightEvent (Click Highlight button)', () => {
   describe('If data is correct', () => {
@@ -74,102 +94,133 @@ describe('ReceiveRandomEnrichmentEven', () => {
   test('Should highlight new attribute', () => {
     expect(state.attributeList[0].isHighlighted).toBe(true);
   });
+
+  test.skip('Should send effect to core', () => {});
 });
 
-//
-
-describe('toggleHighlighting', () => {
+describe('DeleteItemEvent (Click on delete button)', () => {
   const id = uuid();
+  const receiveRandomEnrichmentEvent = {
+    type: 'ReceiveRandomEnrichmentEvent',
+    payload: {
+      id,
+      name: attributeName('data-tnav'),
+      color: '#ededed',
+    },
+  } as const;
 
-  const { state } = attributeListReducer(attributeListState(), {
+  const deleteItemEvent = {
+    type: 'DeleteItemEvent',
+    payload: {
+      id,
+    },
+  } as const;
+
+  const reducerInit: AttributeListReducerResult = {
+    state: attributeListState(),
+    effects: [],
+  };
+
+  const { state } = [receiveRandomEnrichmentEvent, deleteItemEvent].reduce(
+    (accum, item) => attributeListReducer(accum.state, item),
+    reducerInit
+  );
+
+  test('Should delete item from list', () => {
+    expect(state.attributeList).toEqual([]);
+  });
+  test.skip('Should send effect to core', () => {});
+});
+
+describe('ToggleHighlightingEvent (Click on eye)', () => {
+  const id = uuid();
+  const receiveRandomEnrichmentEvent = {
+    type: 'ReceiveRandomEnrichmentEvent',
+    payload: {
+      id,
+      name: attributeName('data-tnav'),
+      color: '#ededed',
+    },
+  } as const;
+
+  const toggleHighlightingEvent = {
     type: 'ToggleHighlightingEvent',
     payload: { id },
+  } as const;
+
+  const reducerInit: AttributeListReducerResult = {
+    state: attributeListState(),
+    effects: [],
+  };
+
+  test('Should disables attribute', () => {
+    const { state } = [
+      receiveRandomEnrichmentEvent,
+      toggleHighlightingEvent,
+    ].reduce(
+      (accum, item) => attributeListReducer(accum.state, item),
+      reducerInit
+    );
+
+    const highlightedAttribute = state.attributeList.find((a) => a.id === id)!;
+
+    expect(highlightedAttribute.isHighlighted).toBe(false);
   });
 
-  test('Should show to user that attribute is highlighted', () => {
+  test('Should enables attribute', () => {
+    const { state } = [
+      receiveRandomEnrichmentEvent,
+      toggleHighlightingEvent,
+      toggleHighlightingEvent,
+    ].reduce(
+      (accum, item) => attributeListReducer(accum.state, item),
+      reducerInit
+    );
+
     const highlightedAttribute = state.attributeList.find((a) => a.id === id)!;
 
     expect(highlightedAttribute.isHighlighted).toBe(true);
   });
 
-  test.skip('Should send message to core to highlight element', () => {});
+  test.skip('Should send effect to core', () => {});
 });
 
 describe('ChangeHighlightColorEvent', () => {
   const id = uuid();
-  const color = '#EDEDED';
+  const color = '#ededed';
 
-  const { state } = attributeListReducer(attributeListState(), {
+  const receiveRandomEnrichmentEvent = {
+    type: 'ReceiveRandomEnrichmentEvent',
+    payload: {
+      id,
+      name: attributeName('data-tnav'),
+      color: '#000000',
+    },
+  } as const;
+
+  const changeHighlightColorEvent = {
     type: 'ChangeHighlightColorEvent',
     payload: { color, id },
-  });
+  } as const;
+
+  const reducerInit: AttributeListReducerResult = {
+    state: attributeListState(),
+    effects: [],
+  };
+
+  const { state } = [
+    receiveRandomEnrichmentEvent,
+    changeHighlightColorEvent,
+  ].reduce(
+    (accum, item) => attributeListReducer(accum.state, item),
+    reducerInit
+  );
 
   test('Should change color', () => {
     expect(
       state.attributeList.find((attribute) => attribute.id === id)?.color
-    ).toBe('#EDEDED');
+    ).toBe('#ededed');
   });
 
-  test.skip('Should send message to chrome storage', () => {});
-});
-
-describe('DeleteItemEvent', () => {
-  test.skip('Should send message to Chrome', () => {});
-  test.skip('Should delete item from list', () => {});
-});
-
-describe('ChangeAttributeNameInputValueEvent', () => {
-  const { state } = attributeListReducer(
-    attributeListState({
-      attributeNameInputStatus: Status.Error,
-    }),
-    {
-      type: 'ChangeAttributeNameInputValueEvent',
-      payload: { name: 'className' },
-    }
-  );
-
-  test('Should change attribute name input value', () => {
-    expect(state.attributeNameInputValue).toBe('className');
-  });
-
-  test('Should clear input status', () => {
-    expect(state.attributeNameInputStatus).toBe(Status.Default);
-  });
-});
-
-describe('HighlightEvent', () => {
-  describe('If correct data', () => {
-    const { state } = attributeListReducer(
-      attributeListState({
-        attributeNameInputValue: 'className',
-      }),
-      {
-        type: 'HighlightEvent',
-      }
-    );
-
-    test('Should add highlighted item to list', () => {
-      expect(state.attributeList.length).toBe(1);
-      expect(state.attributeList[0].name).toBe('className');
-      expect(state.attributeList[0].isHighlighted).toBe(true);
-    });
-
-    test('Should clear input', () => {
-      expect(state.attributeNameInputValue).toEqual('');
-    });
-
-    test.skip('Should send make rundoms request to effector', () => {});
-  });
-
-  test('If name is too short should show error', () => {
-    const { state } = attributeListReducer(
-      attributeListState({
-        attributeNameInputValue: '',
-      }),
-      { type: 'HighlightEvent' }
-    );
-
-    expect(state.attributeNameInputStatus).toBe(Status.Error);
-  });
+  test.skip('Should send effect to core', () => {});
 });

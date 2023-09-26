@@ -26,12 +26,12 @@ export const attributeListReducer = (
       return highlight(state);
     case 'ReceiveRandomEnrichmentEvent':
       return receiveRandomEnrichment(state, event);
+    case 'DeleteItemEvent':
+      return deleteItem(state, event);
     case 'ToggleHighlightingEvent':
       return toggleHighlighting(state, event);
     case 'ChangeHighlightColorEvent':
       return changeHighlightColor(state, event);
-    case 'DeleteItemEvent':
-      return deleteItem(state, event);
     case 'ChangeAttributeNameInputValueEvent':
       return changeAttributeNameInputValue(state, event);
   }

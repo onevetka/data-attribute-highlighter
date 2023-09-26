@@ -13,7 +13,7 @@ export const attributeListState = (
   return {
     attributeNameInputValue: '',
     attributeNameInputStatus: Status.Default,
-    attributeList: data.attributeList || [],
+    attributeList: [],
     ...data,
   };
 };
