@@ -3,6 +3,38 @@ import 'jest-chain';
 import { attributeListState } from './attributeListState';
 import { attributeListReducer } from './attributeListReducer';
 import { Status } from '../../../core/status/domain/entity/status';
+import { RandomEnrichmentEffect } from './attributeListEffect';
+import { AttributeName } from '../domain/entity/attributeName';
+
+describe('HighlightEvent (Click Highlight button)', () => {
+  describe('If data is correct', () => {
+    const { effects } = attributeListReducer(
+      attributeListState({
+        attributeNameInputValue: 'data-tnav',
+      }),
+      {
+        type: 'HighlightEvent',
+      }
+    );
+
+    test('Should create the AttributeName type', () => {
+      const effect = effects.find(
+        (effect) => effect.type === 'RandomEnrichmentEffect'
+      ) as RandomEnrichmentEffect;
+
+      expect(effect.payload.attributeName).toBeInstanceOf(AttributeName);
+      expect(effect.payload.attributeName.string).toBe('data-tnav');
+    });
+
+    test('Should requests attribute enrichment and throw known colors', () => {
+      const effect = effects.find(
+        (effect) => effect.type === 'RandomEnrichmentEffect'
+      ) as RandomEnrichmentEffect;
+
+      expect(effect.payload.knownColors).toEqual([]);
+    });
+  });
+});
 
 describe('toggleHighlighting', () => {
   const id = uuid();
