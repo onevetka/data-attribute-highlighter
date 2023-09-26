@@ -8,7 +8,7 @@ import { AttributeName } from '../domain/entity/attributeName';
 
 describe('HighlightEvent (Click Highlight button)', () => {
   describe('If data is correct', () => {
-    const { effects } = attributeListReducer(
+    const { state, effects } = attributeListReducer(
       attributeListState({
         attributeNameInputValue: 'data-tnav',
       }),
@@ -32,6 +32,25 @@ describe('HighlightEvent (Click Highlight button)', () => {
       ) as RandomEnrichmentEffect;
 
       expect(effect.payload.knownColors).toEqual([]);
+    });
+
+    test('Should clear input', () => {
+      expect(state.attributeNameInputValue).toBe('');
+    });
+  });
+
+  describe('If data is incorrect', () => {
+    const { state } = attributeListReducer(
+      attributeListState({
+        attributeNameInputValue: '',
+      }),
+      {
+        type: 'HighlightEvent',
+      }
+    );
+
+    test('Should show error', () => {
+      expect(state.attributeNameInputStatus).toBe(Status.Error);
     });
   });
 });
