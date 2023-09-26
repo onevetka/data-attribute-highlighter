@@ -1,16 +1,13 @@
 import { Color } from '../../../core/color/domain/entity/color';
-import { Status } from '../../../core/status/domain/entity/status';
-import { AttributeListItemState } from './attributeListState';
+import { AttributeName } from '../domain/entity/attributeName';
 
 export type AttributeListEvent =
   | ToggleHighlightingEvent
   | ChangeHighlightColorEvent
   | DeleteItemEvent
   | ChangeAttributeNameInputValueEvent
-  | ChangeAttributeNameInputStatusEvent
   | HighlightEvent
-  | AddAttributeToListEvent
-  | SetRandomsToAttributeEvent;
+  | ReceiveRandomEnrichmentEvent;
 
 export interface ToggleHighlightingEvent {
   type: 'ToggleHighlightingEvent';
@@ -41,28 +38,15 @@ export interface ChangeAttributeNameInputValueEvent {
   };
 }
 
-export interface ChangeAttributeNameInputStatusEvent {
-  type: 'ChangeAttributeNameInputStatusEvent';
-  payload: {
-    status: Status;
-  };
-}
-
 export interface HighlightEvent {
   type: 'HighlightEvent';
 }
 
-export interface AddAttributeToListEvent {
-  type: 'AddAttributeToListEvent';
+export interface ReceiveRandomEnrichmentEvent {
+  type: 'ReceiveRandomEnrichmentEvent';
   payload: {
-    attribute: AttributeListItemState;
-  };
-}
-
-export interface SetRandomsToAttributeEvent {
-  type: 'SetRandomsToAttributeEvent';
-  payload: {
-    id: string;
+    name: AttributeName;
     color: Color;
+    id: string;
   };
 }

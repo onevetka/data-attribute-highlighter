@@ -1,5 +1,5 @@
 import { HIGHLIGHTERS_FIELD } from '../../../constants/store';
-import { AttributeListItemState } from '../../../feature/attributeList/state/attributeListState';
+import { Attribute } from '../../../feature/attributeList/domain/entity/attribute';
 import { attributeManager } from './attributeManager';
 
 export type HighlighterData = {
@@ -26,10 +26,10 @@ export class Controller {
     });
   }
 
-  public static addHighlighter(payload: { attribute: AttributeListItemState }) {
+  public static addHighlighter(payload: { attribute: Attribute }) {
     const { id, name, isHighlighted, color } = payload.attribute;
 
-    attributeManager.add(id, name, color, isHighlighted);
+    attributeManager.add(id, name.string, color, isHighlighted);
 
     chrome.storage.local.set({
       [HIGHLIGHTERS_FIELD]: attributeManager.highlightedAttributes,

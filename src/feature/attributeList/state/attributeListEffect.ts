@@ -1,24 +1,18 @@
 import { Color } from '../../../core/color/domain/entity/color';
-import { AttributeListItemState } from './attributeListState';
+import { Attribute } from '../domain/entity/attribute';
+import { AttributeName } from '../domain/entity/attributeName';
 
 export type AttributeListEffect =
   | SaveAttributeToChromeStorageEffect
-  | MakeAttributeRandomsEffect
   | ChangeHighlightColorInChromeStorageEffect
   | DeleteAttributeFromChromeStorageEffect
-  | ToggleAttributeInChromeStorageEffect;
+  | ToggleAttributeInChromeStorageEffect
+  | RandomEnrichmentEffect;
 
 export interface SaveAttributeToChromeStorageEffect {
   type: 'SaveAttributeToChromeStorageEffect';
   payload: {
-    attribute: AttributeListItemState;
-  };
-}
-
-export interface MakeAttributeRandomsEffect {
-  type: 'MakeAttributeRandomsEffect';
-  payload: {
-    knownColors: Color[];
+    attribute: Attribute;
   };
 }
 
@@ -41,5 +35,13 @@ export interface ToggleAttributeInChromeStorageEffect {
   type: 'ToggleAttributeInChromeStorageEffect';
   payload: {
     id: string;
+  };
+}
+
+export interface RandomEnrichmentEffect {
+  type: 'RandomEnrichmentEffect';
+  payload: {
+    attributeName: AttributeName;
+    knownColors: Color[];
   };
 }

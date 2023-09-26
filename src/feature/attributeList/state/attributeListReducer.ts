@@ -1,20 +1,16 @@
 import {
-  AddAttributeToListEvent,
   AttributeListEvent,
-  ChangeAttributeNameInputStatusEvent,
   ChangeAttributeNameInputValueEvent,
   ChangeHighlightColorEvent,
   DeleteItemEvent,
-  SetRandomsToAttributeEvent,
+  ReceiveRandomEnrichmentEvent,
   ToggleHighlightingEvent,
 } from './attributeListEvent';
-import {
-  AttributeListState,
-  attributeListItemState,
-} from './attributeListState';
+import { AttributeListState } from './attributeListState';
 import { Status } from '../../../core/status/domain/entity/status';
 import { AttributeListEffect } from './attributeListEffect';
 import { AttributeName } from '../domain/entity/attributeName';
+import { Attribute } from '../domain/entity/attribute';
 
 export interface AttributeListReducerResult {
   state: AttributeListState;
@@ -23,39 +19,35 @@ export interface AttributeListReducerResult {
 
 export const attributeListReducer = (
   state: AttributeListState,
-  action: AttributeListEvent
+  event: AttributeListEvent
 ): AttributeListReducerResult => {
-  switch (action.type) {
+  switch (event.type) {
     case 'ToggleHighlightingEvent':
-      return toggleHighlighting(state, action);
+      return toggleHighlighting(state, event);
     case 'ChangeHighlightColorEvent':
-      return changeHighlightColor(state, action);
+      return changeHighlightColor(state, event);
     case 'DeleteItemEvent':
-      return deleteItem(state, action);
+      return deleteItem(state, event);
     case 'ChangeAttributeNameInputValueEvent':
-      return changeAttributeNameInputValue(state, action);
+      return changeAttributeNameInputValue(state, event);
     case 'HighlightEvent':
       return highlight(state);
-    case 'AddAttributeToListEvent':
-      return addAttributeToList(state, action);
-    case 'SetRandomsToAttributeEvent':
-      return setRandomsToAttribute(state, action);
-    case 'ChangeAttributeNameInputStatusEvent':
-      return changeAttributeNameInputStatus(state, action);
+    case 'ReceiveRandomEnrichmentEvent':
+      return receiveRandomEnrichment(state, event);
   }
 };
 
 function toggleHighlighting(
   state: AttributeListState,
-  action: ToggleHighlightingEvent
+  event: ToggleHighlightingEvent
 ): AttributeListReducerResult {
-  const id = action.payload.id;
+  const id = event.payload.id;
 
   const newState = {
     ...state,
     attributeList: state.attributeList.map((attribute) => {
       if (attribute.id === id) {
-        return attributeListItemState({
+        return new Attribute({
           ...attribute,
           isHighlighted: !attribute.isHighlighted,
         });
@@ -73,16 +65,16 @@ function toggleHighlighting(
 
 function changeHighlightColor(
   state: AttributeListState,
-  action: ChangeHighlightColorEvent
+  event: ChangeHighlightColorEvent
 ): AttributeListReducerResult {
-  const id = action.payload.id;
-  const color = action.payload.color;
+  const id = event.payload.id;
+  const color = event.payload.color;
 
   const newState = {
     ...state,
     attributeList: state.attributeList.map((attribute) => {
       if (id === attribute.id) {
-        return attributeListItemState({ ...attribute, color });
+        return new Attribute({ ...attribute, color });
       }
 
       return attribute;
@@ -97,9 +89,9 @@ function changeHighlightColor(
 
 function deleteItem(
   state: AttributeListState,
-  action: DeleteItemEvent
+  event: DeleteItemEvent
 ): AttributeListReducerResult {
-  const id = action.payload.id;
+  const id = event.payload.id;
 
   const newState = {
     ...state,
@@ -116,9 +108,9 @@ function deleteItem(
 
 function changeAttributeNameInputValue(
   state: AttributeListState,
-  action: ChangeAttributeNameInputValueEvent
+  event: ChangeAttributeNameInputValueEvent
 ): AttributeListReducerResult {
-  const name = action.payload.name;
+  const name = event.payload.name;
 
   const newState = {
     ...state,
@@ -134,6 +126,8 @@ function highlight(state: AttributeListState): AttributeListReducerResult {
     state.attributeNameInputValue
   );
 
+  // Отправляется нейм, возвращается целиком штука, так можно не тестировать сборку
+
   if (attributeNameResult.isErr) {
     return {
       state: {
@@ -143,78 +137,41 @@ function highlight(state: AttributeListState): AttributeListReducerResult {
       effects: [],
     };
   } else {
-    const newState: AttributeListState = {
-      ...state,
-      attributeNameInputValue: '',
-      attributeList: [
-        attributeListItemState({
-          name: attributeNameResult.value.string,
-          isHighlighted: true,
-        }),
-        ...state.attributeList,
-      ],
-    };
-
     return {
-      state: newState,
-      effects: [],
+      state,
+      effects: [
+        {
+          type: 'RandomEnrichmentEffect',
+          payload: {
+            attributeName: attributeNameResult.value,
+            knownColors: state.attributeList.map(
+              (attribute) => attribute.color
+            ),
+          },
+        },
+      ],
     };
   }
 }
 
-function addAttributeToList(
+function receiveRandomEnrichment(
   state: AttributeListState,
-  action: AddAttributeToListEvent
+  event: ReceiveRandomEnrichmentEvent
 ): AttributeListReducerResult {
-  const newState = {
-    ...state,
-    attributeList: [
-      attributeListItemState(action.payload.attribute),
-      ...state.attributeList,
-    ],
-  };
-
-  return { state: newState, effects: [] };
-}
-
-// FIXME: Это должен делать highlight
-function changeAttributeNameInputStatus(
-  state: AttributeListState,
-  action: ChangeAttributeNameInputStatusEvent
-): AttributeListReducerResult {
-  const newState = {
-    ...state,
-    attributeNameInputStatus: action.payload.status,
-  };
-
-  return { state: newState, effects: [] };
-}
-
-function setRandomsToAttribute(
-  state: AttributeListState,
-  action: SetRandomsToAttributeEvent
-): AttributeListReducerResult {
-  const { id, color } = action.payload;
-
-  const list = state.attributeList;
-  const trashValue = { ...list[0] };
-  const value = attributeListItemState({
-    ...trashValue,
-    id,
-    color,
-  });
-
-  const newList = list.map((attribute, index) =>
-    index === 0 ? value : attribute
-  );
-
-  const newState = {
-    ...state,
-    attributeList: newList,
-  };
-
+  const { id, name, color } = event.payload;
   return {
-    state: newState,
+    state: {
+      ...state,
+      attributeList: [
+        new Attribute({
+          id,
+          name,
+          color,
+          isHighlighted: true,
+        }),
+        ...state.attributeList,
+      ],
+    },
     effects: [],
   };
 }

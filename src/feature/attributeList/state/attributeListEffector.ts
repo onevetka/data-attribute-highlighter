@@ -10,18 +10,17 @@ export const attributeListEffector = (
   injection: { dispatch: Dispatch<AttributeListEvent> }
 ) => {
   switch (effect.type) {
-    case 'MakeAttributeRandomsEffect':
-      setTimeout(() => {
-        injection.dispatch({
-          type: 'SetRandomsToAttributeEvent',
-          payload: {
-            id: uuid(),
-            color: getRandomColor({
-              knownColors: effect.payload.knownColors,
-            }),
-          },
-        });
-      }, 5000);
+    case 'RandomEnrichmentEffect':
+      injection.dispatch({
+        type: 'ReceiveRandomEnrichmentEvent',
+        payload: {
+          id: uuid(),
+          name: effect.payload.attributeName,
+          color: getRandomColor({
+            knownColors: effect.payload.knownColors,
+          }),
+        },
+      });
       break;
     case 'SaveAttributeToChromeStorageEffect':
       sendChromeEffect(effect);

@@ -4,13 +4,6 @@ import {
   appError,
 } from '../../../../core/appError/domain/entity/appError';
 
-const attributeNameError: Record<'tooShortName', AppError> = {
-  tooShortName: appError({
-    code: 'ERROR_TOO_SHORT_ATTRIBUTE_NAME',
-    message: 'Name is too short',
-  }),
-};
-
 export class AttributeName {
   public readonly string: string;
 
@@ -26,3 +19,10 @@ export class AttributeName {
     this.string = string;
   }
 }
+
+const attributeNameError: Record<'tooShortName', AppError> = {
+  tooShortName: appError({
+    code: 'ERROR_TOO_SHORT_ATTRIBUTE_NAME',
+    message: 'Name is too short',
+  }),
+};

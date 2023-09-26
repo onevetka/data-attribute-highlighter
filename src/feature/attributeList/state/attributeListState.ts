@@ -1,31 +1,10 @@
-import { Color } from '../../../core/color/domain/entity/color';
 import { Status } from '../../../core/status/domain/entity/status';
-import { AttributeListEffect } from './attributeListEffect';
-
-export interface AttributeListItemState {
-  id: string;
-  name: string;
-  isHighlighted: boolean;
-  color: Color;
-}
-
-export const attributeListItemState = (
-  data: Partial<AttributeListItemState> = {}
-): AttributeListItemState => {
-  return {
-    id: '',
-    name: '',
-    isHighlighted: false,
-    color: '#000000',
-    ...data,
-  };
-};
+import { Attribute } from '../domain/entity/attribute';
 
 export interface AttributeListState {
   attributeNameInputValue: string;
-  attributeList: AttributeListItemState[];
+  attributeList: Attribute[];
   attributeNameInputStatus: Status;
-  effects: AttributeListEffect[];
 }
 
 export const attributeListState = (
@@ -34,8 +13,7 @@ export const attributeListState = (
   return {
     attributeNameInputValue: '',
     attributeNameInputStatus: Status.Default,
-    attributeList: data.attributeList?.map(attributeListItemState) || [],
-    effects: [],
+    attributeList: data.attributeList || [],
     ...data,
   };
 };
