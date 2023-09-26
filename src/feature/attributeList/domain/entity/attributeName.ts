@@ -3,6 +3,7 @@ import {
   AppError,
   appError,
 } from '../../../../core/appError/domain/entity/appError';
+import { Ok } from 'true-myth/dist/public/result';
 
 export class AttributeName {
   public readonly string: string;
@@ -26,3 +27,9 @@ const attributeNameError: Record<'tooShortName', AppError> = {
     message: 'Name is too short',
   }),
 };
+
+/**
+ * @only-for-tests
+ */
+export const attributeName = (rawString: string) =>
+  (AttributeName.parse(rawString) as Ok<AttributeName, AppError>).value;

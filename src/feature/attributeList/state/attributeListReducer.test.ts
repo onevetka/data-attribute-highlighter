@@ -4,7 +4,10 @@ import { attributeListState } from './attributeListState';
 import { attributeListReducer } from './attributeListReducer';
 import { Status } from '../../../core/status/domain/entity/status';
 import { RandomEnrichmentEffect } from './attributeListEffect';
-import { AttributeName } from '../domain/entity/attributeName';
+import { AttributeName, attributeName } from '../domain/entity/attributeName';
+import { Ok } from 'true-myth/dist/public/result';
+import { AppError } from '../../../core/appError/domain/entity/appError';
+import { Attribute } from '../domain/entity/attribute';
 
 describe('HighlightEvent (Click Highlight button)', () => {
   describe('If data is correct', () => {
@@ -54,6 +57,26 @@ describe('HighlightEvent (Click Highlight button)', () => {
     });
   });
 });
+
+describe('ReceiveRandomEnrichmentEven', () => {
+  const { state } = attributeListReducer(attributeListState(), {
+    type: 'ReceiveRandomEnrichmentEvent',
+    payload: {
+      id: uuid(),
+      name: attributeName('data-tnav'),
+      color: '#ededed',
+    },
+  });
+  test('Should put Attribute type in first place of list', () => {
+    expect(state.attributeList[0]).toBeInstanceOf(Attribute);
+  });
+
+  test('Should highlight new attribute', () => {
+    expect(state.attributeList[0].isHighlighted).toBe(true);
+  });
+});
+
+//
 
 describe('toggleHighlighting', () => {
   const id = uuid();
