@@ -1,16 +1,16 @@
-import { AttributeListEffect } from './effect';
+import { AttributeListEffect } from './attributeListEffect';
 import { v4 as uuid } from 'uuid';
 import { sendChromeEffect } from '../../../chrome/lib/sendChromeEffect';
 import { Dispatch } from '../../../core/imperativeShell/domain/entity/dispatch';
 import { AttributeListEvent } from './attributeListEvent';
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
 
-export const effector = (
+export const attributeListEffector = (
   effect: AttributeListEffect,
   injection: { dispatch: Dispatch<AttributeListEvent> }
 ) => {
   switch (effect.type) {
-    case 'makeAttributeRandoms':
+    case 'MakeAttributeRandomsEffect':
       setTimeout(() => {
         injection.dispatch({
           type: 'SetRandomsToAttributeEvent',
@@ -23,16 +23,16 @@ export const effector = (
         });
       }, 5000);
       break;
-    case 'saveAttributeToChromeStorage':
+    case 'SaveAttributeToChromeStorageEffect':
       sendChromeEffect(effect);
       break;
-    case 'changeHighlightColorInChromeStorage':
+    case 'ChangeHighlightColorInChromeStorageEffect':
       sendChromeEffect(effect);
       break;
-    case 'deleteAttributeFromChromeStorage':
+    case 'DeleteAttributeFromChromeStorageEffect':
       sendChromeEffect(effect);
       break;
-    case 'toggleAttributeInChromeStorage':
+    case 'ToggleAttributeInChromeStorageEffect':
       sendChromeEffect(effect);
       break;
   }

@@ -1,4 +1,4 @@
-import { AttributeListEffect } from '../../../../feature/attributeList/state/effect';
+import { AttributeListEffect } from '../../../../feature/attributeList/state/attributeListEffect';
 import { Controller } from '../controller';
 
 export const performer = (effect: AttributeListEffect) => {

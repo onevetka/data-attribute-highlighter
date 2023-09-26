@@ -1,13 +1,13 @@
-import { reducer } from './reducer';
+import { attributeListReducer } from './attributeListReducer';
 import { attributeListState } from './attributeListState';
 import { useReducerEffector } from '../../../core/imperativeShell/hook/useReducerEffector';
-import { effector } from './effector';
+import { attributeListEffector } from './effector';
 import { Color } from '../../../core/color/domain/entity/color';
 
 export const useViewModel = () => {
   const { state, dispatch } = useReducerEffector(
-    reducer,
-    effector,
+    attributeListReducer,
+    attributeListEffector,
     attributeListState()
   );
 

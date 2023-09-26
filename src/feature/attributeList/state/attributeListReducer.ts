@@ -13,7 +13,7 @@ import {
   attributeListItemState,
 } from './attributeListState';
 import { Status } from '../../../core/status/domain/entity/status';
-import { AttributeListEffect } from './effect';
+import { AttributeListEffect } from './attributeListEffect';
 import { AttributeName } from '../domain/entity/attributeName';
 
 export interface AttributeListReducerResult {
@@ -21,7 +21,7 @@ export interface AttributeListReducerResult {
   effects: AttributeListEffect[];
 }
 
-export const reducer = (
+export const attributeListReducer = (
   state: AttributeListState,
   action: AttributeListEvent
 ): AttributeListReducerResult => {
@@ -69,7 +69,7 @@ function toggleHighlighting(
     state: newState,
     effects: [
       {
-        type: 'toggleAttributeInChromeStorage',
+        type: 'ToggleAttributeInChromeStorageEffect',
         payload: {
           id,
         },
@@ -100,7 +100,7 @@ function changeHighlightColor(
     state: newState,
     effects: [
       {
-        type: 'changeHighlightColorInChromeStorage',
+        type: 'ChangeHighlightColorInChromeStorageEffect',
         payload: {
           id,
           color,
@@ -127,7 +127,7 @@ function deleteItem(
     state: newState,
     effects: [
       {
-        type: 'deleteAttributeFromChromeStorage',
+        type: 'DeleteAttributeFromChromeStorageEffect',
         payload: {
           id,
         },
@@ -182,7 +182,7 @@ function highlight(state: AttributeListState): AttributeListReducerResult {
       state: newState,
       effects: [
         {
-          type: 'makeAttributeRandoms',
+          type: 'MakeAttributeRandomsEffect',
           payload: {
             knownColors: newState.attributeList.map(
               (attribute) => attribute.color
@@ -249,7 +249,7 @@ function setRandomsToAttribute(
     state: newState,
     effects: [
       {
-        type: 'saveAttributeToChromeStorage',
+        type: 'SaveAttributeToChromeStorageEffect',
         payload: {
           attribute: value,
         },

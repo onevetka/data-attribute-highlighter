@@ -4,10 +4,10 @@ import {
   attributeListItemState,
   attributeListState,
 } from './attributeListState';
-import { reducer } from './reducer';
+import { attributeListReducer } from './attributeListReducer';
 import { Status } from '../../../core/status/domain/entity/status';
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
-import { MakeAttributeRandomsEffect } from './effect';
+import { MakeAttributeRandomsEffect } from './attributeListEffect';
 
 describe('toggleHighlighting', () => {
   const id = uuid();
@@ -20,7 +20,7 @@ describe('toggleHighlighting', () => {
     ],
   });
 
-  const { state, effects } = reducer(initialState, {
+  const { state, effects } = attributeListReducer(initialState, {
     type: 'ToggleHighlightingEvent',
     payload: { id },
   });
@@ -33,17 +33,17 @@ describe('toggleHighlighting', () => {
 
   test('Should send message to core to highlight element', () => {
     const effect = effects.find(
-      (e) => e.type === 'toggleAttributeInChromeStorage'
+      (e) => e.type === 'ToggleAttributeInChromeStorageEffect'
     );
 
     expect(effect).toEqual({
-      type: 'toggleAttributeInChromeStorage',
+      type: 'ToggleAttributeInChromeStorageEffect',
       payload: { id },
     });
   });
 });
 
-describe('changeHighlightColor', () => {
+describe('ChangeHighlightColorEvent', () => {
   const id = uuid();
   const color = '#EDEDED';
 
@@ -55,7 +55,7 @@ describe('changeHighlightColor', () => {
     ],
   });
 
-  const { state, effects } = reducer(initialState, {
+  const { state, effects } = attributeListReducer(initialState, {
     type: 'ChangeHighlightColorEvent',
     payload: { color, id },
   });
@@ -66,10 +66,10 @@ describe('changeHighlightColor', () => {
     ).toBe('#EDEDED');
   });
 
-  test('Action changeHighlightColor should send changeHighlightColorInChromeStorage effect', () => {
+  test('Should send message to chrome storage', () => {
     expect(effects).toEqual([
       {
-        type: 'changeHighlightColorInChromeStorage',
+        type: 'ChangeHighlightColorInChromeStorageEffect',
         payload: {
           color: '#EDEDED',
           id,
@@ -79,7 +79,7 @@ describe('changeHighlightColor', () => {
   });
 });
 
-describe('deleteItem', () => {
+describe('DeleteItemEvent', () => {
   const id = uuid();
   const initialState = attributeListState({
     attributeList: [
@@ -89,7 +89,7 @@ describe('deleteItem', () => {
     ],
   });
 
-  const { effects } = reducer(initialState, {
+  const { effects } = attributeListReducer(initialState, {
     type: 'DeleteItemEvent',
     payload: { id },
   });
@@ -97,7 +97,7 @@ describe('deleteItem', () => {
   test('Should send message to Chrome', () => {
     expect(effects).toEqual([
       {
-        type: 'deleteAttributeFromChromeStorage',
+        type: 'DeleteAttributeFromChromeStorageEffect',
         payload: { id },
       },
     ]);
@@ -107,8 +107,8 @@ describe('deleteItem', () => {
   test.skip('Should delete item from list', () => {});
 });
 
-describe('changeAttributeNameInputValue', () => {
-  const { state } = reducer(
+describe('ChangeAttributeNameInputValueEvent', () => {
+  const { state } = attributeListReducer(
     attributeListState({
       attributeNameInputStatus: Status.Error,
     }),
@@ -127,9 +127,9 @@ describe('changeAttributeNameInputValue', () => {
   });
 });
 
-describe('highlight', () => {
+describe('HighlightEvent', () => {
   describe('If correct data', () => {
-    const { state, effects } = reducer(
+    const { state, effects } = attributeListReducer(
       attributeListState({
         attributeNameInputValue: 'className',
       }),
@@ -149,7 +149,7 @@ describe('highlight', () => {
     });
 
     test('Should send make rundoms request to effector', () => {
-      expect(effects[0].type).toBe('makeAttributeRandoms');
+      expect(effects[0].type).toBe('MakeAttributeRandomsEffect');
       expect(
         (effects[0] as MakeAttributeRandomsEffect).payload.knownColors
       ).toEqual(state.attributeList.map((attribute) => attribute.color));
@@ -157,7 +157,7 @@ describe('highlight', () => {
   });
 
   test('If name is too short should show error', () => {
-    const { state } = reducer(
+    const { state } = attributeListReducer(
       attributeListState({
         attributeNameInputValue: '',
       }),
@@ -168,11 +168,11 @@ describe('highlight', () => {
   });
 });
 
-describe('addAttributeToList', () => {
+describe('AddAttributeToListEvent', () => {
   test('Sets to list attribute', () => {
     const initialState = attributeListState();
 
-    const { state } = reducer(initialState, {
+    const { state } = attributeListReducer(initialState, {
       type: 'AddAttributeToListEvent',
       payload: {
         attribute: attributeListItemState({

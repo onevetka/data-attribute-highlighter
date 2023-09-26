@@ -9,21 +9,21 @@ export type AttributeListEffect =
   | ToggleAttributeInChromeStorageEffect;
 
 export interface SaveAttributeToChromeStorageEffect {
-  type: 'saveAttributeToChromeStorage';
+  type: 'SaveAttributeToChromeStorageEffect';
   payload: {
     attribute: AttributeListItemState;
   };
 }
 
 export interface MakeAttributeRandomsEffect {
-  type: 'makeAttributeRandoms';
+  type: 'MakeAttributeRandomsEffect';
   payload: {
     knownColors: Color[];
   };
 }
 
 export interface ChangeHighlightColorInChromeStorageEffect {
-  type: 'changeHighlightColorInChromeStorage';
+  type: 'ChangeHighlightColorInChromeStorageEffect';
   payload: {
     color: Color;
     id: string;
@@ -31,14 +31,14 @@ export interface ChangeHighlightColorInChromeStorageEffect {
 }
 
 export interface DeleteAttributeFromChromeStorageEffect {
-  type: 'deleteAttributeFromChromeStorage';
+  type: 'DeleteAttributeFromChromeStorageEffect';
   payload: {
     id: string;
   };
 }
 
 export interface ToggleAttributeInChromeStorageEffect {
-  type: 'toggleAttributeInChromeStorage';
+  type: 'ToggleAttributeInChromeStorageEffect';
   payload: {
     id: string;
   };

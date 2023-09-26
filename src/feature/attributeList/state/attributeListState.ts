@@ -1,6 +1,6 @@
 import { Color } from '../../../core/color/domain/entity/color';
 import { Status } from '../../../core/status/domain/entity/status';
-import { AttributeListEffect } from './effect';
+import { AttributeListEffect } from './attributeListEffect';
 
 export interface AttributeListItemState {
   id: string;
