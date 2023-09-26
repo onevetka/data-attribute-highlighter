@@ -67,14 +67,7 @@ function toggleHighlighting(
 
   return {
     state: newState,
-    effects: [
-      {
-        type: 'ToggleAttributeInChromeStorageEffect',
-        payload: {
-          id,
-        },
-      },
-    ],
+    effects: [],
   };
 }
 
@@ -98,15 +91,7 @@ function changeHighlightColor(
 
   return {
     state: newState,
-    effects: [
-      {
-        type: 'ChangeHighlightColorInChromeStorageEffect',
-        payload: {
-          id,
-          color,
-        },
-      },
-    ],
+    effects: [],
   };
 }
 
@@ -125,14 +110,7 @@ function deleteItem(
 
   return {
     state: newState,
-    effects: [
-      {
-        type: 'DeleteAttributeFromChromeStorageEffect',
-        payload: {
-          id,
-        },
-      },
-    ],
+    effects: [],
   };
 }
 
@@ -151,7 +129,6 @@ function changeAttributeNameInputValue(
   return { state: newState, effects: [] };
 }
 
-// FIXME
 function highlight(state: AttributeListState): AttributeListReducerResult {
   const attributeNameResult = AttributeName.parse(
     state.attributeNameInputValue
@@ -180,16 +157,7 @@ function highlight(state: AttributeListState): AttributeListReducerResult {
 
     return {
       state: newState,
-      effects: [
-        {
-          type: 'MakeAttributeRandomsEffect',
-          payload: {
-            knownColors: newState.attributeList.map(
-              (attribute) => attribute.color
-            ),
-          },
-        },
-      ],
+      effects: [],
     };
   }
 }
@@ -247,13 +215,6 @@ function setRandomsToAttribute(
 
   return {
     state: newState,
-    effects: [
-      {
-        type: 'SaveAttributeToChromeStorageEffect',
-        payload: {
-          attribute: value,
-        },
-      },
-    ],
+    effects: [],
   };
 }
