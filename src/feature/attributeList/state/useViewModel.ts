@@ -36,30 +36,30 @@ export const useViewModel = () => {
 
   const handleChangeAttributeNameInputValue = (name: string) =>
     dispatch({
-      type: 'changeAttributeNameInputValue',
+      type: 'ChangeAttributeNameInputValueEvent',
       payload: { name },
     });
 
   const handleHighlight = () =>
     dispatch({
-      type: 'highlight',
+      type: 'HighlightEvent',
     });
 
   const handleToggleHighlighting = (id: string) =>
     dispatch({
-      type: 'toggleHighlighting',
+      type: 'ToggleHighlightingEvent',
       payload: { id },
     });
 
   const handlechangeHighlightColor = (id: string, color: Color) =>
     dispatch({
-      type: 'changeHighlightColor',
+      type: 'ChangeHighlightColorEvent',
       payload: { id, color },
     });
 
   const handleDeleteItem = (id: string) =>
     dispatch({
-      type: 'deleteItem',
+      type: 'DeleteItemEvent',
       payload: { id },
     });
 

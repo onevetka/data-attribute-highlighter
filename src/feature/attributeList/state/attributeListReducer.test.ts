@@ -21,7 +21,7 @@ describe('toggleHighlighting', () => {
   });
 
   const { state, effects } = reducer(initialState, {
-    type: 'toggleHighlighting',
+    type: 'ToggleHighlightingEvent',
     payload: { id },
   });
 
@@ -56,7 +56,7 @@ describe('changeHighlightColor', () => {
   });
 
   const { state, effects } = reducer(initialState, {
-    type: 'changeHighlightColor',
+    type: 'ChangeHighlightColorEvent',
     payload: { color, id },
   });
 
@@ -90,7 +90,7 @@ describe('deleteItem', () => {
   });
 
   const { effects } = reducer(initialState, {
-    type: 'deleteItem',
+    type: 'DeleteItemEvent',
     payload: { id },
   });
 
@@ -113,7 +113,7 @@ describe('changeAttributeNameInputValue', () => {
       attributeNameInputStatus: Status.Error,
     }),
     {
-      type: 'changeAttributeNameInputValue',
+      type: 'ChangeAttributeNameInputValueEvent',
       payload: { name: 'className' },
     }
   );
@@ -134,7 +134,7 @@ describe('highlight', () => {
         attributeNameInputValue: 'className',
       }),
       {
-        type: 'highlight',
+        type: 'HighlightEvent',
       }
     );
 
@@ -161,7 +161,7 @@ describe('highlight', () => {
       attributeListState({
         attributeNameInputValue: '',
       }),
-      { type: 'highlight' }
+      { type: 'HighlightEvent' }
     );
 
     expect(state.attributeNameInputStatus).toBe(Status.Error);
@@ -173,7 +173,7 @@ describe('addAttributeToList', () => {
     const initialState = attributeListState();
 
     const { state } = reducer(initialState, {
-      type: 'addAttributeToList',
+      type: 'AddAttributeToListEvent',
       payload: {
         attribute: attributeListItemState({
           name: 'className',

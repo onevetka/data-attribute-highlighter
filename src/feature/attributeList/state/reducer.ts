@@ -1,13 +1,13 @@
 import {
-  AddAttributeToListAction,
-  AttributeListAction,
-  ChangeAttributeNameInputStatusAction,
-  ChangeAttributeNameInputValueAction,
-  ChangeHighlightColorAction,
-  DeleteItemAction,
-  SetRandomsToAttributeAction,
-  ToggleHighlightingAction,
-} from './action';
+  AddAttributeToListEvent,
+  AttributeListEvent,
+  ChangeAttributeNameInputStatusEvent,
+  ChangeAttributeNameInputValueEvent,
+  ChangeHighlightColorEvent,
+  DeleteItemEvent,
+  SetRandomsToAttributeEvent,
+  ToggleHighlightingEvent,
+} from './attributeListEvent';
 import {
   AttributeListState,
   attributeListItemState,
@@ -23,31 +23,31 @@ export interface AttributeListReducerResult {
 
 export const reducer = (
   state: AttributeListState,
-  action: AttributeListAction
+  action: AttributeListEvent
 ): AttributeListReducerResult => {
   switch (action.type) {
-    case 'toggleHighlighting':
+    case 'ToggleHighlightingEvent':
       return toggleHighlighting(state, action);
-    case 'changeHighlightColor':
+    case 'ChangeHighlightColorEvent':
       return changeHighlightColor(state, action);
-    case 'deleteItem':
+    case 'DeleteItemEvent':
       return deleteItem(state, action);
-    case 'changeAttributeNameInputValue':
+    case 'ChangeAttributeNameInputValueEvent':
       return changeAttributeNameInputValue(state, action);
-    case 'highlight':
+    case 'HighlightEvent':
       return highlight(state);
-    case 'addAttributeToList':
+    case 'AddAttributeToListEvent':
       return addAttributeToList(state, action);
-    case 'setRandomsToAttribute':
+    case 'SetRandomsToAttributeEvent':
       return setRandomsToAttribute(state, action);
-    case 'changeAttributeNameInputStatus':
+    case 'ChangeAttributeNameInputStatusEvent':
       return changeAttributeNameInputStatus(state, action);
   }
 };
 
 function toggleHighlighting(
   state: AttributeListState,
-  action: ToggleHighlightingAction
+  action: ToggleHighlightingEvent
 ): AttributeListReducerResult {
   const id = action.payload.id;
 
@@ -80,7 +80,7 @@ function toggleHighlighting(
 
 function changeHighlightColor(
   state: AttributeListState,
-  action: ChangeHighlightColorAction
+  action: ChangeHighlightColorEvent
 ): AttributeListReducerResult {
   const id = action.payload.id;
   const color = action.payload.color;
@@ -112,7 +112,7 @@ function changeHighlightColor(
 
 function deleteItem(
   state: AttributeListState,
-  action: DeleteItemAction
+  action: DeleteItemEvent
 ): AttributeListReducerResult {
   const id = action.payload.id;
 
@@ -138,7 +138,7 @@ function deleteItem(
 
 function changeAttributeNameInputValue(
   state: AttributeListState,
-  action: ChangeAttributeNameInputValueAction
+  action: ChangeAttributeNameInputValueEvent
 ): AttributeListReducerResult {
   const name = action.payload.name;
 
@@ -151,6 +151,7 @@ function changeAttributeNameInputValue(
   return { state: newState, effects: [] };
 }
 
+// FIXME
 function highlight(state: AttributeListState): AttributeListReducerResult {
   const attributeNameResult = AttributeName.parse(
     state.attributeNameInputValue
@@ -195,7 +196,7 @@ function highlight(state: AttributeListState): AttributeListReducerResult {
 
 function addAttributeToList(
   state: AttributeListState,
-  action: AddAttributeToListAction
+  action: AddAttributeToListEvent
 ): AttributeListReducerResult {
   const newState = {
     ...state,
@@ -208,9 +209,10 @@ function addAttributeToList(
   return { state: newState, effects: [] };
 }
 
+// FIXME: Это должен делать highlight
 function changeAttributeNameInputStatus(
   state: AttributeListState,
-  action: ChangeAttributeNameInputStatusAction
+  action: ChangeAttributeNameInputStatusEvent
 ): AttributeListReducerResult {
   const newState = {
     ...state,
@@ -222,7 +224,7 @@ function changeAttributeNameInputStatus(
 
 function setRandomsToAttribute(
   state: AttributeListState,
-  action: SetRandomsToAttributeAction
+  action: SetRandomsToAttributeEvent
 ): AttributeListReducerResult {
   const { id, color } = action.payload;
 
