@@ -1,7 +1,7 @@
 import { attributeListReducer } from './attributeListReducer';
 import { attributeListState } from './attributeListState';
 import { useReducerEffector } from '../../../core/imperativeShell/hook/useReducerEffector';
-import { attributeListEffector } from './effector';
+import { attributeListEffector } from './attributeListEffector';
 import { Color } from '../../../core/color/domain/entity/color';
 
 export const useViewModel = () => {
