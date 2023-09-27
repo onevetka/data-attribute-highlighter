@@ -11,6 +11,7 @@ export const useViewModel = () => {
     attributeListState()
   );
 
+  // TODO: Запрос LoadUserAttributesEvent;
   // useEffect(() => {
   //   chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
   //     const highlightedAttributes = data[HIGHLIGHTERS_FIELD] || [];
