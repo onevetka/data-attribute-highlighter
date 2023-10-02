@@ -22,6 +22,11 @@ export const attributeListEffector = (
         },
       });
       break;
+    case 'SaveAttributeToStorageEffect':
+    case 'RemoveAttributeFromStorageEffect':
+      sendChromeEffect(effect);
+      break;
+    //
     case 'SaveAttributeToChromeStorageEffect':
       sendChromeEffect(effect);
       break;
