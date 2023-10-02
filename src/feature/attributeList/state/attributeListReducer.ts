@@ -102,7 +102,12 @@ function deleteItem(
 
   return {
     state: newState,
-    effects: [],
+    effects: [
+      {
+        type: 'RemoveAttributeFromStorageEffect',
+        payload: { id },
+      },
+    ],
   };
 }
 
@@ -162,20 +167,27 @@ function receiveRandomEnrichment(
   event: ReceiveRandomEnrichmentEvent
 ): AttributeListReducerResult {
   const { id, name, color } = event.payload;
+
+  const attribute = new Attribute({
+    id,
+    name,
+    color,
+    isHighlighted: true,
+  });
+
   return {
     state: {
       ...state,
       attributeNameInputValue: '',
-      attributeList: [
-        new Attribute({
-          id,
-          name,
-          color,
-          isHighlighted: true,
-        }),
-        ...state.attributeList,
-      ],
+      attributeList: [attribute, ...state.attributeList],
     },
-    effects: [],
+    effects: [
+      {
+        type: 'SaveAttributeToStorageEffect',
+        payload: {
+          attribute,
+        },
+      },
+    ],
   };
 }

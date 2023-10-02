@@ -5,7 +5,11 @@ import {
   attributeListReducer,
 } from './attributeListReducer';
 import { Status } from '../../../core/status/domain/entity/status';
-import { RandomEnrichmentEffect } from './attributeListEffect';
+import {
+  RandomEnrichmentEffect,
+  RemoveAttributeFromStorageEffect,
+  SaveAttributeToStorageEffect,
+} from './attributeListEffect';
 import { AttributeName, attributeName } from '../domain/entity/attributeName';
 import { Attribute } from '../domain/entity/attribute';
 
@@ -75,7 +79,7 @@ describe('HighlightEvent (Click Highlight button)', () => {
 });
 
 describe('ReceiveRandomEnrichmentEven', () => {
-  const { state } = attributeListReducer(
+  const { state, effects } = attributeListReducer(
     attributeListState({
       attributeNameInputValue: 'data-tnav',
     }),
@@ -100,7 +104,18 @@ describe('ReceiveRandomEnrichmentEven', () => {
     expect(state.attributeNameInputValue).toBe('');
   });
 
-  test.skip('Should send effect to core', () => {});
+  test('Should save new attribute to store', () => {
+    const saveToStorageEffect = effects.find(
+      (effect) => effect.type === 'SaveAttributeToStorageEffect'
+    ) as SaveAttributeToStorageEffect;
+
+    expect(saveToStorageEffect.type).toBe('SaveAttributeToStorageEffect');
+    expect(saveToStorageEffect.payload.attribute).toEqual(
+      state.attributeList[0]
+    );
+  });
+
+  test.skip('Should highlight in core', () => {});
 });
 
 describe('DeleteItemEvent (Click on delete button)', () => {
@@ -126,7 +141,10 @@ describe('DeleteItemEvent (Click on delete button)', () => {
     effects: [],
   };
 
-  const { state } = [receiveRandomEnrichmentEvent, deleteItemEvent].reduce(
+  const { state, effects } = [
+    receiveRandomEnrichmentEvent,
+    deleteItemEvent,
+  ].reduce(
     (accum, item) => attributeListReducer(accum.state, item),
     reducerInit
   );
@@ -134,6 +152,18 @@ describe('DeleteItemEvent (Click on delete button)', () => {
   test('Should delete item from list', () => {
     expect(state.attributeList).toEqual([]);
   });
+
+  test('Should delete attribute from storage', () => {
+    const removeFromStorageEffect = effects.find(
+      (effect) => effect.type === 'RemoveAttributeFromStorageEffect'
+    ) as RemoveAttributeFromStorageEffect;
+
+    expect(removeFromStorageEffect.type).toBe(
+      'RemoveAttributeFromStorageEffect'
+    );
+    expect(removeFromStorageEffect.payload.id).toBe(id);
+  });
+
   test.skip('Should send effect to core', () => {});
 });
 

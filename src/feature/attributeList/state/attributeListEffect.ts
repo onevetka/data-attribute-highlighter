@@ -4,6 +4,8 @@ import { AttributeName } from '../domain/entity/attributeName';
 
 export type AttributeListEffect =
   | RandomEnrichmentEffect
+  | SaveAttributeToStorageEffect
+  | RemoveAttributeFromStorageEffect
   | SaveAttributeToChromeStorageEffect
   | ChangeHighlightColorInChromeStorageEffect
   | DeleteAttributeFromChromeStorageEffect
@@ -16,6 +18,22 @@ export interface RandomEnrichmentEffect {
     knownColors: Color[];
   };
 }
+
+export interface SaveAttributeToStorageEffect {
+  type: 'SaveAttributeToStorageEffect';
+  payload: {
+    attribute: Attribute;
+  };
+}
+
+export interface RemoveAttributeFromStorageEffect {
+  type: 'RemoveAttributeFromStorageEffect';
+  payload: {
+    id: string;
+  };
+}
+
+//
 
 export interface SaveAttributeToChromeStorageEffect {
   type: 'SaveAttributeToChromeStorageEffect';
