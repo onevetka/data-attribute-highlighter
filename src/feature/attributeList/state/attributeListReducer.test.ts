@@ -112,8 +112,6 @@ describe('ReceiveRandomEnrichmentEven', () => {
     expect(saveToStorageEffect.type).toBe('SaveChangesToStorageEffect');
     expect(saveToStorageEffect.payload.changes).toEqual(state.attributeList);
   });
-
-  test.skip('Should highlight in core', () => {});
 });
 
 describe('DeleteItemEvent (Click on delete button)', () => {
@@ -159,8 +157,6 @@ describe('DeleteItemEvent (Click on delete button)', () => {
     expect(removeFromStorageEffect.type).toBe('SaveChangesToStorageEffect');
     expect(removeFromStorageEffect.payload.changes).toBe(state.attributeList);
   });
-
-  test.skip('Should send effect to core', () => {});
 });
 
 describe('ToggleHighlightingEvent (Click on eye)', () => {
