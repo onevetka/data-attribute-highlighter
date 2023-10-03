@@ -1,4 +1,5 @@
 import { Color } from '../../../core/color/domain/entity/color';
+import { Attribute } from '../domain/entity/attribute';
 import { AttributeName } from '../domain/entity/attributeName';
 
 export type AttributeListEvent =
@@ -7,7 +8,9 @@ export type AttributeListEvent =
   | DeleteItemEvent
   | ChangeAttributeNameInputValueEvent
   | HighlightEvent
-  | ReceiveRandomEnrichmentEvent;
+  | ReceiveRandomEnrichmentEvent
+  | LoadAttributeListEvent
+  | ReceiveAttributeListEvent;
 
 export interface ToggleHighlightingEvent {
   type: 'ToggleHighlightingEvent';
@@ -48,5 +51,16 @@ export interface ReceiveRandomEnrichmentEvent {
     name: AttributeName;
     color: Color;
     id: string;
+  };
+}
+
+export interface LoadAttributeListEvent {
+  type: 'LoadAttributeListEvent';
+}
+
+export interface ReceiveAttributeListEvent {
+  type: 'ReceiveAttributeListEvent';
+  payload: {
+    attributeList: Attribute[];
   };
 }

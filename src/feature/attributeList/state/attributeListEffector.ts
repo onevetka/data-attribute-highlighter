@@ -4,6 +4,7 @@ import { sendChromeEffect } from '../../../chrome/lib/sendChromeEffect';
 import { Dispatch } from '../../../core/imperativeShell/domain/entity/dispatch';
 import { AttributeListEvent } from './attributeListEvent';
 import { getRandomColor } from '../../../shared/color/domain/lib/getRandomColor';
+import { HIGHLIGHTERS_FIELD } from '../../../constants/store';
 
 export const attributeListEffector = (
   effect: AttributeListEffect,
@@ -22,8 +23,19 @@ export const attributeListEffector = (
         },
       });
       break;
-    case 'SaveAttributeToStorageEffect':
-    case 'RemoveAttributeFromStorageEffect':
+    case 'LoadAttributeListFromStorageEffect':
+      chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
+        const attributeList = data[HIGHLIGHTERS_FIELD] || [];
+
+        injection.dispatch({
+          type: 'ReceiveAttributeListEvent',
+          payload: {
+            attributeList,
+          },
+        });
+      });
+      break;
+    case 'SaveChangesToStorageEffect':
       sendChromeEffect(effect);
       break;
     //

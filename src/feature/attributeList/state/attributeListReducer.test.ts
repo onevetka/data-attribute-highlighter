@@ -6,9 +6,9 @@ import {
 } from './attributeListReducer';
 import { Status } from '../../../core/status/domain/entity/status';
 import {
+  LoadAttributeListFromStorageEffect,
   RandomEnrichmentEffect,
-  RemoveAttributeFromStorageEffect,
-  SaveAttributeToStorageEffect,
+  SaveChangesToStorageEffect,
 } from './attributeListEffect';
 import { AttributeName, attributeName } from '../domain/entity/attributeName';
 import { Attribute } from '../domain/entity/attribute';
@@ -106,13 +106,11 @@ describe('ReceiveRandomEnrichmentEven', () => {
 
   test('Should save new attribute to store', () => {
     const saveToStorageEffect = effects.find(
-      (effect) => effect.type === 'SaveAttributeToStorageEffect'
-    ) as SaveAttributeToStorageEffect;
+      (effect) => effect.type === 'SaveChangesToStorageEffect'
+    ) as SaveChangesToStorageEffect;
 
-    expect(saveToStorageEffect.type).toBe('SaveAttributeToStorageEffect');
-    expect(saveToStorageEffect.payload.attribute).toEqual(
-      state.attributeList[0]
-    );
+    expect(saveToStorageEffect.type).toBe('SaveChangesToStorageEffect');
+    expect(saveToStorageEffect.payload.changes).toEqual(state.attributeList);
   });
 
   test.skip('Should highlight in core', () => {});
@@ -155,13 +153,11 @@ describe('DeleteItemEvent (Click on delete button)', () => {
 
   test('Should delete attribute from storage', () => {
     const removeFromStorageEffect = effects.find(
-      (effect) => effect.type === 'RemoveAttributeFromStorageEffect'
-    ) as RemoveAttributeFromStorageEffect;
+      (effect) => effect.type === 'SaveChangesToStorageEffect'
+    ) as SaveChangesToStorageEffect;
 
-    expect(removeFromStorageEffect.type).toBe(
-      'RemoveAttributeFromStorageEffect'
-    );
-    expect(removeFromStorageEffect.payload.id).toBe(id);
+    expect(removeFromStorageEffect.type).toBe('SaveChangesToStorageEffect');
+    expect(removeFromStorageEffect.payload.changes).toBe(state.attributeList);
   });
 
   test.skip('Should send effect to core', () => {});
@@ -258,4 +254,46 @@ describe('ChangeHighlightColorEvent', () => {
   });
 
   test.skip('Should send effect to core', () => {});
+});
+
+describe('LoadAttributeListEvent (Initial attribute loading)', () => {
+  const { effects } = attributeListReducer(attributeListState(), {
+    type: 'LoadAttributeListEvent',
+  });
+
+  test('Should ask storage saved attributes', () => {
+    const askStorageEffect = effects.find(
+      (effect) => effect.type === 'LoadAttributeListFromStorageEffect'
+    ) as LoadAttributeListFromStorageEffect;
+
+    expect(askStorageEffect.type).toBe('LoadAttributeListFromStorageEffect');
+  });
+});
+
+describe('ReceiveAttributeListEvent (Receiving from storage initial state)', () => {
+  const attributeList = [
+    new Attribute({
+      id: '123123',
+      name: attributeName('data-tnav'),
+      isHighlighted: true,
+      color: '#ededed',
+    }),
+    new Attribute({
+      id: '009992',
+      name: attributeName('data-qa'),
+      isHighlighted: true,
+      color: '#111111',
+    }),
+  ];
+
+  const { state } = attributeListReducer(attributeListState(), {
+    type: 'ReceiveAttributeListEvent',
+    payload: {
+      attributeList,
+    },
+  });
+
+  test('Should show received attribute list', () => {
+    expect(state.attributeList).toEqual(attributeList);
+  });
 });

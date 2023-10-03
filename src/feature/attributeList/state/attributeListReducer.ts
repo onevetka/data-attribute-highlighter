@@ -3,6 +3,7 @@ import {
   ChangeAttributeNameInputValueEvent,
   ChangeHighlightColorEvent,
   DeleteItemEvent,
+  ReceiveAttributeListEvent,
   ReceiveRandomEnrichmentEvent,
   ToggleHighlightingEvent,
 } from './attributeListEvent';
@@ -34,6 +35,10 @@ export const attributeListReducer = (
       return changeHighlightColor(state, event);
     case 'ChangeAttributeNameInputValueEvent':
       return changeAttributeNameInputValue(state, event);
+    case 'LoadAttributeListEvent':
+      return loadAttributeList(state);
+    case 'ReceiveAttributeListEvent':
+      return receiveAttributeList(state, event);
   }
 };
 
@@ -104,8 +109,8 @@ function deleteItem(
     state: newState,
     effects: [
       {
-        type: 'RemoveAttributeFromStorageEffect',
-        payload: { id },
+        type: 'SaveChangesToStorageEffect',
+        payload: { changes: newState.attributeList },
       },
     ],
   };
@@ -130,8 +135,6 @@ function highlight(state: AttributeListState): AttributeListReducerResult {
   const attributeNameResult = AttributeName.parse(
     state.attributeNameInputValue
   );
-
-  // Отправляется нейм, возвращается целиком штука, так можно не тестировать сборку
 
   if (attributeNameResult.isErr) {
     return {
@@ -168,26 +171,57 @@ function receiveRandomEnrichment(
 ): AttributeListReducerResult {
   const { id, name, color } = event.payload;
 
-  const attribute = new Attribute({
-    id,
-    name,
-    color,
-    isHighlighted: true,
-  });
+  const attributeList = [
+    new Attribute({
+      id,
+      name,
+      color,
+      isHighlighted: true,
+    }),
+    ...state.attributeList,
+  ];
 
   return {
     state: {
       ...state,
       attributeNameInputValue: '',
-      attributeList: [attribute, ...state.attributeList],
+      attributeList,
     },
     effects: [
       {
-        type: 'SaveAttributeToStorageEffect',
+        type: 'SaveChangesToStorageEffect',
         payload: {
-          attribute,
+          changes: attributeList,
         },
       },
     ],
+  };
+}
+
+function loadAttributeList(
+  state: AttributeListState
+): AttributeListReducerResult {
+  return {
+    state,
+    effects: [
+      {
+        type: 'LoadAttributeListFromStorageEffect',
+      },
+    ],
+  };
+}
+
+function receiveAttributeList(
+  state: AttributeListState,
+  event: ReceiveAttributeListEvent
+): AttributeListReducerResult {
+  const { attributeList } = event.payload;
+
+  return {
+    state: {
+      ...state,
+      attributeList,
+    },
+    effects: [],
   };
 }

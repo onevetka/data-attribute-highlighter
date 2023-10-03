@@ -3,6 +3,7 @@ import { attributeListState } from './attributeListState';
 import { useReducerEffector } from '../../../core/imperativeShell/hook/useReducerEffector';
 import { attributeListEffector } from './attributeListEffector';
 import { Color } from '../../../core/color/domain/entity/color';
+import { useEffect } from 'react';
 
 export const useViewModel = () => {
   const { state, dispatch } = useReducerEffector(
@@ -11,29 +12,11 @@ export const useViewModel = () => {
     attributeListState()
   );
 
-  // TODO: Запрос LoadUserAttributesEvent;
-  // useEffect(() => {
-  //   chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-  //     const highlightedAttributes = data[HIGHLIGHTERS_FIELD] || [];
-
-  //     const list = Object.keys(highlightedAttributes).map((id) => {
-  //       const { attributeName, color, isVisible } = highlightedAttributes[id];
-
-  //       return {
-  //         id,
-  //         color,
-  //         name: attributeName,
-  //         isHighlighted: isVisible,
-  //       };
-  //     });
-
-  //     setViewModelState(
-  //       attributeListState({
-  //         attributeList: list,
-  //       })
-  //     );
-  //   });
-  // }, []);
+  useEffect(() => {
+    dispatch({
+      type: 'LoadAttributeListEvent',
+    });
+  }, []);
 
   const handleChangeAttributeNameInputValue = (name: string) =>
     dispatch({
