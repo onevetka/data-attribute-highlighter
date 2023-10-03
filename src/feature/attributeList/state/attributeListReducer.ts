@@ -64,7 +64,14 @@ function toggleHighlighting(
 
   return {
     state: newState,
-    effects: [],
+    effects: [
+      {
+        type: 'SaveChangesToStorageEffect',
+        payload: {
+          changes: newState.attributeList,
+        },
+      },
+    ],
   };
 }
 
@@ -88,7 +95,14 @@ function changeHighlightColor(
 
   return {
     state: newState,
-    effects: [],
+    effects: [
+      {
+        type: 'SaveChangesToStorageEffect',
+        payload: {
+          changes: newState.attributeList,
+        },
+      },
+    ],
   };
 }
 

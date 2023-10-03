@@ -184,8 +184,8 @@ describe('ToggleHighlightingEvent (Click on eye)', () => {
     effects: [],
   };
 
-  test('Should disables attribute', () => {
-    const { state } = [
+  describe('Disable', () => {
+    const { state, effects } = [
       receiveRandomEnrichmentEvent,
       toggleHighlightingEvent,
     ].reduce(
@@ -195,11 +195,22 @@ describe('ToggleHighlightingEvent (Click on eye)', () => {
 
     const highlightedAttribute = state.attributeList.find((a) => a.id === id)!;
 
-    expect(highlightedAttribute.isHighlighted).toBe(false);
+    test('Should disable attribute', () => {
+      expect(highlightedAttribute.isHighlighted).toBe(false);
+    });
+
+    test('Should save changes to storage', () => {
+      const saveToStorageEffect = effects.find(
+        (effect) => effect.type === 'SaveChangesToStorageEffect'
+      ) as SaveChangesToStorageEffect;
+
+      expect(saveToStorageEffect.type).toBe('SaveChangesToStorageEffect');
+      expect(saveToStorageEffect.payload.changes).toBe(state.attributeList);
+    });
   });
 
-  test('Should enables attribute', () => {
-    const { state } = [
+  describe('Enable', () => {
+    const { state, effects } = [
       receiveRandomEnrichmentEvent,
       toggleHighlightingEvent,
       toggleHighlightingEvent,
@@ -209,11 +220,19 @@ describe('ToggleHighlightingEvent (Click on eye)', () => {
     );
 
     const highlightedAttribute = state.attributeList.find((a) => a.id === id)!;
+    test('Should enable attribute', () => {
+      expect(highlightedAttribute.isHighlighted).toBe(true);
+    });
 
-    expect(highlightedAttribute.isHighlighted).toBe(true);
+    test('Should save changes to storage', () => {
+      const saveToStorageEffect = effects.find(
+        (effect) => effect.type === 'SaveChangesToStorageEffect'
+      ) as SaveChangesToStorageEffect;
+
+      expect(saveToStorageEffect.type).toBe('SaveChangesToStorageEffect');
+      expect(saveToStorageEffect.payload.changes).toBe(state.attributeList);
+    });
   });
-
-  test.skip('Should send effect to core', () => {});
 });
 
 describe('ChangeHighlightColorEvent', () => {
@@ -239,7 +258,7 @@ describe('ChangeHighlightColorEvent', () => {
     effects: [],
   };
 
-  const { state } = [
+  const { state, effects } = [
     receiveRandomEnrichmentEvent,
     changeHighlightColorEvent,
   ].reduce(
@@ -253,7 +272,14 @@ describe('ChangeHighlightColorEvent', () => {
     ).toBe('#ededed');
   });
 
-  test.skip('Should send effect to core', () => {});
+  test('Should save changes to storage', () => {
+    const saveToStorageEffect = effects.find(
+      (effect) => effect.type === 'SaveChangesToStorageEffect'
+    ) as SaveChangesToStorageEffect;
+
+    expect(saveToStorageEffect.type).toBe('SaveChangesToStorageEffect');
+    expect(saveToStorageEffect.payload.changes).toBe(state.attributeList);
+  });
 });
 
 describe('LoadAttributeListEvent (Initial attribute loading)', () => {

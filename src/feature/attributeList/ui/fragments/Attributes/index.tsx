@@ -40,6 +40,7 @@ export const Attributes: React.FC = () => {
         </Button>
       </form>
       <div className={styles.list}>
+        {/* View state here */}
         {viewState.attributeList.length > 0 ? (
           viewState.attributeList.map((attribute, index) => (
             <CurrentAttributeListItem
