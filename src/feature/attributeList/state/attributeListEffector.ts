@@ -24,31 +24,16 @@ export const attributeListEffector = (
       });
       break;
     case 'LoadAttributeListFromStorageEffect':
-      chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) => {
-        const attributeList = data[HIGHLIGHTERS_FIELD] || [];
-
+      chrome.storage.local.get(HIGHLIGHTERS_FIELD, (data) =>
         injection.dispatch({
           type: 'ReceiveAttributeListEvent',
           payload: {
-            attributeList,
+            attributeList: data[HIGHLIGHTERS_FIELD] || [],
           },
-        });
-      });
+        })
+      );
       break;
     case 'SaveChangesToStorageEffect':
-      sendChromeEffect(effect);
-      break;
-    //
-    case 'SaveAttributeToChromeStorageEffect':
-      sendChromeEffect(effect);
-      break;
-    case 'ChangeHighlightColorInChromeStorageEffect':
-      sendChromeEffect(effect);
-      break;
-    case 'DeleteAttributeFromChromeStorageEffect':
-      sendChromeEffect(effect);
-      break;
-    case 'ToggleAttributeInChromeStorageEffect':
       sendChromeEffect(effect);
       break;
   }
