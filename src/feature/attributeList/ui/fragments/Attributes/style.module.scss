@@ -6,12 +6,7 @@
   margin: 0 24px;
   display: flex;
   flex-direction: column;
-}
-
-.list-item {
-  &:not(:first-child) {
-    padding-top: 16px;
-  }
+  gap: 16px;
 }
 
 .form {

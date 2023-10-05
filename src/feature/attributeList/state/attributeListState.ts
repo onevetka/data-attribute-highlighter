@@ -3,8 +3,9 @@ import { Attribute } from '../domain/entity/attribute';
 
 export interface AttributeListState {
   attributeNameInputValue: string;
-  attributeList: Attribute[];
   attributeNameInputStatus: Status;
+  attributeList: Attribute[];
+  status: 'loading' | 'idle';
 }
 
 export const attributeListState = (
@@ -14,6 +15,7 @@ export const attributeListState = (
     attributeNameInputValue: '',
     attributeNameInputStatus: Status.Default,
     attributeList: [],
+    status: 'loading',
     ...data,
   };
 };

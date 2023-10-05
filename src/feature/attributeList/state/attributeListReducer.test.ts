@@ -279,7 +279,7 @@ describe('ChangeHighlightColorEvent', () => {
 });
 
 describe('LoadAttributeListEvent (Initial attribute loading)', () => {
-  const { effects } = attributeListReducer(attributeListState(), {
+  const { state, effects } = attributeListReducer(attributeListState(), {
     type: 'LoadAttributeListEvent',
   });
 
@@ -289,6 +289,9 @@ describe('LoadAttributeListEvent (Initial attribute loading)', () => {
     ) as LoadAttributeListFromStorageEffect;
 
     expect(askStorageEffect.type).toBe('LoadAttributeListFromStorageEffect');
+  });
+  test('Should set loading status', () => {
+    expect(state.status).toBe('loading');
   });
 });
 
@@ -317,5 +320,8 @@ describe('ReceiveAttributeListEvent (Receiving from storage initial state)', () 
 
   test('Should show received attribute list', () => {
     expect(state.attributeList).toEqual(attributeList);
+  });
+  test('Should set idle status', () => {
+    expect(state.status).toBe('idle');
   });
 });

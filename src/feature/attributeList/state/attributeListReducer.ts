@@ -216,7 +216,10 @@ function loadAttributeList(
   state: AttributeListState
 ): AttributeListReducerResult {
   return {
-    state,
+    state: {
+      ...state,
+      status: 'loading',
+    },
     effects: [
       {
         type: 'LoadAttributeListFromStorageEffect',
@@ -235,6 +238,7 @@ function receiveAttributeList(
     state: {
       ...state,
       attributeList,
+      status: 'idle',
     },
     effects: [],
   };

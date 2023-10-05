@@ -4,6 +4,7 @@ import { useReducerEffector } from '../../../core/imperativeShell/hook/useReduce
 import { attributeListEffector } from './attributeListEffector';
 import { Color } from '../../../core/color/domain/entity/color';
 import { useEffect } from 'react';
+import { AttributeListViewState } from './attributeListViewState';
 
 export const useViewModel = () => {
   const { state, dispatch } = useReducerEffector(
@@ -18,7 +19,7 @@ export const useViewModel = () => {
     });
   }, []);
 
-  const handleChangeAttributeNameInputValue = (name: string) =>
+  const handleChangeAttributeName = (name: string) =>
     dispatch({
       type: 'ChangeAttributeNameInputValueEvent',
       payload: { name },
@@ -48,8 +49,8 @@ export const useViewModel = () => {
     });
 
   return {
-    viewState: state,
-    handleChangeAttributeNameInputValue,
+    viewState: new AttributeListViewState(state),
+    handleChangeAttributeName,
     handleHighlight,
     handleToggleHighlighting,
     handlechangeHighlightColor,

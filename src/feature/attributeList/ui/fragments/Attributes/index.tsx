@@ -3,7 +3,6 @@ import Input from '../../../../../components/Input';
 import Button from '../../../../../components/Button';
 import ListSkeleton from '../../components/ListSkeleton';
 import CurrentAttributeListItem from '../../components/CurrentAttributeListItem';
-import { Color } from '../../../../../core/color/domain/entity/color';
 import { useViewModel } from '../../../state/useViewModel';
 
 import styles from './style.module.scss';
@@ -11,12 +10,36 @@ import styles from './style.module.scss';
 export const Attributes: React.FC = () => {
   const {
     viewState,
-    handleChangeAttributeNameInputValue,
+    handleChangeAttributeName,
     handleHighlight,
+    handleDeleteItem,
     handleToggleHighlighting,
     handlechangeHighlightColor,
-    handleDeleteItem,
   } = useViewModel();
+
+  const renderList = () => {
+    if (viewState.list === 'empty') {
+      return <ListSkeleton />;
+    }
+
+    if (viewState.list === 'loading') {
+      return <ListSkeleton />;
+    }
+
+    return (
+      <>
+        {viewState.list.map((attribute) => (
+          <CurrentAttributeListItem
+            viewState={attribute}
+            onDelete={handleDeleteItem}
+            onToggleVisibility={handleToggleHighlighting}
+            onChangeColor={handlechangeHighlightColor}
+            key={attribute.id}
+          />
+        ))}
+      </>
+    );
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -30,36 +53,16 @@ export const Attributes: React.FC = () => {
         <Input
           className={styles.attributeNameInput}
           label="Attribute name"
-          value={viewState.attributeNameInputValue}
-          onChange={handleChangeAttributeNameInputValue}
+          value={viewState.input.value}
+          onChange={handleChangeAttributeName}
           placeholder="data-test"
-          status={viewState.attributeNameInputStatus}
+          status={viewState.input.status}
         />
         <Button className={styles.highlightButton} type="submit">
           Highlight
         </Button>
       </form>
-      <div className={styles.list}>
-        {/* View state here */}
-        {viewState.attributeList.length > 0 ? (
-          viewState.attributeList.map((attribute, index) => (
-            <CurrentAttributeListItem
-              className={styles.listItem}
-              label={attribute.name.string}
-              highlightingColor={attribute.color}
-              isHighlighted={attribute.isHighlighted}
-              onClose={() => handleDeleteItem(attribute.id)}
-              onToggleVisibility={() => handleToggleHighlighting(attribute.id)}
-              onChangeColor={(color: Color) =>
-                handlechangeHighlightColor(attribute.id, color)
-              }
-              key={attribute.id}
-            />
-          ))
-        ) : (
-          <ListSkeleton />
-        )}
-      </div>
+      <div className={styles.list}>{renderList()}</div>
     </div>
   );
 };

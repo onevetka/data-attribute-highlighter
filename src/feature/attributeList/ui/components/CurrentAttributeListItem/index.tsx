@@ -1,6 +1,10 @@
 // Base
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 import cx from 'classnames';
+
+// Entity
+import { Color } from '../../../../../core/color/domain/entity/color';
+import { Attribute } from '../../../domain/entity/attribute';
 
 // Components
 import ColorPicker from '../ColorPicker';
@@ -12,43 +16,76 @@ import VisibilityOnIcon from '../../icons/VisibilityOnIcon';
 // Assets
 import styles from './style.module.scss';
 
+export class AttributeViewState {
+  id: string;
+
+  label: {
+    value: string;
+    isСrossed: boolean;
+  };
+  color: {
+    value: string;
+    isDisabled: boolean;
+  };
+  visibilityButton: {
+    icon: 'VisibilityOnIcon' | 'VisibilityOffIcon';
+  };
+
+  constructor(attribute: Attribute) {
+    this.id = attribute.id;
+
+    this.label = {
+      value: attribute.name.string,
+      isСrossed: !attribute.isHighlighted,
+    };
+
+    this.color = {
+      value: attribute.color,
+      isDisabled: !attribute.isHighlighted,
+    };
+
+    this.visibilityButton = {
+      icon: attribute.isHighlighted ? 'VisibilityOnIcon' : 'VisibilityOffIcon',
+    };
+  }
+}
+
+const mapVisibilityIcon = {
+  VisibilityOnIcon: <VisibilityOnIcon />,
+  VisibilityOffIcon: <VisibilityOffIcon />,
+};
+
 interface ListItemProps {
-  className?: string;
-  label: string;
-  highlightingColor: string;
-  isHighlighted: boolean;
-  onClose: Function;
-  onToggleVisibility: MouseEventHandler;
-  onChangeColor: Function;
+  viewState: AttributeViewState;
+  onDelete: (id: string) => void;
+  onToggleVisibility: (id: string) => void;
+  onChangeColor: (id: string, color: Color) => void;
 }
 
 const CurrentAttributeListItem: React.FC<ListItemProps> = ({
-  className,
-  label,
-  highlightingColor,
-  isHighlighted,
-  onClose,
+  viewState,
+  onDelete,
   onToggleVisibility,
   onChangeColor,
 }) => {
   return (
-    <div className={cx(styles.wrapper, className)}>
+    <div className={styles.wrapper}>
       <div
         className={cx(styles.label, {
-          [styles.disabled]: !isHighlighted,
+          [styles.disabled]: viewState.label.isСrossed,
         })}
       >
-        {label}
+        {viewState.label.value}
       </div>
       <ColorPicker
-        onChange={onChangeColor}
-        value={highlightingColor}
-        disabled={!isHighlighted}
+        onChange={(color: Color) => onChangeColor(viewState.id, color)}
+        value={viewState.color.value}
+        disabled={viewState.color.isDisabled}
       />
-      <IconButton onClick={onToggleVisibility}>
-        {isHighlighted ? <VisibilityOnIcon /> : <VisibilityOffIcon />}
+      <IconButton onClick={() => onToggleVisibility(viewState.id)}>
+        {mapVisibilityIcon[viewState.visibilityButton.icon]}
       </IconButton>
-      <IconButton onClick={onClose as MouseEventHandler}>
+      <IconButton onClick={() => onDelete(viewState.id)}>
         <CloseIcon />
       </IconButton>
     </div>
