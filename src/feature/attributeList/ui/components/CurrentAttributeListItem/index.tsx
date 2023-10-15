@@ -4,7 +4,6 @@ import cx from 'classnames';
 
 // Entity
 import { Color } from '../../../../../core/color/domain/entity/color';
-import { Attribute } from '../../../domain/entity/attribute';
 
 // Components
 import ColorPicker from '../ColorPicker';
@@ -15,40 +14,7 @@ import VisibilityOnIcon from '../../icons/VisibilityOnIcon';
 
 // Assets
 import styles from './style.module.scss';
-
-export class AttributeViewState {
-  id: string;
-
-  label: {
-    value: string;
-    isСrossed: boolean;
-  };
-  color: {
-    value: string;
-    isDisabled: boolean;
-  };
-  visibilityButton: {
-    icon: 'VisibilityOnIcon' | 'VisibilityOffIcon';
-  };
-
-  constructor(attribute: Attribute) {
-    this.id = attribute.id;
-
-    this.label = {
-      value: attribute.name.string,
-      isСrossed: !attribute.isHighlighted,
-    };
-
-    this.color = {
-      value: attribute.color,
-      isDisabled: !attribute.isHighlighted,
-    };
-
-    this.visibilityButton = {
-      icon: attribute.isHighlighted ? 'VisibilityOnIcon' : 'VisibilityOffIcon',
-    };
-  }
-}
+import { AttributeViewState } from '../../../state/attributeViewState';
 
 const mapVisibilityIcon = {
   VisibilityOnIcon: <VisibilityOnIcon />,

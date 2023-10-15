@@ -1,6 +1,6 @@
 import { Status } from '../../../core/status/domain/entity/status';
-import { AttributeViewState } from '../ui/components/CurrentAttributeListItem';
 import { AttributeListState } from './attributeListState';
+import { AttributeViewState } from './attributeViewState';
 
 export class AttributeListViewState {
   list: AttributeViewState[] | 'empty' | 'loading';
