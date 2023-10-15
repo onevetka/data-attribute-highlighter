@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './style.module.scss';
 
-const SkeletonAttributeList: React.FC = () => {
+const EmptyAttributeList: React.FC = () => {
   return (
     <div className={styles.skeletonWrapper}>
       {[1.0, 0.7, 0.4].map((item) => (
@@ -11,8 +11,9 @@ const SkeletonAttributeList: React.FC = () => {
           key={item}
         />
       ))}
+      <div className={styles.label}>No highlighted attributes</div>
     </div>
   );
 };
 
-export default SkeletonAttributeList;
+export default EmptyAttributeList;

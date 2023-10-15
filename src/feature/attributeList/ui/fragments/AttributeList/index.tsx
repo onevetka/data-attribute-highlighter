@@ -1,12 +1,12 @@
 import React, { FormEvent } from 'react';
 import Input from '../../../../../components/Input';
 import Button from '../../../../../components/Button';
-import SkeletonAttributeList from '../../components/EmptyAttributeList';
+import EmptyAttributeList from '../../components/EmptyAttributeList';
 import Attribute from '../../components/Attribute';
 import { useViewModel } from '../../../state/useViewModel';
 
 import styles from './style.module.scss';
-import EmptyAttributeList from '../../components/SkeletonAttributeList';
+import SkeletonAttributeList from '../../components/SkeletonAttributeList';
 
 export const AttributeList: React.FC = () => {
   const {

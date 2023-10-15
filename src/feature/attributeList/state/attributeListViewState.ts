@@ -3,16 +3,29 @@ import { AttributeListState } from './attributeListState';
 import { AttributeViewState } from './attributeViewState';
 
 export class AttributeListViewState {
-  list: AttributeViewState[] | 'empty' | 'loading'; // FIXME: Сюда тесты нужны и логику по показу пустого списка. Кстати это должен быть компонент с вью стейтом
+  list: AttributeViewState[] | 'empty' | 'loading';
   input: {
     value: string;
     status: Status;
   };
 
   constructor(state: AttributeListState) {
-    this.list = state.attributeList.map(
-      (attribute) => new AttributeViewState(attribute)
-    );
+    switch (state.status) {
+      case 'loading': {
+        this.list = 'loading';
+        break;
+      }
+      case 'idle': {
+        if (state.attributeList.length === 0) {
+          this.list = 'empty';
+        } else {
+          this.list = state.attributeList.map(
+            (attribute) => new AttributeViewState(attribute)
+          );
+        }
+        break;
+      }
+    }
 
     this.input = {
       value: state.attributeNameInputValue,
