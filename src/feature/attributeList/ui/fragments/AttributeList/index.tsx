@@ -1,11 +1,12 @@
 import React, { FormEvent } from 'react';
 import Input from '../../../../../components/Input';
 import Button from '../../../../../components/Button';
-import ListSkeleton from '../../components/ListSkeleton';
+import SkeletonAttributeList from '../../components/EmptyAttributeList';
 import Attribute from '../../components/Attribute';
 import { useViewModel } from '../../../state/useViewModel';
 
 import styles from './style.module.scss';
+import EmptyAttributeList from '../../components/SkeletonAttributeList';
 
 export const AttributeList: React.FC = () => {
   const {
@@ -19,11 +20,11 @@ export const AttributeList: React.FC = () => {
 
   const renderList = () => {
     if (viewState.list === 'empty') {
-      return <ListSkeleton />;
+      return <EmptyAttributeList />;
     }
 
     if (viewState.list === 'loading') {
-      return <ListSkeleton />;
+      return <SkeletonAttributeList />;
     }
 
     return (

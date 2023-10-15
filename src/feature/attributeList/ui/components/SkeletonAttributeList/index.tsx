@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './style.module.scss';
 
-const ListSkeleton: React.FC = () => {
+const EmptyAttributeList: React.FC = () => {
   return (
     <div className={styles.skeletonWrapper}>
       {[1.0, 0.7, 0.4].map((item) => (
@@ -16,4 +16,4 @@ const ListSkeleton: React.FC = () => {
   );
 };
 
-export default ListSkeleton;
+export default EmptyAttributeList;
