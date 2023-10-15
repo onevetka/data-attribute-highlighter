@@ -27,6 +27,11 @@ export const AttributeList: React.FC = () => {
       return <SkeletonAttributeList />;
     }
 
+    /**
+     * TODO: Добавить обработку ошибок из кор части.
+     * Так может случиться, что элементы могут быть сломаны и надо показать, что делать, чтобы это исправить
+     */
+
     return (
       <>
         {viewState.list.map((attribute) => (
