@@ -2,11 +2,11 @@ import React from 'react';
 import { render } from 'react-dom';
 import styles from './style.module.scss';
 import './index.css';
-import Attributes from '../../feature/attributeList/ui/fragments/Attributes';
+import { AttributeList } from '../../feature/attributeList/ui/fragments/AttributeList';
 
 render(
   <div className={styles.app}>
-    <Attributes />
+    <AttributeList />
   </div>,
   window.document.querySelector('#app-container')
 );
