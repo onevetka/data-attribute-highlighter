@@ -2,12 +2,12 @@ import React, { FormEvent } from 'react';
 import Input from '../../../../../components/Input';
 import Button from '../../../../../components/Button';
 import ListSkeleton from '../../components/ListSkeleton';
-import CurrentAttributeListItem from '../../components/CurrentAttributeListItem';
+import Attribute from '../../components/Attribute';
 import { useViewModel } from '../../../state/useViewModel';
 
 import styles from './style.module.scss';
 
-export const Attributes: React.FC = () => {
+export const AttributeList: React.FC = () => {
   const {
     viewState,
     handleChangeAttributeName,
@@ -29,7 +29,7 @@ export const Attributes: React.FC = () => {
     return (
       <>
         {viewState.list.map((attribute) => (
-          <CurrentAttributeListItem
+          <Attribute
             viewState={attribute}
             onDelete={handleDeleteItem}
             onToggleVisibility={handleToggleHighlighting}
@@ -67,4 +67,4 @@ export const Attributes: React.FC = () => {
   );
 };
 
-export default Attributes;
+export default AttributeList;

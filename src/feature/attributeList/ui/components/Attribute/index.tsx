@@ -28,7 +28,7 @@ interface ListItemProps {
   onChangeColor: (id: string, color: Color) => void;
 }
 
-const CurrentAttributeListItem: React.FC<ListItemProps> = ({
+const Attribute: React.FC<ListItemProps> = ({
   viewState,
   onDelete,
   onToggleVisibility,
@@ -58,4 +58,4 @@ const CurrentAttributeListItem: React.FC<ListItemProps> = ({
   );
 };
 
-export default CurrentAttributeListItem;
+export default Attribute;
